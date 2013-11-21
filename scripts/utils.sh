@@ -1,6 +1,6 @@
 # reload source
 reload() {
-  source ~/.bash_profile;
+  source ~/.dotfiles/.bash_profile;
 }
 
 # list directory after cd; also save the last directory

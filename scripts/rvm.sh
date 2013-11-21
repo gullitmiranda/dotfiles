@@ -1,4 +1,4 @@
-if [ -d ~/.dotfiles/.bash_profile ]; then
+if [ -d $HOME/.rvm ]; then
   [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
   export PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 fi

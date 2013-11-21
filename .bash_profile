@@ -7,3 +7,4 @@ source $HOME/.dotfiles/scripts/gem_completion.sh
 source $HOME/.dotfiles/scripts/utils.sh
 
 source $HOME/.dotfiles/scripts/prompt.sh
+source $HOME/.dotfiles/scripts/rvm.sh

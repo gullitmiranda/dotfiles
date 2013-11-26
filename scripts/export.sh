@@ -1,5 +1,5 @@
 export PATH="./bin:$HOME/.dotfiles/bin:$HOME/bin:$HOME/local/bin:$HOME/local/ruby/gems/bin:$HOME/local/sbin:/bin:/sbin:/usr/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/usr/X11/bin"
-export INSTALL_DIR="$HOME/local"
+# export INSTALL_DIR="$HOME/local"
 export EVENT_NOKQUEUE=1
 export MANPATH=/usr/local/git/man:$MANPATH
 

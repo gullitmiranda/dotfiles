@@ -1,3 +1,4 @@
+source $HOME/.dotfiles/scripts/nvm.sh
 source $HOME/.dotfiles/scripts/rvm.sh
 source $HOME/.dotfiles/scripts/other.sh
 source $HOME/.dotfiles/scripts/export.sh

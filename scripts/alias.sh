@@ -19,3 +19,5 @@ alias bu="bundle update"
 alias bi="bundle install"
 alias bs="bundle show"
 alias bv="bundle install --path vendor"
+
+alias 2haml="find . -name \*.erb -print | sed 'p;s/.erb$/.haml/' | xargs -n2 html2haml"

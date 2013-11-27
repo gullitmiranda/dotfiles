@@ -1,11 +1,11 @@
 # reload source
-reload() {
-  source ~/.dotfiles/.bash_profile;
+function reload {
+  source ~/.bashrc
 }
 
 # list directory after cd; also save the last directory
 # and open it when a new tab is created.
-cd() {
+function cd {
   builtin cd "${@:-$HOME}" && ls && pwd > $CDHISTORY;
 }
 

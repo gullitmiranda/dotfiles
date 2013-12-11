@@ -576,6 +576,31 @@
 	},
 	"file_history":
 	[
+		"/home/requestdev/www/dotfiles/scripts/rvm.sh",
+		"/home/requestdev/www/dotfiles/scripts/export.sh",
+		"/home/requestdev/www/dotfiles/.bash_profile",
+		"/home/requestdev/www/dotfiles/scripts/nvm.sh",
+		"/home/requestdev/www/dotfiles/scripts/alias.sh",
+		"/home/requestdev/www/dotfiles/scripts/utils.sh",
+		"/home/requestdev/.dotfiles/scripts/export.sh",
+		"/home/requestdev/www/dotfiles/Rakefile",
+		"/home/requestdev/www/dotfiles/bash/inputrc",
+		"/home/requestdev/www/dotfiles/git/gitignore",
+		"/home/requestdev/www/dotfiles/README.md",
+		"/home/requestdev/www/dotfiles/install.sh",
+		"/home/requestdev/.bashrc",
+		"/home/requestdev/www/dotfiles/.gemrc",
+		"/home/requestdev/www/dotfiles/.inputrc",
+		"/home/requestdev/www/dotfiles/.vimrc",
+		"/home/requestdev/www/dotfiles/init.sh",
+		"/home/requestdev/www/dotfiles/dotfiles/Rakefile",
+		"/home/requestdev/www/dotfiles/git/gitconfig",
+		"/home/requestdev/.config/sublime-text-3/Packages/HTML-CSS-JS Prettify/HTMLPrettify.sublime-settings",
+		"/home/requestdev/www/dotfiles/scripts/prompt.sh",
+		"/home/requestdev/www/dotfiles/scripts/options.sh",
+		"/home/requestdev/www/dotfiles/.bash/general.sh",
+		"/home/requestdev/www/dotfiles/scripts/gem_completion.sh",
+		"/home/requestdev/www/dotfiles/.bash/aws.sh",
 		"/home/requestdev/www/guiacartoes/config/routes.rb",
 		"/home/requestdev/www/guiacartoes/app/views/users/show.html.haml",
 		"/home/requestdev/www/guiacartoes/app/assets/stylesheets/application.css.scss",
@@ -678,32 +703,7 @@
 		"/home/requestdev/www/guiacartoes/app/views/layouts/_navegation.html.haml",
 		"/home/requestdev/www/guiacartoes/app/assets/javascripts/application.js",
 		"/home/requestdev/www/guiacartoes/.htaccess",
-		"/home/requestdev/www/guiacartoes/vendor/assets/javascripts/bootstrap-modal.js",
-		"/home/requestdev/www/guiacartoes/app/assets/stylesheets/bootstrap-modal-fullscreen.css",
-		"/home/requestdev/www/guiacartoes/app/assets/javascripts/bootstrap-modal-fullscreen.js.coffee",
-		"/home/requestdev/www/guiacartoes/config/nginx.conf",
-		"/home/requestdev/www/guiacartoes/app/views/history_trackers/_history_tracker.html.haml",
-		"/home/requestdev/www/guiacartoes/app/helpers/history_trackers_helper.rb",
-		"/home/requestdev/Dropbox/www/guiacartoes/CHANGELOG.md",
-		"/home/requestdev/www/guiacartoes/vendor/assets/stylesheets/bootstrap/_buttons.scss",
-		"/home/requestdev/www/guiacartoes/app/inputs/file_input.rb",
-		"/home/requestdev/www/guiacartoes/app/views/registrations/_form_inputs.html.haml",
-		"/home/requestdev/www/guiacartoes/config/initializers/simple_form_bootstrap.rb",
-		"/home/requestdev/www/guiacartoes/app/assets/stylesheets/users.css.scss",
-		"/home/requestdev/www/guiacartoes/tmp/cache/assets/development/sass/8608fdcb5db9f205af4089f33a3854e018c22b90/_forms.scssc",
-		"/home/requestdev/www/guiacartoes/tmp/cache/assets/development/sass/ce24adc00d9e5243917f14e021a21ba06b61af55/bootstrap_and_overrides.css.scssc",
-		"/home/requestdev/www/guiacartoes/tmp/cache/assets/development/sass/ce24adc00d9e5243917f14e021a21ba06b61af55/users.css.scssc",
-		"/home/requestdev/www/guiacartoes/tmp/cache/assets/development/sprockets/8ab512c9b33ac90e699b73469d71f061",
-		"/home/requestdev/www/guiacartoes/tmp/cache/assets/development/sprockets/bcca522c6302f184f12fe0e8a7d7e71a",
-		"/home/requestdev/www/guiacartoes/tmp/cache/assets/development/sprockets/c13fc73ceafa45876a901b3e775b83ae",
-		"/home/requestdev/Dropbox/www/gems-fork/bootstrap-sass/vendor/assets/stylesheets/bootstrap/_variables.scss",
-		"/home/requestdev/www/guiacartoes/vendor/assets/stylesheets/bootstrap/_responsive-navbar.scss",
-		"/home/requestdev/www/guiacartoes/app/assets/javascripts/hoverfold.js.coffee",
-		"/home/requestdev/www/guiacartoes/app/assets/javascripts/search.js.coffee",
-		"/home/requestdev/www/guiacartoes/app/views/home/index.html.haml",
-		"/home/requestdev/www/guiacartoes/app/views/home/show.html.haml",
-		"/home/requestdev/www/guiacartoes/app/views/shared/_omniauth.haml",
-		"/home/requestdev/www/guiacartoes/app/assets/javascripts/epiceditor.js"
+		"/home/requestdev/www/guiacartoes/vendor/assets/javascripts/bootstrap-modal.js"
 	],
 	"find":
 	{
@@ -730,9 +730,39 @@
 	},
 	"find_state":
 	{
-		"case_sensitive": true,
+		"case_sensitive": false,
 		"find_history":
 		[
+			".nvm/scripts/nvm",
+			"rvm",
+			"reload",
+			"INSTALL_DIR",
+			"local/",
+			"vagrant",
+			"color",
+			"ctags",
+			"reload",
+			"if [ -",
+			"echo",
+			"bash",
+			"yadr",
+			"KeyBindings",
+			"install_homebrew",
+			"install_prezto",
+			"apply_theme_to_iterm_profile_idx",
+			"iTerm_available_themes",
+			"install_term_theme",
+			"install_vundle",
+			"yadr",
+			"file_operation",
+			"YADR",
+			"yadr",
+			"$HOME/scripts/",
+			"webkit2",
+			"$HOME/scripts",
+			"$HOME",
+			".bash/",
+			"mate",
 			"\"click\"",
 			"returnValue",
 			":meta_tags",
@@ -830,37 +860,7 @@
 			"width_slice",
 			"$width",
 			"card_index",
-			"#content",
-			"max-width",
-			"search_class",
-			"cards_search_container",
-			"categories_nav",
-			"cards_search_filters_container",
-			" !default",
-			"link",
-			" !default",
-			".nav > li",
-			"@",
-			"search_class",
-			"is_root",
-			"is_root?",
-			"is_root",
-			"modal_sign_up_button",
-			"modal_login_button",
-			"inver",
-			" !default",
-			"input-append",
-			"navbar-inner",
-			"form-search",
-			"form-actions",
-			"unstyled",
-			"thumbnail",
-			"add-on",
-			"input-prepend",
-			"inline",
-			".inline",
-			"input-large",
-			"input-small"
+			"#content"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -868,6 +868,15 @@
 		"regex": false,
 		"replace_history":
 		[
+			".nvm/nvm.sh",
+			"nvm",
+			"dotfiles",
+			"DotFiles",
+			"dotfiles",
+			"$HOME/.dotfiles/scripts/",
+			"$HOME/.dotfiles/scripts",
+			"",
+			"subl",
 			" $ad_cards-margin",
 			"ad_limit",
 			"col-lg-2",
@@ -986,16 +995,7 @@
 			"class: :",
 			"\\1:",
 			"hint_class: ",
-			"autofocus: ",
-			"url: ",
-			"as: ",
-			"class: '",
-			"confirm: ",
-			"default: ",
-			"method:",
-			"class:",
-			"   -moz-",
-			"    -ms-"
+			"autofocus: "
 		],
 		"reverse": false,
 		"show_context": true,
@@ -1057,6 +1057,30 @@
 		"height": 0.0,
 		"selected_items":
 		[
+			[
+				"expo",
+				"scripts/export.sh"
+			],
+			[
+				"rvm",
+				"scripts/rvm.sh"
+			],
+			[
+				"ex",
+				"scripts/export.sh"
+			],
+			[
+				"nvm",
+				"scripts/nvm.sh"
+			],
+			[
+				"ali",
+				"scripts/alias.sh"
+			],
+			[
+				"inpu",
+				"bash/inputrc"
+			],
 			[
 				"ca",
 				"guiacartoes/app/views/cards/_card_ad.html.haml"
@@ -1544,30 +1568,6 @@
 			[
 				"simpl",
 				"guiacartoes/config/initializers/simple_form.rb"
-			],
-			[
-				".loc",
-				"guiacartoes/Gemfile.lock"
-			],
-			[
-				"late",
-				"guiacartoes/templates/mailers/launch.text.html"
-			],
-			[
-				"lain",
-				"guiacartoes/templates/mailers/launch.inline.html"
-			],
-			[
-				"lau",
-				"guiacartoes/templates/mailers/launch.html"
-			],
-			[
-				"chan",
-				"guiacartoes/CHANGELOG.md"
-			],
-			[
-				"roo",
-				"guiacartoes/public/robots.txt"
 			]
 		],
 		"width": 0.0

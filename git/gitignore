@@ -31,4 +31,11 @@ Session.vim
 # ----------------------------------------------------------------------------------------------
 .sass-cache
 
-public/assets
+# Ignore bundler config
+/.bundle
+
+# Ignore all log and fuse files.
+/log/*.log
+*.fuse*
+
+*.sublime-*

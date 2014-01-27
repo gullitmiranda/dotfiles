@@ -21,8 +21,6 @@ export CDHISTORY="/tmp/cd-${USER}"
 
 export RUBYLIB='.'
 export RUBYOPT=''
-export GEM_HOME="$HOME/local/ruby/gems"
-export GEM_PATH="$HOME/local/ruby/gems"
 
 export LESS_TERMCAP_mb=$'\E[04;33m'
 export LESS_TERMCAP_md=$'\E[04;33m'

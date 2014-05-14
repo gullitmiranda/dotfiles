@@ -30,12 +30,6 @@ export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[00;32m'
 
-# azk
-export AZK_HOME="$HOME/.azk"
-if [ -d "$AZK_HOME" ]; then
-  export PATH="$AZK_HOME/bin:$PATH"
-fi
-
 # Java
 export JAVA_HOME="/usr/lib/jvm/java-7-openjdk-amd64/"
 # export JAVA_HOME="/Library/Java/Home"

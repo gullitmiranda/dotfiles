@@ -30,10 +30,12 @@ export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[00;32m'
 
-export EC2_HOME="$HOME/.ec2"
-export EC2_PRIVATE_KEY="$EC2_HOME/pk.pem"
-export EC2_CERT="$EC2_HOME/cert.pem"
-export EC2_AMI_HOME="$EC2_HOME/ec2-ami-tools"
-export PATH="$EC2_HOME/bin:$EC2_AMI_HOME/bin:$PATH"
+# azk
+export AZK_HOME="$HOME/.azk"
+if [ ! -d "$AZK_HOME/" ]; then
+  export PATH="$AZK_HOME/bin:$PATH"
+fi
+
+# Java
 export JAVA_HOME="/usr/lib/jvm/java-7-openjdk-amd64/"
 # export JAVA_HOME="/Library/Java/Home"

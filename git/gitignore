@@ -38,4 +38,4 @@ Session.vim
 /log/*.log
 *.fuse*
 
-*.sublime-*
+*.sublime-workspace

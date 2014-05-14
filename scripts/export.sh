@@ -32,7 +32,7 @@ export LESS_TERMCAP_us=$'\E[00;32m'
 
 # azk
 export AZK_HOME="$HOME/.azk"
-if [ ! -d "$AZK_HOME/" ]; then
+if [ -d "$AZK_HOME" ]; then
   export PATH="$AZK_HOME/bin:$PATH"
 fi
 

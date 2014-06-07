@@ -1,4 +1,4 @@
-export PATH="$PATH:./bin:$HOME/.dotfiles/bin:$HOME/bin:$HOME/local/bin:$HOME/local/ruby/gems/bin:$HOME/local/sbin:/bin:/sbin:/usr/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/usr/X11/bin"
+export PATH="$PATH:./bin:$HOME/.dotfiles/bin:$HOME/bin:$HOME/local/bin:$HOME/local/ruby/gems/bin:$HOME/local/ruby/gems/bin:$HOME/local/sbin:/bin:/sbin:/usr/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/usr/X11/bin"
 # export INSTALL_DIR="$HOME/local"
 export EVENT_NOKQUEUE=1
 export MANPATH=/usr/local/git/man:$MANPATH
@@ -16,11 +16,14 @@ export HISTIGNORE="&"
 export HISTSIZE=${HISTFILESIZE}
 export GREP_OPTIONS="--color=auto"
 export GREP_COLOR="4;33"
-export CDPATH=.:~:~/dev:~/www:~/dev/wwww
+export CDPATH=.:~:~/dev:/wwww:~/www:~/dev/wwww
 export CDHISTORY="/tmp/cd-${USER}"
 
 export RUBYLIB='.'
 export RUBYOPT=''
+export RUBY_VERSION="$(ruby -e 'print RUBY_VERSION')"
+export GEM_HOME="$HOME/local/ruby/gems/$RUBY_VERSION"
+
 
 export LESS_TERMCAP_mb=$'\E[04;33m'
 export LESS_TERMCAP_md=$'\E[04;33m'

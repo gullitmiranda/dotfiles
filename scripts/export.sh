@@ -1,4 +1,4 @@
-export PATH="$PATH:./bin:$HOME/.dotfiles/bin:$HOME/bin:$HOME/local/bin:$HOME/local/sbin:/bin:/sbin:/usr/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/usr/X11/bin"
+export PATH="$PATH:./bin:$HOME/.dotfiles/bin:/opt/android-studio/bin:$HOME/bin:$HOME/local/bin:$HOME/local/sbin:/bin:/sbin:/usr/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/usr/X11/bin"
 # export INSTALL_DIR="$HOME/local"
 export EVENT_NOKQUEUE=1
 export MANPATH=/usr/local/git/man:$MANPATH
@@ -42,5 +42,5 @@ export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[00;32m'
 
 # Java
-export JAVA_HOME="/usr/lib/jvm/java-7-openjdk-amd64/"
+# export JAVA_HOME="/usr/lib/jvm/java-7-openjdk-amd64/"
 # export JAVA_HOME="/Library/Java/Home"

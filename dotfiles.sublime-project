@@ -3,7 +3,7 @@
 	[
 		{
 			"follow_symlinks": true,
-			"path": "/home/requestdev/www/dotfiles"
+			"path": "."
 		}
 	]
 }

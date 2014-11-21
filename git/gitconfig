@@ -110,8 +110,7 @@
   default = tracking
 [core]
   autocrlf = false
-  editor = vim
-  excludesfile = ~/.dotfiles/git/gitignore
+	editor = subl -n -w
 [advice]
   statusHints = false
 [diff]
@@ -127,4 +126,4 @@
   path = .gitconfig.user
 [user]
   name = Gullit Miranda
-  email = gullitmiranda@requestdev.com.br
+  email = gullitmiranda@gmail.com

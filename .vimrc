@@ -1,0 +1,1 @@
+/Users/gmmaster/.vim/janus/vim/vimrc

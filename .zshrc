@@ -50,6 +50,8 @@ plugins=(common-aliases coreutils dirpersist bundler docker gem git git-extras g
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
+setopt auto_cd
+cdpath=($HOME/Works $HOME)
 
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$ZSH/bin:$PATH"
 
@@ -91,7 +93,7 @@ export ANALYTICS_ERRORS=1
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-myzsh='subl ~/.zshrc'
+alias zshrc='subl ~/.zshrc'
 
 bindkey -e
 

@@ -50,8 +50,9 @@ plugins=(common-aliases coreutils dirpersist bundler docker gem git git-extras g
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
+# https://robots.thoughtbot.com/cding-to-frequently-used-directories-in-zsh
 setopt auto_cd
-cdpath=($HOME/Works $HOME)
+cdpath=($HOME/Works $HOME $HOME/Copy)
 
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$ZSH/bin:$PATH"
 

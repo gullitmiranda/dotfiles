@@ -5,7 +5,16 @@ export ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="amuse"
+# ZSH_THEME="agnoster"
+# ZSH_THEME="cobalt2"
+# ZSH_THEME="amuse"
+ZSH_THEME="powerlevel9k"
+
+# USER="gullitmiranda"
+DEFAULT_USER="gullitmiranda"
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir vcs)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(longstatus history time)
+POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -45,11 +54,16 @@ DISABLE_AUTO_UPDATE="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(common-aliases coreutils dirpersist bundler docker gem git git-extras git-hubflow git-flow sublime)
+plugins=(common-aliases coreutils dirpersist bundler docker gem git git-extras myalias git-hubflow git-flow sublime)
 
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
+# http://zsh.sourceforge.net/Intro/intro_16.html
+setopt correct
+setopt cdablevars
+setopt interactivecomments
+
 # https://robots.thoughtbot.com/cding-to-frequently-used-directories-in-zsh
 setopt auto_cd
 cdpath=($HOME/Works $HOME $HOME/Copy)
@@ -131,14 +145,6 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
 fi
 
-
-# Folders alias
-# alias azuki='cd ~/azuki/'
-# alias crowdfunding='cd ~/azuki/crowdfunding/'
-# alias www='cd ~/www/'
-
-# azuki=~/azuki
-
 # Alias
 alias hgrep='history | grep'
 alias pgrep='ps aux | grep'
@@ -147,9 +153,6 @@ alias agrep='alias | grep'
 
 alias ss='subl .'
 
-alias  gfa='git fetch --all'
-alias gfap='git fetch --all --prune'
-alias  gmn='git merge --no-ff'
 # alias wh='while; do $arg; done'
 
 # azk
@@ -188,13 +191,15 @@ if [[ -r ~/.local/lib/python2.7/site-packages/ ]]; then
   export PYTHON_PACKAGE="$HOME/.local/lib/python2.7/site-packages/"
 elif [[ -r /usr/local/lib/python2.7/site-packages/ ]]; then
   export PYTHON_PACKAGE="/usr/local/lib/python2.7/site-packages/"
+elif [[ -r $HOME/Library/Python/2.7/lib/python/site-packages/ ]]; then
+  export PYTHON_PACKAGE="$HOME/Library/Python/2.7/lib/python/site-packages"
 elif [[ -r /Library/Python/2.7/site-packages/ ]]; then
   export PYTHON_PACKAGE="/Library/Python/2.7/site-packages"
 fi
 
-if [[ -e "$PYTHON_PACKAGE/powerline/bindings/zsh/powerline.zsh" ]]; then
-  source $PYTHON_PACKAGE/powerline/bindings/zsh/powerline.zsh
-fi
+# if [[ -e "$PYTHON_PACKAGE/powerline/bindings/zsh/powerline.zsh" ]]; then
+#   source $PYTHON_PACKAGE/powerline/bindings/zsh/powerline.zsh
+# fi
 
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"

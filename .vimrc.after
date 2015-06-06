@@ -1,8 +1,26 @@
+set guifont=Inconsolata-g\ for\ Powerline:h13
+let g:Powerline_symbols = 'fancy'
+set encoding=utf-8
+set t_Co=256
+set fillchars+=stl:\ ,stlnc:\
+set term=xterm-256color
+set termencoding=utf-8
+
 syntax enable
 " set background=dark
 " colorscheme solarized
 color molokai
 
-:if !empty(glob("$PYTHON_PACKAGE/powerline/bindings/vim/plugin/powerline.vim"))
-:  source $PYTHON_PACKAGE/powerline/bindings/vim/plugin/powerline.vim
-:endif
+if has("gui_running")
+  let s:uname = system("uname")
+  if s:uname == "Darwin\n"
+    set guifont=Inconsolata-g\ for\ Powerline:h13
+  endif
+endif
+
+if !empty(glob("$PYTHON_PACKAGE/powerline/bindings/vim/plugin/powerline.vim"))
+  source $PYTHON_PACKAGE/powerline/bindings/vim/plugin/powerline.vim
+endif
+":if !empty(glob("$PYTHON_PACKAGE/powerline/bindings/vim/plugin/powerline.vim"))
+":  source $PYTHON_PACKAGE/powerline/bindings/vim/plugin/powerline.vim
+":endif

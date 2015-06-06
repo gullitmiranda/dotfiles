@@ -111,8 +111,8 @@
 [core]
   autocrlf = false
   # editor = subl -n -w
-	editor = '/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl' -n -w
-	excludesfile = ~/.gitignore
+  editor = '/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl' -w
+	excludesfile = /Users/gmmaster/.gitignore
 [advice]
   statusHints = false
 [diff]

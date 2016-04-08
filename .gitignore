@@ -2,3 +2,10 @@
 .zdirs
 .DOTFILES
 
+# sensitive data
+.ssh/
+.hex/
+.ec2/
+wakatime/
+.npmrc
+.s3cfg

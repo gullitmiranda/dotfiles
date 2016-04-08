@@ -33,3 +33,15 @@ ln -sf ${BASE_PATH}/.zshrc            $HOME/.zshrc
 ln -sf ${BASE_PATH}/.gitconfig        $HOME/.gitconfig
 ln -sf ${BASE_PATH}/.gitignore_global $HOME/.gitignore
 
+
+ln -sf ${BASE_PATH}/.ec2              $HOME/.ec2
+ln -sf ${BASE_PATH}/.editorconfig     $HOME/.editorconfig
+ln -sf ${BASE_PATH}/.hex              $HOME/.hex
+ln -sf ${BASE_PATH}/.ngrok            $HOME/.ngrok
+ln -sf ${BASE_PATH}/.npmignore        $HOME/.npmignore
+ln -sf ${BASE_PATH}/.npmrc            $HOME/.npmrc
+ln -sf ${BASE_PATH}/.s3cfg            $HOME/.s3cfg
+ln -sf ${BASE_PATH}/.ssh              $HOME/.ssh
+
+## Wakatime
+ln -sf ${BASE_PATH}/wakatime/.wakatime.* ~/

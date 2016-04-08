@@ -54,7 +54,7 @@ DISABLE_AUTO_UPDATE="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(common-aliases coreutils dirpersist bundler docker gem git git-extras myalias git-hubflow git-flow sublime)
+plugins=(common-aliases coreutils dirpersist bundler docker gem git git-extras myalias git-hubflow git-flow sublime zsh-autosuggestions)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -66,23 +66,9 @@ setopt interactivecomments
 
 # https://robots.thoughtbot.com/cding-to-frequently-used-directories-in-zsh
 setopt auto_cd
-cdpath=($HOME/Works $HOME $HOME/Copy)
+cdpath=($HOME/Works $HOME/Works/request $HOME)
 
-export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$ZSH/bin:$PATH"
-
-# boot2docker
-export DOCKER_CERT_PATH=/Users/gmmaster/.boot2docker/certs/boot2docker-vm
-export DOCKER_TLS_VERIFY=1
-export DOCKER_HOST=tcp://192.168.59.103:2376
-
-# azk
-export AZK_DISABLE_TRACKER=true
-export AZK_KEEN_PROJECT_ID=5526968d672e6c5a0d0ebec6
-export AZK_KEEN_WRITE_KEY=5dbce13e376070e36eec0c7dd1e7f42e49f39b4db041f208054617863832309c14a797409e12d976630c3a4b479004f26b362506e82a46dd54df0c977a7378da280c05ae733c97abb445f58abb56ae15f561ac9ad774cea12c3ad8628d896c39f6e702f6b035541fc1a562997cb05768
-export ANALYTICS_DATA=2
-export ANALYTICS_ERRORS=1
-
-# export MANPATH="/usr/local/man:$MANPATH"
+export PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:$ZSH/bin:$PATH"
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -110,6 +96,10 @@ export ANALYTICS_ERRORS=1
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias zshrc='subl ~/.zshrc'
 
+if [ -f "/usr/local/bin/exa" ]; then
+  alias la='exa -abghHliS'
+fi
+
 bindkey -e
 
 # Arrow search
@@ -122,7 +112,6 @@ bindkey '^[[B' history-beginning-search-forward
 
 # Mac OSX
 if [[ "$OSTYPE" == "darwin"* ]]; then
-
   # Word Jump
   bindkey '^[[1;9C' forward-word
   bindkey '^[[1;9D' backward-word
@@ -140,6 +129,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   alias st='sourcetree .'
   alias stree='sourcetree'
   alias tw='tower .'
+  alias ccat='pygmentize'
 
   alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
   alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
@@ -147,11 +137,14 @@ fi
 
 # Alias
 alias hgrep='history | grep'
-alias pgrep='ps aux | grep'
+alias pgrep='ps aux | grep -v grep | grep'
 alias egrep='env | grep'
 alias agrep='alias | grep'
 
 alias ss='subl .'
+alias ssp='subl $(basename "$PWD").sublime-project'
+alias atodo='subl ~/Works/azuki/TODO'
+alias ptodo='subl ~/Documents/Personal.todo'
 
 # alias wh='while; do $arg; done'
 
@@ -165,25 +158,30 @@ if [ -d "/opt/local/bin" ]; then
 fi
 
 if [ -d "$HOME/Works/azuki/azk/bin" ]; then
-  export PATH="$HOME/Works/azuki/azk/bin:$PATH"
-  alias anvm='azk nvm'
-  alias nvm='anvm'
-
-  alias anpm='anvm npm'
-  alias npm='anpm'
-
+  export AZK_SOURCE_PATH="$HOME/Works/azuki/azk"
+  export PATH="${AZK_SOURCE_PATH}/bin:$PATH"
+  alias a="${AZK_SOURCE_PATH}/bin/azk"
+  alias azk="${AZK_SOURCE_PATH}/bin/azk"
+  alias docker="${AZK_SOURCE_PATH}/bin/adocker"
+  alias anvm='a nvm'
   alias anode='anvm node'
-  alias node='anode'
 
-  alias agulp='anvm gulp'
-  alias gulp='agulp'
+  # alias nvm='anvm'
+  # alias anpm='anvm npm'
+  # alias npm='anpm'
 
-  alias agrunt='anvm grunt'
-  alias grunt='anvm grunt'
+  # alias node='anode'
+  # alias gulp='agulp'
+
+  export AZK_ENV=development
+  export AZK_VM_MEMORY=512
+  export AZK_AGENT_CHECK_INTERVAL=30000
+  export AZK_DISABLE_TRACKER=true
 fi
 
 if [ -f "/usr/local/bin/azk" ]; then
   alias bazk='/usr/local/bin/azk'
+  alias bdocker='/usr/local/bin/adocker'
 fi
 
 # powerline
@@ -201,5 +199,3 @@ fi
 #   source $PYTHON_PACKAGE/powerline/bindings/zsh/powerline.zsh
 # fi
 
-### Added by the Heroku Toolbelt
-export PATH="/usr/local/heroku/bin:$PATH"

@@ -6,6 +6,10 @@
 .ssh/
 .hex/
 .ec2/
-wakatime/
+wakatime/*.db
 .npmrc
 .s3cfg
+
+
+# temp files
+*.log

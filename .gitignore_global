@@ -53,7 +53,8 @@ Session.vim
 *.fuse*
 
 .rvmrc
-.env
+.env*
+!.env.sample
 .*.sw[plo]
 *.sublime-workspace
 *.sublime-project

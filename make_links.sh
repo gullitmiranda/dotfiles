@@ -29,3 +29,7 @@ ln -sf ${BASE_PATH}/.zsh-update       $HOME/.zsh-update
 ln -sf ${BASE_PATH}/.zshenv           $HOME/.zshenv
 ln -sf ${BASE_PATH}/.zshrc            $HOME/.zshrc
 
+## git
+ln -sf ${BASE_PATH}/.gitconfig        $HOME/.gitconfig
+ln -sf ${BASE_PATH}/.gitignore_global $HOME/.gitignore
+

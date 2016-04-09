@@ -17,11 +17,12 @@ echo ":: Making symbolic links from ${BASE_PATH}"
 
 ## terminal and zsh
 ln -sf "${BASE_PATH}/tmux.conf"         "${HOME}/"
-ln -sf "${BASE_PATH}/.zdirs"            "${HOME}/"
-ln -sf "${BASE_PATH}/.oh-my-zsh"        "${HOME}/"
-ln -sf "${BASE_PATH}/.zsh-update"       "${HOME}/"
-ln -sf "${BASE_PATH}/.zshenv"           "${HOME}/"
 ln -sf "${BASE_PATH}/.zshrc"            "${HOME}/"
+ln -sf "${BASE_PATH}/.zdirs"            "${HOME}/"
+ln -sf "${BASE_PATH}/.zshenv"           "${HOME}/"
+ln -sf "${BASE_PATH}/.zsh-update"       "${HOME}/"
+ln -sf "${BASE_PATH}/.zsh_history"      "${HOME}/"
+ln -sf "${BASE_PATH}/.oh-my-zsh"        "${HOME}/"
 
 ## git
 ln -sf "${BASE_PATH}/.gitconfig"        "${HOME}/"

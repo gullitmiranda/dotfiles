@@ -1,5 +1,6 @@
 # zsh or dotfiles
 .zdirs
+.zsh_history
 .DOTFILES
 
 # sensitive data

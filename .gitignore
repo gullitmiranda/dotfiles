@@ -3,12 +3,7 @@
 .DOTFILES
 
 # sensitive data
-.ssh/
-.hex/
-.ec2/
-wakatime/*.db
-.npmrc
-.s3cfg
+customs/
 
 # temp files
 *.log

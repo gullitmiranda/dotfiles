@@ -174,7 +174,7 @@ if [ -d "$HOME/Works/azuki/azk/bin" ]; then
   # alias gulp='agulp'
 
   export AZK_ENV=development
-  export AZK_VM_MEMORY=512
+  # export AZK_VM_MEMORY=512
   export AZK_AGENT_CHECK_INTERVAL=30000
   export AZK_DISABLE_TRACKER=true
 fi

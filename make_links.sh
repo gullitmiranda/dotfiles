@@ -16,7 +16,7 @@ echo ":: Making symbolic links from ${BASE_PATH}"
 # ########
 
 ## terminal and zsh
-ln -sf "${BASE_PATH}/tmux.conf"         "${HOME}/"
+ln -sf "${BASE_PATH}/.tmux.conf"         "${HOME}/"
 ln -sf "${BASE_PATH}/.zshrc"            "${HOME}/"
 ln -sf "${BASE_PATH}/.zdirs"            "${HOME}/"
 ln -sf "${BASE_PATH}/.zshenv"           "${HOME}/"

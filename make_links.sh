@@ -16,7 +16,7 @@ echo ":: Making symbolic links from ${BASE_PATH}"
 # ########
 
 ## terminal and zsh
-ln -sf "${BASE_PATH}/.tmux.conf"         "${HOME}/"
+ln -sf "${BASE_PATH}/.tmux.conf"        "${HOME}/"
 ln -sf "${BASE_PATH}/.zshrc"            "${HOME}/"
 ln -sf "${BASE_PATH}/.zdirs"            "${HOME}/"
 ln -sf "${BASE_PATH}/.zshenv"           "${HOME}/"
@@ -31,6 +31,10 @@ ln -sf "${BASE_PATH}/.gitignore_global" "${HOME}/.gitignore"
 ln -sf "${BASE_PATH}/.editorconfig"     "${HOME}/"
 ln -sf "${BASE_PATH}/.npmignore"        "${HOME}/"
 ln -sf "${BASE_PATH}/.npmrc"            "${HOME}/"
+
+## application settings
+mkdir -p "${HOME}/.config"
+ln -sf "${BASE_PATH}/.config/*"         "${HOME}/.config"
 
 if [[ -f "customs/make_links.sh" ]]; then
 	cd ./customs

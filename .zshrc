@@ -73,6 +73,7 @@ export PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:$ZSH/b
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
+export EDITOR='vim'
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
 #   export EDITOR='vim'
@@ -94,7 +95,12 @@ export PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:$ZSH/b
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias zshrc='subl ~/.zshrc'
+
+alias zshrc='${EDITOR} ~/.zshrc'
+alias vimc='${EDITOR} ~/.vim'
+alias vimrc='${EDITOR} ~/.vimrc'
+alias nvimc='${EDITOR} ~/.config/nvim'
+alias nvimrc='${EDITOR} ~/.config/nvim/init.vim'
 
 if [ -f "/usr/local/bin/exa" ]; then
   alias la='exa -abghHliS'

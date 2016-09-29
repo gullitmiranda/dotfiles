@@ -116,7 +116,7 @@
 [core]
   autocrlf = false
   # editor = subl -n -w
-  editor = '/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl' -w
+	editor = vim
 	excludesfile = /Users/gmmaster/.gitignore
 [advice]
   statusHints = false

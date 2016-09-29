@@ -243,3 +243,13 @@ export GEM_HOME="$HOME/.gem"
 export ANDROID_HOME="${HOME}/Library/Android/sdk"
 # export PATH="/Applications/Genymotion.app/Contents/MacOS/player.app/Contents/MacOS/tools:${PATH}"
 # export PATH="${PATH}:${ANDROID_HOME}/platforms:${ANDROID_HOME}/build-tools"
+
+# NodeJS
+export NVM_DIR="$HOME/.nvm"
+. "$(brew --prefix nvm)/nvm.sh"
+
+export PATH="./node_modules/.bin:$PATH"
+
+alias rn="react-native"
+export PATH="$HOME/.anyenv/bin:$PATH"
+eval "$(anyenv init -)"

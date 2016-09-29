@@ -106,6 +106,8 @@ if [ -f "/usr/local/bin/exa" ]; then
   alias la='exa -abghHliS'
 fi
 
+alias flushdns='dscacheutil -flushcache;sudo killall -HUP mDNSResponder;say flushed'
+
 bindkey -e
 
 # Arrow search
@@ -137,9 +139,32 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   alias tw='tower .'
   alias ccat='pygmentize'
 
+  alias caret='open -a Caret'
+
   alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
   alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
 fi
+
+# Sublime
+
+open_with_sublime() {
+  if [[ $# -gt 0 ]]; then
+    project_path=${1}
+    shift;
+  else
+    project_path="`pwd`"
+  fi
+
+  project_file="${project_path}/`basename "${project_path}"`.sublime-project"
+
+  if [[ -f "${project_file}" ]]; then
+    project_path=${project_file}
+  fi
+
+  subl "${project_path}" ${@}
+}
+
+exportf open_with_sublime
 
 # Alias
 alias hgrep='history | grep'
@@ -147,8 +172,8 @@ alias pgrep='ps aux | grep -v grep | grep'
 alias egrep='env | grep'
 alias agrep='alias | grep'
 
-alias ss='subl .'
-alias ssp='subl $(basename "$PWD").sublime-project'
+alias ss="open_with_sublime"
+alias ssp="open_with_sublime"
 alias atodo='subl ~/Works/azuki/TODO'
 alias ptodo='subl ~/Documents/Personal.todo'
 

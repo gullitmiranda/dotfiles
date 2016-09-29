@@ -111,7 +111,7 @@ set nohlsearch
 set incsearch
 set laststatus=2  " Always display the status line
 set showtabline=2
-set autochdir
+set noautochdir
 
 set foldcolumn=0
 set foldlevelstart=200

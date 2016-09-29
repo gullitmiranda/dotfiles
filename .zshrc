@@ -214,6 +214,12 @@ if [ -f "/usr/local/bin/azk" ]; then
   alias bdocker='/usr/local/bin/adocker'
 fi
 
+# fuse search
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_DEFAULT_OPTS="-m --bind ctrl-a:select-all,ctrl-d:deselect-all,ctrl-t:toggle-all"
+export FZF_DEFAULT_COMMAND='ag -l --nocolor --hidden --ignore .git -g ""'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
 # powerline
 if [[ -r ~/.local/lib/python2.7/site-packages/ ]]; then
   export PYTHON_PACKAGE="$HOME/.local/lib/python2.7/site-packages/"

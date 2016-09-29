@@ -244,6 +244,13 @@ export ANDROID_HOME="${HOME}/Library/Android/sdk"
 # export PATH="/Applications/Genymotion.app/Contents/MacOS/player.app/Contents/MacOS/tools:${PATH}"
 # export PATH="${PATH}:${ANDROID_HOME}/platforms:${ANDROID_HOME}/build-tools"
 
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+export DEPS_PATH=~/Works/git
+export BATS=${DEPS_PATH}/bats/bin/bats
+
+compctl -g '~/.itermocil/*(:t:r)' itermocil
+
 # NodeJS
 export NVM_DIR="$HOME/.nvm"
 . "$(brew --prefix nvm)/nvm.sh"

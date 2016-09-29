@@ -66,7 +66,7 @@ setopt interactivecomments
 
 # https://robots.thoughtbot.com/cding-to-frequently-used-directories-in-zsh
 setopt auto_cd
-cdpath=($HOME/Works $HOME/Works/request $HOME)
+cdpath=($HOME/Works $HOME/Works/azuki-sh $HOME/Works/azuki $HOME/Works/request $HOME)
 
 export PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:$ZSH/bin:$PATH"
 
@@ -184,12 +184,11 @@ if [ -d "$HOME/.local/bin" ]; then
   export PATH="$HOME/.local/bin:$PATH"
 fi
 
-if [ -d "/opt/local/bin" ]; then
-  export PATH="$PATH:/opt/local/bin"
-fi
+export PATH="$PATH:/opt/local/bin"
 
 if [ -d "$HOME/Works/azuki/azk/bin" ]; then
   export AZK_SOURCE_PATH="$HOME/Works/azuki/azk"
+  export AZK_LIB_PATH="$HOME/odrive/g/Works/azuki/azk/lib"
   export PATH="${AZK_SOURCE_PATH}/bin:$PATH"
   alias a="${AZK_SOURCE_PATH}/bin/azk"
   alias azk="${AZK_SOURCE_PATH}/bin/azk"
@@ -205,7 +204,7 @@ if [ -d "$HOME/Works/azuki/azk/bin" ]; then
   # alias gulp='agulp'
 
   export AZK_ENV=development
-  # export AZK_VM_MEMORY=512
+  export AZK_VM_MEMORY=1024
   export AZK_AGENT_CHECK_INTERVAL=30000
   export AZK_DISABLE_TRACKER=true
 fi
@@ -229,4 +228,7 @@ fi
 # if [[ -e "$PYTHON_PACKAGE/powerline/bindings/zsh/powerline.zsh" ]]; then
 #   source $PYTHON_PACKAGE/powerline/bindings/zsh/powerline.zsh
 # fi
+export DOTFILES_DIR="/Users/gmmaster/odrive/g/dotfiles"
 
+# Ruby
+export GEM_HOME="$HOME/.gem"

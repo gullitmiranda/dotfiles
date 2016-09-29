@@ -238,3 +238,8 @@ export DOTFILES_DIR="/Users/gmmaster/odrive/g/dotfiles"
 
 # Ruby
 export GEM_HOME="$HOME/.gem"
+
+# Mobile development
+export ANDROID_HOME="${HOME}/Library/Android/sdk"
+# export PATH="/Applications/Genymotion.app/Contents/MacOS/player.app/Contents/MacOS/tools:${PATH}"
+# export PATH="${PATH}:${ANDROID_HOME}/platforms:${ANDROID_HOME}/build-tools"

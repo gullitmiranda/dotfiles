@@ -64,6 +64,8 @@
 
   # remote
   r = remote -v                     # show remotes (verbose)
+  nuke = !sh -c 'git branch -d $1 && git push origin :$1' -
+  nuke-force = !sh -c 'git branch -D $1; git push origin :$1' -
 
   # reset
   unstage = reset HEAD              # remove files from index (tracking)

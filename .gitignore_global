@@ -56,6 +56,12 @@ Session.vim
 .env*
 !.env.sample
 .*.sw[plo]
+
+# Editors
 *.sublime-workspace
 *.sublime-project
+
+# sensitive data
 *privkey.asc
+.s3cfg
+*.keystore

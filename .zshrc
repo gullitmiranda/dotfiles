@@ -165,7 +165,7 @@ export PATH="$PATH:/opt/local/bin"
 
 if [ -d "$HOME/Works/azuki/azk/bin" ]; then
   export AZK_SOURCE_PATH="$HOME/Works/azuki/azk"
-  export AZK_LIB_PATH="$HOME/odrive/g/Works/azuki/azk/lib"
+  export AZK_LIB_PATH="$HOME/Works/azuki/azk/lib"
   export PATH="${AZK_SOURCE_PATH}/bin:$PATH"
   alias a="${AZK_SOURCE_PATH}/bin/azk"
   alias anvm='a nvm'
@@ -211,7 +211,7 @@ fi
 # if [[ -e "$PYTHON_PACKAGE/powerline/bindings/zsh/powerline.zsh" ]]; then
 #   source $PYTHON_PACKAGE/powerline/bindings/zsh/powerline.zsh
 # fi
-export DOTFILES_DIR="/Users/gmmaster/odrive/g/dotfiles"
+export DOTFILES_DIR="${HOME}/odrive/pessoal/dotfiles"
 
 # Ruby
 export GEM_HOME="$HOME/.gem"

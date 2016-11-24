@@ -6,6 +6,7 @@
 
 # Icon must end with two \r
 Icon
+!Icon/
 
 # Thumbnails
 ._*
@@ -65,3 +66,4 @@ Session.vim
 *privkey.asc
 .s3cfg
 *.keystore
+TODO

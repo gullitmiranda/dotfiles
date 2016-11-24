@@ -10,6 +10,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'airblade/vim-gitgutter'
 Plug 'KabbAmine/vCoolor.vim'
+Plug 'mileszs/ack.vim'
 Plug 'junegunn/fzf', { 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'vim-ctrlspace/vim-ctrlspace'
@@ -29,7 +30,7 @@ Plug 'janko-m/vim-test'
 Plug 'pbrisbin/vim-mkdir'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-surround'
-Plug 'tpope/vim-commentary'
+Plug 'scrooloose/nerdcommenter'
 Plug 'lornix/vim-scrollbar'
 Plug 'terryma/vim-expand-region'
 Plug 'kassio/neoterm'
@@ -48,11 +49,12 @@ Plug 'isRuslan/vim-es6'
 Plug 'tikhomirov/vim-glsl'
 Plug 'mattn/emmet-vim'
 
+Plug 'elixir-lang/vim-elixir'
 Plug 'slashmili/alchemist.vim'
 
 " autocomplete
-Plug 'elixir-lang/vim-elixir'
 Plug 'Valloric/YouCompleteMe', { 'do': './install --all' }
+Plug 'marijnh/tern_for_vim', { 'do': 'npm install' }
 
 " Themes
 Plug 'ciaranm/inkpot'
@@ -64,6 +66,8 @@ Plug 'iCyMind/NeoSolarized'
 Plug 'mhartington/oceanic-next'
 Plug 'jdkanani/vim-material-theme'
 Plug 'morhetz/gruvbox'
+
+" Plug 'ryanoasis/vim-devicons'
 
 call plug#end()
 
@@ -134,7 +138,6 @@ set shellcmdflag=-lc
 set showcmd
 
 " configure syntastic syntax checking to check on open as well as save
-let g:syntastic_check_on_open=1
 let g:syntastic_javascript_checkers = ['eslint']
 " let g:syntastic_javascript_eslint_exec = 'eslint_d'
 
@@ -146,16 +149,27 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+let g:syntastic_enable_highlighting = 1
+let g:syntastic_quiet_messages = { 'type': 'style' }
+let g:syntastic_mode_map={'mode': 'passive'}
 
-" tabars and buffers
+" tabbars and buffers
 nmap <S-T> :tabnew<cr>
 vmap <S-Tab> <gv
 nmap <S-K><S-B> :NERDTreeToggle<CR>
 vmap <Tab> >gv
 nmap <silent><C-p> :CtrlSpace O<CR>
-nmap <silent><C-t> :FZF<CR>
+nmap <C-t> :FZF<CR>
 vmap // y/<C-R>"<CR>  " search by selection
 map <silent> <leader><s-s><s-b> :call ToggleScrollbar()<cr><Paste>
+
+map ,e :e <C-R>=expand("%:p:h") . "/" <CR>
+map ,w :w <C-R>=expand("%:p:h") . "/" <CR>
+map ,mk :Mkdir <C-R>=expand("%:p:h") . "/" <CR>
+map ,m :Move <C-R>=expand("%:p") <CR>
+map ,t :tabnew <C-R>=expand("%:p:h") . "/" <CR>
+map ,vs :vsplit <C-R>=expand("%:p:h") . "/" <CR>
+map ,s :split <C-R>=expand("%:p:h") . "/" <CR>
 
 " NERDTreeToggle
 let g:NERDTreeShowHidden = 1
@@ -165,8 +179,12 @@ let g:NERDTreeShowHidden = 1
 let g:fzf_layout = { 'down': '~40%' }
 
 " In Neovim, you can set up fzf window using a Vim command
+" let g:fzf_layout = { 'window': 'enew' }
+" let g:fzf_layout = { 'window': '-tabnew' }
+
 let g:CtrlSpaceSearchTiming = 100
 let g:CtrlSpaceFileEngine = 'auto'
+" let g:CtrlSpaceFileEngine = '/usr/local/opt/fzf'
 let g:CtrlSpaceSaveWorkspaceOnExit = 1
 let g:CtrlSpaceSaveWorkspaceOnSwitch = 1
 let g:CtrlSpaceLoadLastWorkspaceOnStart = 1
@@ -179,6 +197,8 @@ if executable("ag")
   " Use Ag over Grep
   set grepprg=ag\ --nogroup\ --nocolor
 
+  let g:ackprg = 'ag --vimgrep'
+  " let g:ackprg = 'ack -s -H --nocolor --nogroup --column --nopager'
   let g:CtrlSpaceGlobCommand = 'ag -l --nocolor --hidden -g ""'
 endif
 
@@ -192,6 +212,20 @@ imap <C-v> <ESC>"+pa
 
 " clear find hihlighting
 nnoremap <silent> <Esc><Esc> :noh<CR> :call clearmatches()<CR>
+
+" Comments
+filetype plugin on
+" Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
+
+" Use compact syntax for prettified multi-line comments
+let g:NERDCompactSexyComs = 1
+
+" Align line-wise comment delimiters flush left instead of following code indentation
+let g:NERDDefaultAlign = 'left'
+
+" Enable trimming of trailing whitespace when uncommenting
+let g:NERDTrimTrailingWhitespace = 1
 
 if has("autocmd")  " go back to where you exited
   autocmd BufReadPost *

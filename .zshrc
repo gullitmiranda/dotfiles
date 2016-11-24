@@ -68,7 +68,7 @@ setopt interactivecomments
 setopt auto_cd
 cdpath=($HOME/Works $HOME/Works/azuki-sh $HOME/Works/azuki $HOME/Works/request $HOME)
 
-export PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:$ZSH/bin:$PATH"
+export PATH="~/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:$ZSH/bin:$PATH"
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -168,8 +168,6 @@ if [ -d "$HOME/Works/azuki/azk/bin" ]; then
   export AZK_LIB_PATH="$HOME/odrive/g/Works/azuki/azk/lib"
   export PATH="${AZK_SOURCE_PATH}/bin:$PATH"
   alias a="${AZK_SOURCE_PATH}/bin/azk"
-  alias azk="${AZK_SOURCE_PATH}/bin/azk"
-  alias docker="${AZK_SOURCE_PATH}/bin/adocker"
   alias anvm='a nvm'
   alias anode='anvm node'
 
@@ -181,7 +179,7 @@ if [ -d "$HOME/Works/azuki/azk/bin" ]; then
   # alias gulp='agulp'
 
   export AZK_ENV=development
-  export AZK_VM_MEMORY=1024
+  export AZK_VM_MEMORY=512
   export AZK_AGENT_CHECK_INTERVAL=30000
   export AZK_DISABLE_TRACKER=true
 fi
@@ -190,6 +188,8 @@ if [ -f "/usr/local/bin/azk" ]; then
   alias bazk='/usr/local/bin/azk'
   alias bdocker='/usr/local/bin/adocker'
 fi
+
+alias k="kubectl"
 
 # fuse search
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -233,6 +233,7 @@ export NVM_DIR="$HOME/.nvm"
 . "$(brew --prefix nvm)/nvm.sh"
 
 export PATH="./node_modules/.bin:$PATH"
+export PATH="$PATH:$HOME/.yarn-config/global/node_modules/.bin"
 
 alias rn="react-native"
 export PATH="$HOME/.anyenv/bin:$PATH"

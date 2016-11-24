@@ -34,7 +34,7 @@ ln -sf "${BASE_PATH}/.npmrc"            "${HOME}/"
 
 ## application settings
 mkdir -p "${HOME}/.config"
-ln -sf "${BASE_PATH}/.config/*"         "${HOME}/.config"
+ln -sf "${BASE_PATH}/.config/"*         "${HOME}/.config"
 
 if [[ -f "customs/make_links.sh" ]]; then
 	cd ./customs

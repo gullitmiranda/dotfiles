@@ -229,12 +229,11 @@ export BATS=${DEPS_PATH}/bats/bin/bats
 compctl -g '~/.itermocil/*(:t:r)' itermocil
 
 # NodeJS
-export NVM_DIR="$HOME/.nvm"
-. "$(brew --prefix nvm)/nvm.sh"
-
 export PATH="./node_modules/.bin:$PATH"
 export PATH="$PATH:$HOME/.yarn-config/global/node_modules/.bin"
 
 alias rn="react-native"
 export PATH="$HOME/.anyenv/bin:$PATH"
 eval "$(anyenv init -)"
+export NODE_BINARY="$(ndenv which node)"
+

@@ -66,6 +66,7 @@
   r = remote -v                     # show remotes (verbose)
   nuke = !sh -c 'git branch -d $1 && git push origin :$1' -
   nuke-force = !sh -c 'git branch -D $1; git push origin :$1' -
+  nukef = !sh -c 'git nuke-force $1' -
 
   # reset
   unstage = reset HEAD              # remove files from index (tracking)
@@ -106,7 +107,7 @@
 [merge]
   summary = true
   verbosity = 1
-  tool = mvimdiff
+	tool = code
 [apply]
   whitespace = nowarn
 [branch]
@@ -120,6 +121,7 @@
   # editor = subl -n -w
 	editor = vim
 	excludesfile = /Users/gmmaster/.gitignore
+	ignorecase = false
 [advice]
   statusHints = false
 [diff]
@@ -130,7 +132,7 @@
 [rerere]
   # Remember my merges
   # http://gitfu.wordpress.com/2008/04/20/git-rerere-rereremember-what-you-did-last-time/
-  enabled = true
+	enabled = false
 [include]
   path = .gitconfig.user
 [user]
@@ -152,3 +154,10 @@
 	required = true
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+[commit]
+	template = /Users/gmmaster/.stCommitMsg
+[am]
+	threeWay = true
+[http]
+	sslVerify = true

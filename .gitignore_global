@@ -67,3 +67,6 @@ Session.vim
 .s3cfg
 *.keystore
 TODO
+*.pem
+*.key
+*.pub

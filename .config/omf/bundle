@@ -1,0 +1,11 @@
+package asdf
+package fasd
+package foreign-env
+package gi
+package https://github.com/jhillyerd/plugin-git
+package https://github.com/vincentjames501/fish-kill-on-port.git
+theme bobthefish
+theme default
+theme eden
+theme godfather
+theme hulk

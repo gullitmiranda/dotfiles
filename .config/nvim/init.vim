@@ -8,12 +8,12 @@ Plug 'Valloric/MatchTagAlways'
 Plug 'Yggdroot/indentLine'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'airblade/vim-gitgutter'
+"Plug 'airblade/vim-gitgutter'
 Plug 'KabbAmine/vCoolor.vim'
 Plug 'mileszs/ack.vim'
 Plug 'junegunn/fzf', { 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'vim-ctrlspace/vim-ctrlspace'
+"Plug 'vim-ctrlspace/vim-ctrlspace'
 Plug 'tpope/vim-fugitive'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'kien/rainbow_parentheses.vim'
@@ -35,11 +35,13 @@ Plug 'lornix/vim-scrollbar'
 Plug 'terryma/vim-expand-region'
 Plug 'kassio/neoterm'
 
+Plug 'neomake/neomake'
+
 " Snippet engines
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 
 " languages syntaxes and snippets
-Plug 'scrooloose/syntastic'
+"Plug 'scrooloose/syntastic'
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
 Plug 'justinj/vim-react-snippets'
@@ -49,11 +51,22 @@ Plug 'isRuslan/vim-es6'
 Plug 'tikhomirov/vim-glsl'
 Plug 'mattn/emmet-vim'
 
-Plug 'elixir-lang/vim-elixir'
+"Plug 'elixir-lang/vim-elixir'
 Plug 'slashmili/alchemist.vim'
 
 " autocomplete
-Plug 'Valloric/YouCompleteMe', { 'do': './install --all' }
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
+
+Plug 'Shougo/neco-syntax'
+Plug 'Shougo/neco-vim'
+Plug 'zchee/deoplete-zsh'
+
+Plug 'fszymanski/deoplete-emoji'
+Plug 'thalesmello/webcomplete.vim'
+
+"Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --tern-completer --racer-completer' }
+"Plug 'Valloric/YouCompleteMe', { 'do': './install.py --tern-completer' }
 Plug 'marijnh/tern_for_vim', { 'do': 'npm install' }
 
 " Themes
@@ -145,20 +158,20 @@ set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_enable_highlighting = 1
-let g:syntastic_quiet_messages = { 'type': 'style' }
-let g:syntastic_mode_map={'mode': 'passive'}
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
+"let g:syntastic_enable_highlighting = 1
+"let g:syntastic_quiet_messages = { 'type': 'style' }
+"let g:syntastic_mode_map={'mode': 'passive'}
 
 " tabbars and buffers
 nmap <S-T> :tabnew<cr>
 vmap <S-Tab> <gv
 nmap <S-K><S-B> :NERDTreeToggle<CR>
 vmap <Tab> >gv
-nmap <silent><C-p> :CtrlSpace O<CR>
+"nmap <silent><C-p> :CtrlSpace O<CR>
 nmap <C-t> :FZF<CR>
 vmap // y/<C-R>"<CR>  " search by selection
 map <silent> <leader><s-s><s-b> :call ToggleScrollbar()<cr><Paste>
@@ -182,13 +195,13 @@ let g:fzf_layout = { 'down': '~40%' }
 " let g:fzf_layout = { 'window': 'enew' }
 " let g:fzf_layout = { 'window': '-tabnew' }
 
-let g:CtrlSpaceSearchTiming = 100
-let g:CtrlSpaceFileEngine = 'auto'
-" let g:CtrlSpaceFileEngine = '/usr/local/opt/fzf'
-let g:CtrlSpaceSaveWorkspaceOnExit = 1
-let g:CtrlSpaceSaveWorkspaceOnSwitch = 1
-let g:CtrlSpaceLoadLastWorkspaceOnStart = 1
-let g:CtrlSpaceCacheDir = expand($HOME)
+"let g:CtrlSpaceSearchTiming = 100
+"let g:CtrlSpaceFileEngine = 'auto'
+""let g:CtrlSpaceFileEngine = '/usr/local/opt/fzf'
+"let g:CtrlSpaceSaveWorkspaceOnExit = 1
+"let g:CtrlSpaceSaveWorkspaceOnSwitch = 1
+""let g:CtrlSpaceLoadLastWorkspaceOnStart = 1
+"let g:CtrlSpaceCacheDir = expand($HOME)
 
 set rtp+=/usr/local/opt/fzf " enable fzf with fuse search engine
 
@@ -199,7 +212,7 @@ if executable("ag")
 
   let g:ackprg = 'ag --vimgrep'
   " let g:ackprg = 'ack -s -H --nocolor --nogroup --column --nopager'
-  let g:CtrlSpaceGlobCommand = 'ag -l --nocolor --hidden -g ""'
+  "let g:CtrlSpaceGlobCommand = 'ag -l --nocolor --hidden -g ""'
 endif
 
 " copy and paste
@@ -214,6 +227,7 @@ imap <C-v> <ESC>"+pa
 nnoremap <silent> <Esc><Esc> :noh<CR> :call clearmatches()<CR>
 
 " Comments
+filetype on
 filetype plugin on
 " Add spaces after comment delimiters by default
 let g:NERDSpaceDelims = 1
@@ -250,6 +264,7 @@ augroup vimrc
   autocmd BufRead,BufNewFile *.md set filetype=markdown
   autocmd BufRead,BufNewFile .{jscs,jshint,eslint}rc set filetype=json
   autocmd BufRead,BufNewFile .glsl.json set filetype=glsl
+  " autocmd! BufWritePost $MYVIMRC source % | echom "Reloaded " . $MYVIMRC | redraw
 
   au BufReadPre * setlocal foldmethod=indent
   au BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
@@ -328,11 +343,24 @@ nmap <silent> <leader>l :TestLast<CR>
 nmap <silent> <leader>g :TestVisit<CR>
 
 " Control spotify from vim - https://github.com/hnarayanan/shpotify
-nnoremap <leader>sn :silent :! spotify next<CR> :redraw!<CR>
-nnoremap <leader>sb :silent :! spotify prev<CR> :redraw!<CR>
+" nnoremap <leader>sn :silent :! spotify next<CR> :redraw!<CR>
+" nnoremap <leader>sb :silent :! spotify prev<CR> :redraw!<CR>
 
 
 " languages syntaxes and snippets
 let g:jsx_ext_required = 0
 let g:javascript_plugin_jsdoc = 1
 
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger="<C-w>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" Enable snippet box
+let g:snippetsEmu_key = "<C-Space>"
+
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
+
+" run Neomake on the current file on every write
+" autocmd! BufWritePost * Neomake

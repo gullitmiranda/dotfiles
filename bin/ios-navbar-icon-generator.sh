@@ -1,0 +1,1 @@
+/Users/gmmaster/Works/git/ios-icon-generator/ios-navbar-icon-generator.sh

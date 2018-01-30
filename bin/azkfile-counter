@@ -1,0 +1,2 @@
+#! /bin/bash
+curl -s "https://github.com/search?utf8=%E2%9C%93&q=Azkfile.js+in%3Apath+-user%3Aazukiapp+-user%3Aazuki-images+-user%3Arun-project+-user%3Amarcusgadbem+-user%3Aheitortsergent+-user%3Asaitodisse+-user%3Agullitmiranda+-user%3Afearenales+-user%3Anuxlli&type=Code&ref=searchresults" | grep counter | sed s/.*counter\"\>//g | sed s/\<\\/.*//g

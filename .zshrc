@@ -1,3 +1,5 @@
+debug=false
+$debug && zmodload zsh/zprof
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
@@ -54,7 +56,9 @@ DISABLE_AUTO_UPDATE="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(common-aliases coreutils dirpersist bundler docker gem git git-extras myalias git-hubflow git-flow sublime zsh-autosuggestions)
+plugins=(common-aliases coreutils dirpersist docker gem git git-extras history-substring-search)
+# custom plugins
+plugins+=(myalias sublime zsh-autosuggestions)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -66,9 +70,12 @@ setopt interactivecomments
 
 # https://robots.thoughtbot.com/cding-to-frequently-used-directories-in-zsh
 setopt auto_cd
-cdpath=($HOME/Works $HOME/Works/azuki-sh $HOME/Works/azuki $HOME/Works/request $HOME)
+cdpath=($HOME/Works $HOME/Works/yube $HOME/Works/azuki-sh $HOME/Works/azuki $HOME/Works/request $HOME/odrive/pessoal $HOME)
 
-export PATH="~/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:$ZSH/bin:$PATH"
+export PATH="$HOME/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/dotfiles/bin:$PATH"
+
+# Adding completion directory
+fpath+=~/.zfunc
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -96,6 +103,9 @@ export EDITOR='vim'
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+alias datestamp='date +%Y%m%d-%H%M%S'
+alias dateiso='date +%Y-%m-%dT%H:%M:%S%z'
+
 alias zshrc='${EDITOR} ~/.zshrc'
 alias vimc='${EDITOR} ~/.vim'
 alias vimrc='${EDITOR} ~/.vimrc'
@@ -108,25 +118,28 @@ fi
 
 alias flushdns='dscacheutil -flushcache;sudo killall -HUP mDNSResponder;say flushed'
 
-bindkey -e
+# bindkey -e
 
 # Arrow search
-bindkey '\e[A' history-beginning-search-backward
-bindkey '\e[B' history-beginning-search-forward
-bindkey '^[OA' history-beginning-search-backward
-bindkey '^[OB' history-beginning-search-forward
-bindkey '^[[A' history-beginning-search-backward
-bindkey '^[[B' history-beginning-search-forward
+# bindkey '\e[A' history-beginning-search-backward
+# bindkey '\e[B' history-beginning-search-forward
+# bindkey '^[OA' history-beginning-search-backward
+# bindkey '^[OB' history-beginning-search-forward
+# bindkey '^[[A' history-beginning-search-backward
+# bindkey '^[[B' history-beginning-search-forward
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
 
 # Mac OSX
 if [[ "$OSTYPE" == "darwin"* ]]; then
+
   # Word Jump
   bindkey '^[[1;9C' forward-word
   bindkey '^[[1;9D' backward-word
 
   # Line limits jumping
-  bindkey '\033f' beginning-of-line
-  bindkey '\033e' end-of-line
+  # bindkey '\033f' beginning-of-line
+  # bindkey '\033e' end-of-line
   # bindkey "\e[1~" beginning-of-line
   # bindkey "\e[4~" end-of-line
 
@@ -152,6 +165,7 @@ alias egrep='env | grep'
 alias agrep='alias | grep'
 
 alias atodo='subl ~/Works/azuki/TODO'
+alias ytodo='subl ~/Works/yube/TODO'
 alias ptodo='subl ~/Documents/Personal.todo'
 
 # alias wh='while; do $arg; done'
@@ -161,13 +175,15 @@ if [ -d "$HOME/.local/bin" ]; then
   export PATH="$HOME/.local/bin:$PATH"
 fi
 
-export PATH="$PATH:/opt/local/bin"
+export PATH="/opt/local/bin:$PATH"
 
 if [ -d "$HOME/Works/azuki/azk/bin" ]; then
   export AZK_SOURCE_PATH="$HOME/Works/azuki/azk"
   export AZK_LIB_PATH="$HOME/Works/azuki/azk/lib"
   export PATH="${AZK_SOURCE_PATH}/bin:$PATH"
   alias a="${AZK_SOURCE_PATH}/bin/azk"
+  # alias azk="${AZK_SOURCE_PATH}/bin/azk"
+  # alias docker="${AZK_SOURCE_PATH}/bin/adocker"
   alias anvm='a nvm'
   alias anode='anvm node'
 
@@ -190,6 +206,9 @@ if [ -f "/usr/local/bin/azk" ]; then
 fi
 
 alias k="kubectl"
+alias d="docker"
+alias dc="docker-compose"
+alias dct="docker-compose -f docker-compose.yml -f docker-compose.test.yml"
 
 # fuse search
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -221,19 +240,44 @@ export ANDROID_HOME="${HOME}/Library/Android/sdk"
 # export PATH="/Applications/Genymotion.app/Contents/MacOS/player.app/Contents/MacOS/tools:${PATH}"
 # export PATH="${PATH}:${ANDROID_HOME}/platforms:${ANDROID_HOME}/build-tools"
 
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+# test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
-export DEPS_PATH=~/Works/git
-export BATS=${DEPS_PATH}/bats/bin/bats
+# export DEPS_PATH=~/Works/git
+# export BATS=${DEPS_PATH}/bats/bin/bats
 
-compctl -g '~/.itermocil/*(:t:r)' itermocil
+# compctl -g '~/.itermocil/*(:t:r)' itermocil
 
 # NodeJS
 export PATH="./node_modules/.bin:$PATH"
-export PATH="$PATH:$HOME/.yarn-config/global/node_modules/.bin"
+export PATH="$HOME/.yarn-config/global/node_modules/.bin:$PATH"
 
 alias rn="react-native"
+# export NODE_BINARY="$(ndenv which node)"
+# source $HOME/.cargo/env
+export GOPATH=$HOME/Works/git/go
+if [[ -f "$(which helm)" ]]; then
+  export HELM_HOME=$(helm home)
+fi
+
+# . $HOME/.asdf/asdf.sh
+# . $HOME/.asdf/completions/asdf.bash
+[[ -s "$HOME/.kiex/scripts/kiex" ]] && source "$HOME/.kiex/scripts/kiex"
+
+if which pyenv > /dev/null; then
+  eval "$(pyenv init -)"
+  if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
+  export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+fi
+
+source ~/.env.sh
+
 export PATH="$HOME/.anyenv/bin:$PATH"
 eval "$(anyenv init -)"
-export NODE_BINARY="$(ndenv which node)"
 
+# Java home
+if [[ -f "/usr/libexec/java_home" ]]; then
+ #export JAVA_HOME="/System/Library/Frameworks/JavaVM.framework/Home"
+ export JAVA_HOME=$(/usr/libexec/java_home)
+fi
+
+$debug && zprof

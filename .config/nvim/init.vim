@@ -38,7 +38,7 @@ Plug 'kassio/neoterm'
 Plug 'neomake/neomake'
 
 " Snippet engines
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+" Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 
 " languages syntaxes and snippets
 "Plug 'scrooloose/syntastic'

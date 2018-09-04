@@ -6,5 +6,10 @@
 # sensitive data
 customs/
 
+# project files
+*.code-workspace
+
 # temp files
 *.log
+.DS_Store
+.iex_history

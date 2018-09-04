@@ -17,7 +17,6 @@ abbr -a commit   git_prompt_short_sha
 abbr -a gc       git commit -v
 abbr -a gcm      git commit -v -m
 abbr -a gcan     git commit -v -s --no-edit --amend
-abbr -a gcv      git_commit_version
 
 abbr -a gfa      git fetch --all
 abbr -a gfap     git fetch --all --prune

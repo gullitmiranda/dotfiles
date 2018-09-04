@@ -164,3 +164,5 @@
 	threeWay = true
 [http]
 	sslVerify = true
+[gc]
+	autoDetach = false

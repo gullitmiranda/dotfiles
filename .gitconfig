@@ -166,3 +166,5 @@
 	sslVerify = true
 [gc]
 	autoDetach = false
+[status]
+	submoduleSummary = true

@@ -3,7 +3,7 @@ set -gx CDPATH . $HOME/Works $HOME/Works/yube $HOME/Works/azuki-sh $HOME/Works/a
 set -gx PATH $HOME/dotfiles/bin $PATH
 set -gx ANDROID_HOME $HOME/Library/Android/sdk
 
-source ~/.iterm2_shell_integration.fish
+source ~/dotfiles/.iterm2_shell_integration.fish
 source ~/.env.sh
 
 #----

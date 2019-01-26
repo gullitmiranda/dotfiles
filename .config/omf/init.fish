@@ -17,7 +17,8 @@ set -g theme_display_docker_machine no
 set -g theme_newline_cursor yes
 
 # with custom functions
-set -g theme_newline_chart "↪"
+# set -g theme_newline_chart "↪"
+# set -g theme_newline_chart "$right_arrow_glyph"
 
 #----
 # Aliases

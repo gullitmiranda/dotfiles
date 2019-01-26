@@ -54,19 +54,30 @@ Session.vim
 *.fuse*
 
 .rvmrc
-.env*
-!.env.sample
 .*.sw[plo]
 
 # Editors
+*.code-workspace
 *.sublime-workspace
 *.sublime-project
 
 # sensitive data
 *privkey.asc
-.s3cfg
 *.keystore
-TODO
 *.pem
 *.key
 *.pub
+
+.s3cfg
+.env*
+!.env.sample
+.kube/config
+
+# Others
+TODO
+
+## By languages
+################
+
+# Elixir
+.elixir_ls

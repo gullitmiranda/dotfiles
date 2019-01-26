@@ -20,6 +20,8 @@ abbr -a gcan     git commit -v -s --no-edit --amend
 
 abbr -a gfa      git fetch --all
 abbr -a gfap     git fetch --all --prune
+abbr -a gfp      git fetch --prune
+abbr -a gfpo     git fetch --prune origin
 abbr -a gmn      git merge --no-ff
 
 abbr -a grb       git rebase

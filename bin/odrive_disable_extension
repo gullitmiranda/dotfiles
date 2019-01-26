@@ -5,7 +5,7 @@ set -e
 o_ver_path="$HOME/.odrive/bin/$(ls -1 "$HOME/.odrive/bin/" | tail -n 1)"
 extension_path="$o_ver_path/odriveapp.app/Contents/PlugIns/FinderSyncExtension.appex"
 
-if [[ -f "$extension_path" ]]; then
+if [[ -e "$extension_path" ]]; then
   mv "${extension_path}" "${extension_path}.bak"
   sudo killall Finder
 else

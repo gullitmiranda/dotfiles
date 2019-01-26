@@ -11,8 +11,6 @@ if [ "$current_theme" = "bobthefish" ]
 
     set_color $fish_color_autosuggestion
 
-    env
-
     echo -e "\e[A"
     __bobthefish_cmd_duration
     __bobthefish_timestamp

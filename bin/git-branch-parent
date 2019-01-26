@@ -1,0 +1,10 @@
+#!/bin/bash
+
+current_branch=`git rev-parse --abbrev-ref HEAD`
+
+git show-branch -a                    |
+  ack '\*'                            | # we want only lines that contain an asterisk
+  ack -v "$current_branch"            | # but also don't contain the current branch
+  head -n1                            | # and only the first such line
+  sed -E 's/.[^[]*\[(.[^]]*)\].*/\1/' | # really, just the part of the line between []
+  sed 's/[\^~].*//'                     # and with any relative refs (^, ~n) removed

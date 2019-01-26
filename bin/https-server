@@ -1,0 +1,28 @@
+#!/bin/bash
+
+http_server_cli=http-server
+
+if test ! $(which ${http_server_cli}); then
+  npm install -g ${http_server_cli}
+fi
+
+cert_filename=~/.localhost-ssl/localhost
+cert=${cert_filename}.crt
+key=${cert_filename}.key
+err=
+
+if [[ ! -e "$cert" ]]; then
+  echo "Not foud cert file $cert"
+  err=1
+fi
+if [[ ! -e "$key" ]]; then
+  echo "Not foud key file $key"
+  err=1
+fi
+
+if [[ -n "$err" ]]; then
+  echo "Run \`localhost-ssl\` to generate a cert and key"
+  exit 1
+fi
+
+${http_server_cli} --ssl --cert "$cert" --key "$key"

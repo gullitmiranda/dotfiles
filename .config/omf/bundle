@@ -1,6 +1,5 @@
 package asdf
 package bang-bang
-package cd
 package config
 package fasd
 package foreign-env
@@ -15,4 +14,3 @@ theme bobthefish
 theme default
 theme eden
 theme godfather
-theme hulk

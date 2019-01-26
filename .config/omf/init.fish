@@ -71,13 +71,13 @@ alias ytodo='code ~/Works/yube/TODO'
 alias ptodo='code ~/Documents/Personal.todo'
 
 #----
-# Dev
+# DevOps
 
-# Elixir config
-set -gx ERL_AFLAGS "-kernel shell_history enabled"
-
-## GoLang
-set -gx GOPATH $HOME/Works/git/go
+# gcloud
+if test (which gcloud)
+  set gcloud_bin_dir (dirname (readlink (which gcloud)))
+  set -gx PATH $PATH $gcloud_bin_dir
+end
 
 # helm configs
 if test (which helm)
@@ -85,9 +85,21 @@ if test (which helm)
   set -gx HELM_HOME (helm home)
 end
 
-## NodeJS
-set -gx PATH (yarn global bin) $PATH
-set -gx PATH ./node_modules/.bin $PATH
+#----
+# Dev
+
+# Elixir/Erlang config
+set -gx ERL_AFLAGS "-kernel shell_history enabled"
+
+## GoLang
+set -gx GOPATH $HOME/Works/git/go
+
+# ## NodeJS
+# fix conflic which asdf-nodejs which dependecy shim
+set -gx PATH /usr/local/bin /usr/bin /bin /usr/sbin /sbin $PATH
+
+set -gx PATH $PATH (yarn global bin)
+set -gx PATH $PATH ./node_modules/.bin
 
 # Rust
-set -gx PATH $HOME/.cargo/bin $PATH
+set -gx PATH $PATH $HOME/.cargo/bin

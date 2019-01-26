@@ -1,6 +1,6 @@
 # set -U EDITOR vim
-set -gx CDPATH . $HOME/Works $HOME/Works/yube $HOME/Works/azuki-sh $HOME/Works/azuki $HOME/Works/request $HOME/odrive/pessoal $HOME
-set -gx PATH $HOME/dotfiles/bin $PATH
+set -gx CDPATH . $HOME/Works $HOME/Works/yube $HOME/Works/azuki-sh $HOME/Works/azuki $HOME/Works/azuki-mafia $HOME/Works/request $HOME/odrive/pessoal $HOME
+set -gx PATH $HOME/dotfiles/bin /opt $PATH
 set -gx ANDROID_HOME $HOME/Library/Android/sdk
 
 source ~/dotfiles/.iterm2_shell_integration.fish

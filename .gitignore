@@ -13,3 +13,5 @@ customs/
 *.log
 .DS_Store
 .iex_history
+.config/fish/fishd.*
+.config/fish/fish_variables

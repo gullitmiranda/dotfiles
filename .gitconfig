@@ -114,16 +114,17 @@
 [apply]
   whitespace = nowarn
 [branch]
-  autosetupmerge = true
+	autoSetupMerge = always
 [push]
   # 'git push' will push the current branch to its tracking branch
   # the usual default is to push all branches
-  default = tracking
+  default = current
+  # default = tracking
 [core]
   autocrlf = false
   # editor = subl -n -w
 	editor = vim
-	excludesfile = /Users/gmmaster/.gitignore
+	excludesfile = $HOME/.gitignore
 	ignorecase = false
 [advice]
   statusHints = false
@@ -143,7 +144,7 @@
 	email = gullitmiranda@gmail.com
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
+	path =
 [mergetool "sourcetree"]
 	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
@@ -159,7 +160,7 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 [commit]
-	template = /Users/gmmaster/.stCommitMsg
+	template = $HOME/.stCommitMsg
 [am]
 	threeWay = true
 [http]
@@ -168,3 +169,5 @@
 	autoDetach = false
 [status]
 	submoduleSummary = true
+[pull]
+	default = current

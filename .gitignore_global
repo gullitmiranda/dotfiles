@@ -73,11 +73,11 @@ Session.vim
 !.env.sample
 .kube/config
 
-# Others
-TODO
+!.tool-versions
 
 ## By languages
 ################
 
 # Elixir
 .elixir_ls
+*.numi

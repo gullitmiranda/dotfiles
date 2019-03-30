@@ -1,6 +1,6 @@
 # set -U EDITOR vim
-set -gx CDPATH . $HOME/Works $HOME/Works/yube $HOME/Works/azuki-sh $HOME/Works/azuki $HOME/Works/azuki-mafia $HOME/Works/request $HOME/odrive/pessoal $HOME
-set -gx PATH $HOME/dotfiles/bin /opt $PATH
+set -gx CDPATH . $HOME/Works $HOME/Works/parafuzo $HOME/Works/yube $HOME/Works/azuki-sh $HOME/Works/azuki $HOME/Works/azuki-mafia $HOME/Works/request $HOME/odrive/pessoal $HOME
+set -gx PATH $HOME/.local/bin/ $HOME/dotfiles/bin /opt $PATH
 set -gx ANDROID_HOME $HOME/Library/Android/sdk
 
 source ~/dotfiles/.iterm2_shell_integration.fish
@@ -101,9 +101,11 @@ set -gx GOPATH $HOME/Works/git/go
 
 # ## NodeJS
 # fix conflic which asdf-nodejs which dependecy shim
-set -gx PATH /usr/local/bin /usr/bin /bin /usr/sbin /sbin $PATH
+# set -gx PATH /usr/local/bin /usr/bin /bin /usr/sbin /sbin $PATH
 
-set -gx PATH $PATH (yarn global bin)
+if test (which yarn)
+  set -gx PATH $PATH (yarn global bin)
+end
 set -gx PATH $PATH ./node_modules/.bin
 
 # Rust

@@ -70,6 +70,11 @@ alias btodo='code ~/Works/brainn-co/TODO'
 alias ytodo='code ~/Works/yube/TODO'
 alias ptodo='code ~/Documents/Personal.todo'
 
+# https://github.com/fish-shell/fish-shell/issues/1156#issuecomment-371493891
+function fishcognito
+    env fish_history='' fish
+end
+
 #----
 # DevOps
 

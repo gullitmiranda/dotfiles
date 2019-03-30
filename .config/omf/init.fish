@@ -80,7 +80,7 @@ end
 
 # gcloud
 if test (which gcloud)
-  set gcloud_bin_dir (dirname (readlink (which gcloud)))
+  set gcloud_bin_dir (dirname (which gcloud))
   set -gx PATH $PATH $gcloud_bin_dir
 end
 

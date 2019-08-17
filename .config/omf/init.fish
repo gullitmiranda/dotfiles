@@ -3,6 +3,9 @@ set -gx CDPATH . $HOME/Works $HOME/Works/parafuzo $HOME/Works/yube $HOME/Works/a
 set -gx PATH $HOME/.local/bin/ $HOME/dotfiles/bin /opt $PATH
 set -gx ANDROID_HOME $HOME/Library/Android/sdk
 
+# Fix to prevent asdf shims override system binaries
+set -xg PATH /usr/local/bin /usr/bin /bin /usr/sbin /sbin $PATH
+
 source ~/dotfiles/.iterm2_shell_integration.fish
 source ~/.env.sh
 
@@ -100,8 +103,6 @@ set -gx ERL_AFLAGS "-kernel shell_history enabled"
 set -gx GOPATH $HOME/Works/git/go
 
 # ## NodeJS
-# fix conflic which asdf-nodejs which dependecy shim
-# set -gx PATH /usr/local/bin /usr/bin /bin /usr/sbin /sbin $PATH
 
 if test (which yarn)
   set -gx PATH $PATH (yarn global bin)

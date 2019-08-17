@@ -54,6 +54,13 @@ end
 #   alias cat='bat'
 # end
 
+if test -f (which fzf)
+  # https://remysharp.com/2018/08/23/cli-improved#fzf--ctrlr
+  alias preview="fzf --preview 'bat --color \"always\" {}'"
+  # add support for ctrl+o to open selected file in VS Code
+  set -gx FZF_DEFAULT_OPTS "--bind='ctrl-o:execute(code {})+abort'"
+end
+
 if test -f (which ncdu)
   alias _du=(which du)
   alias du="ncdu --color dark -rr -x --exclude .git --exclude node_modules"

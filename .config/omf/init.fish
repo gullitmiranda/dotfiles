@@ -1,5 +1,16 @@
 # set -U EDITOR vim
-set -gx CDPATH . $HOME/Works $HOME/Works/parafuzo $HOME/Works/yube $HOME/Works/azuki-sh $HOME/Works/azuki $HOME/Works/azuki-mafia $HOME/Works/request $HOME/odrive/pessoal $HOME
+
+# base cdpath's
+set -gx CDPATH $HOME/Works/request $HOME/odrive/pessoal $HOME
+# azuki cdpath's
+set -gx CDPATH $HOME/Works/azuki-sh $HOME/Works/azuki $HOME/Works/azuki-mafia $CDPATH
+# yube cdpath's
+set -gx CDPATH $HOME/Works/yube $CDPATH
+# parafuzo cdpath's
+set -gx CDPATH $HOME/Works/parafuzo $HOME/Works/parafuzo/services $CDPATH
+# priority base cdpath's
+set -gx CDPATH . $HOME/Works $CDPATH
+
 set -gx PATH $HOME/.local/bin/ $HOME/dotfiles/bin /opt $PATH
 set -gx ANDROID_HOME $HOME/Library/Android/sdk
 

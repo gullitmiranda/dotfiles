@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+echo $KUBECTL_CONTEXT
+
+sleep_size=$1
+shift;
+
+while true; do
+  ${@}
+  sleep $sleep_size
+done

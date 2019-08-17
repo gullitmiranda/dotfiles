@@ -49,6 +49,26 @@ if test -f "/usr/local/bin/exa"
   alias la='exa -abghHliS'
 end
 
+# if test -f (which bat)
+#   alias _cat=(which cat)
+#   alias cat='bat'
+# end
+
+if test -f (which ncdu)
+  alias _du=(which du)
+  alias du="ncdu --color dark -rr -x --exclude .git --exclude node_modules"
+end
+
+if test -f (which prettyping)
+  alias _ping=(which ping)
+  alias ping='prettyping --nolegend'
+end
+
+# if test -f (which tldr)
+#   alias _man=(which man)
+#   alias man='tldr'
+# end
+
 switch (uname)
   case Darwin
     function sourcetree -a repo

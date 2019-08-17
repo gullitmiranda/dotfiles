@@ -117,6 +117,8 @@ set -gx ERL_AFLAGS "-kernel shell_history enabled"
 set -gx GOPATH $HOME/Works/git/go
 
 # ## NodeJS
+set -xg NODE_ENV development
+set -xg BABEL_ENV $NODE_ENV
 
 if test (which yarn)
   set -gx PATH $PATH (yarn global bin)

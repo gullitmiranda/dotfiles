@@ -107,7 +107,17 @@ set -gx GOPATH $HOME/Works/git/go
 if test (which yarn)
   set -gx PATH $PATH (yarn global bin)
 end
-set -gx PATH $PATH ./node_modules/.bin
+
+if test -d ./node_modules/.bin
+  set -gx PATH ./node_modules/.bin $PATH
+end
 
 # Rust
-set -gx PATH $PATH $HOME/.cargo/bin
+if test -d "$HOME/.cargo/bin"
+  set -gx PATH $PATH $HOME/.cargo/bin
+end
+
+# Python
+if test -d "$HOME/Library/Python/3.7/bin"
+  set -gx PATH $PATH $HOME/Library/Python/3.7/bin
+end

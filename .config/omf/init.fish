@@ -6,6 +6,9 @@ set -gx ANDROID_HOME $HOME/Library/Android/sdk
 # Fix to prevent asdf shims override system binaries
 set -xg PATH /usr/local/bin /usr/bin /bin /usr/sbin /sbin $PATH
 
+# https://direnv.net/
+direnv hook fish | source
+
 source ~/dotfiles/.iterm2_shell_integration.fish
 source ~/.env.sh
 

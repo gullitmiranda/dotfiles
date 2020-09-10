@@ -1,0 +1,18 @@
+[custom.fishcognito]
+command = """ printf ' \\xF0\\x9F\\x91\\xBB' """
+when = """ test "$fishcognito_active" = "true" """
+prefix = ""
+
+# [character]
+# symbol = "➜"
+# error_symbol = "✗"
+# use_symbol_for_status = true
+
+[directory]
+truncate_to_repo = false
+
+[git_status]
+show_sync_count = true
+
+[kubernetes]
+# disabled = false

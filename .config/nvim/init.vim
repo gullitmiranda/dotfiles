@@ -325,7 +325,7 @@ let g:airline_theme='oceanicnext'
 
 
 " Always use vertical diffs
-set diffopt+=vertical
+" set diffopt+=vertical
 
 " Local config
 if filereadable($HOME . "/.vimrc.local")

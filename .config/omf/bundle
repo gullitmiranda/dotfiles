@@ -3,7 +3,7 @@ package bang-bang
 package config
 package fasd
 package foreign-env
-package gi
+package https://github.com/bergercookie/plugin-gi.git
 package https://github.com/jhillyerd/plugin-git
 package https://github.com/vincentjames501/fish-kill-on-port.git
 package peco

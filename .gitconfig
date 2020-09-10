@@ -6,11 +6,11 @@
   current = yellow reverse
   local = yellow
   remote = green
-[color "diff"]
-  meta = yellow bold
-  frag = magenta bold
-  old = red
-  new = green
+# [color "diff"]
+#   meta = yellow bold
+#   frag = magenta bold
+#   old = red
+#   new = green
 [alias]
   # add
   a = add # add
@@ -124,15 +124,20 @@
   autocrlf = false
   # editor = subl -n -w
 	editor = vim
-	excludesfile = $HOME/.gitignore
+	excludesfile = /Users/gmmaster/.gitignore
 	ignorecase = false
+  pager = delta
+
+[interactive]
+  diffFilter = delta --color-only
+
 [advice]
   statusHints = false
-[diff]
-  # Git diff will use (i)ndex, (w)ork tree, (c)ommit and (o)bject
-  # instead of a/b/c/d as prefixes for patches
-  mnemonicprefix = true
-        algorithm = patience
+# [diff]
+#   # Git diff will use (i)ndex, (w)ork tree, (c)ommit and (o)bject
+#   # instead of a/b/c/d as prefixes for patches
+#   mnemonicprefix = true
+#   algorithm = patience
 [rerere]
   # Remember my merges
   # http://gitfu.wordpress.com/2008/04/20/git-rerere-rereremember-what-you-did-last-time/
@@ -159,8 +164,6 @@
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
-[commit]
-	template = $HOME/.stCommitMsg
 [am]
 	threeWay = true
 [http]
@@ -171,6 +174,31 @@
 	submoduleSummary = true
 [pull]
 	default = current
-[pager]
-  diff = diff-so-fancy | less --tabs=1,5 -RFX
-  show = diff-so-fancy | less --tabs=1,5 -RFX
+	ff = only
+# [pager]
+#   diff = diff-so-fancy | less --tabs=1,5 -RFX
+#   show = diff-so-fancy | less --tabs=1,5 -RFX
+[commit]
+	template = /Users/gmmaster/.stCommitMsg
+[init]
+	defaultBranch = main
+
+[delta]
+  # defaults
+  features = side-by-side unobtrusive-line-numbers decorations
+  whitespace-error-style = 22 reverse
+
+  syntax-theme = Dracula
+	# navigate = true
+  side-by-side = true
+  line-numbers = true
+
+[delta "unobtrusive-line-numbers"]
+    line-numbers = true
+    line-numbers-left-format = "{nm:>4}│"
+    line-numbers-right-format = "{np:>4}│"
+
+[delta "decorations"]
+  commit-decoration-style = bold yellow box ul
+  file-style = bold yellow ul
+  file-decoration-style = none

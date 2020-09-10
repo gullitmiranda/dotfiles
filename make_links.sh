@@ -4,37 +4,69 @@
 set -e
 
 BASE_PATH=${1:-$BASE_PATH}
+SYNC_DIR_PATH=${SYNC_DIR_PATH:-$HOME/Dropbox}
 
 if [ ! -n "${BASE_PATH}" ]; then
 	BASE_PATH=$(pwd)
 fi
 
-echo ":: Making symbolic links from ${BASE_PATH}"
+if [[ ! -d "$SYNC_DIR_PATH" ]]; then
+	echo "not found SYNC_DIR_PATH=${SYNC_DIR_PATH}"
+	exit 1
+fi
+
+echo "==> Making symbolic links"
+echo "		BASE_PATH=${BASE_PATH}"
+echo "		SYNC_DIR_PATH=${SYNC_DIR_PATH}"
+
+build_link() {
+	# get all elements except the last
+	echo origin=${@:1:${#@}-1}
+	# get last element
+	echo target=${@: -1}
+
+	echo "[build_link] link \"$origin\" into \"$target\""
+	# ln -sf "$origin" "$target"
+	ln -s "$origin" "$target"
+}
+
+build_link() {
+	build_link "$BASE_PATH/$1" "$HOME/$2"
+}
+
+link_to_sync() {
+	build_link "$BASE_PATH/$1" "$SYNC_DIR_PATH/$2"
+}
 
 # ########
 # DOTFILES
 # ########
 
-## terminal and zsh
-ln -sf "${BASE_PATH}/.tmux.conf"        "${HOME}/"
-ln -sf "${BASE_PATH}/.zshrc"            "${HOME}/"
-ln -sf "${BASE_PATH}/.zdirs"            "${HOME}/"
-ln -sf "${BASE_PATH}/.zshenv"           "${HOME}/"
-ln -sf "${BASE_PATH}/.zsh-update"       "${HOME}/"
-ln -sf "${BASE_PATH}/.zsh_history"      "${HOME}/"
-ln -sf "${BASE_PATH}/.oh-my-zsh"        "${HOME}/"
+cd "$BASE_PATH"
+
+if [[ "$SHELL" == "zsh" ]]; then
+	## terminal and zsh
+	build_link .zshrc
+	build_link .zdirs
+	build_link .zshenv
+	build_link .zsh-update
+	build_link .oh-my-zsh
+	link_to_sync .zsh_history
+fi
+
+build_link .tmux.conf
 
 ## git
-ln -sf "${BASE_PATH}/.gitconfig"        "${HOME}/"
-ln -sf "${BASE_PATH}/.gitignore_global" "${HOME}/.gitignore"
+build_link .gitconfig
+build_link .gitignore_global .gitignore
 
-ln -sf "${BASE_PATH}/.editorconfig"     "${HOME}/"
-ln -sf "${BASE_PATH}/.npmignore"        "${HOME}/"
-ln -sf "${BASE_PATH}/.npmrc"            "${HOME}/"
+build_link .editorconfig
+build_link .npmignore
+build_link .npmrc
 
 ## application settings
-mkdir -p "${HOME}/.config"
-ln -sf "${BASE_PATH}/.config/"*         "${HOME}/.config"
+mkdir -p "$HOME/.config"
+build_link ".config/"* "${HOME}/.config"
 
 if [[ -f "customs/make_links.sh" ]]; then
 	cd ./customs

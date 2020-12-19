@@ -44,6 +44,33 @@ Use the brew update, upgrade, and cleanup to install pending updates and upgrade
 brew update && brew upgrade && brew cleanup
 ```
 
+## TODO
+
+- [ ] Use [Scripts to Rule Them All](https://github.blog/2015-06-30-scripts-to-rule-them-all/) pattern to scripts. Examples:
+  - <https://github.com/github/scripts-to-rule-them-all>
+
+## Utils Scripts
+
+A collection of utils bash and fish scripts
+
+### CWD
+
+Gets the current working directory
+
+- bash
+
+```bash
+# Gets the current working directory
+CWD=$(realpath $(dirname ${BASH_SOURCE[0]:-$0}))
+```
+
+- fish
+
+```fish
+# Gets the current working directory
+set CWD (realpath (dirname (status filename)))
+```
+
 ## References
 
 - Mac OS X

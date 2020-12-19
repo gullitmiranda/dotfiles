@@ -19,3 +19,4 @@ customs/
 .iex_history
 .config/fish/fishd.*
 .config/fish/fish_variables
+.config/nvim/plugged

@@ -1,5 +1,6 @@
 package asdf
 package bang-bang
+package bass
 package config
 package fasd
 package foreign-env

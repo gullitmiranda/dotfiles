@@ -1,7 +1,9 @@
 [custom.fishcognito]
 command = """ printf ' \\xF0\\x9F\\x91\\xBB' """
 when = """ test "$fishcognito_active" = "true" """
-prefix = ""
+# https://starship.rs/migrating-to-0.45.0/
+# prefix = ""
+format = ""
 
 # [character]
 # symbol = "➜"

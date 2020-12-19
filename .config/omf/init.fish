@@ -1,4 +1,4 @@
-# set -U EDITOR vim
+set -U EDITOR vim
 
 # base cdpath's
 set -gx CDPATH $HOME/Works/request $HOME/odrive/pessoal $HOME
@@ -12,7 +12,6 @@ set -gx CDPATH $HOME/Works/parafuzo $HOME/Works/parafuzo/services $CDPATH
 set -gx CDPATH . $HOME/Works $CDPATH
 
 set -gx PATH $HOME/.local/bin/ $HOME/dotfiles/bin /opt $PATH
-set -gx ANDROID_HOME $HOME/Library/Android/sdk
 
 set -gx STARSHIP_CONFIG $HOME/dotfiles/starship.toml
 
@@ -26,11 +25,20 @@ set -gx STARSHIP_CONFIG $HOME/dotfiles/starship.toml
 
 set -x LC_ALL en_US.UTF-8
 
+# Install shell integrations
+
 source ~/dotfiles/.iterm2_shell_integration.fish
-source ~/.env.sh
 
 # https://direnv.net/
-direnv hook fish | source
+# direnv hook fish | source
+
+# Hook direnv into your shell.
+# https://github.com/asdf-community/asdf-direnv
+asdf exec direnv hook fish | source
+# A shortcut for asdf managed direnv.
+function direnv
+  asdf exec direnv "$argv"
+end
 
 # https://starship.rs/
 starship init fish | source
@@ -54,8 +62,8 @@ starship init fish | source
 
 source (dirname (status filename))/alias/git.fish
 
-abbr -a datestamp date +%Y%m%d-%H%M%S
-abbr -a dateiso date +%Y-%m-%dT%H:%M:%S%z
+alias datestamp='date +%Y%m%d-%H%M%S'
+alias dateiso='date +%Y-%m-%dT%H:%M:%S%z'
 
 if test -f (which exa)
     alias ls='exa -G --color auto --icons -a -s type'
@@ -85,10 +93,13 @@ if test -f (which prettyping)
     alias ping='prettyping --nolegend'
 end
 
-# if test -f (which tldr)
-#   alias _man=(which man)
-#   alias man='tldr'
-# end
+alias brew-list-tree="brew leaves | xargs brew deps --include-build --tree"
+
+if test -f (which tldr)
+  alias _man=(which man)
+  alias man='tldr'
+  alias human='tldr'
+end
 
 switch (uname)
     case Darwin
@@ -143,18 +154,30 @@ if test (which gcloud)
 end
 
 # helm configs
-if test (which helm)
-    and test -z "$HELM_HOME"
-    set -gx HELM_HOME (helm home | head)
-end
+# if test (which helm)
+#     and test -z "$HELM_HOME"
+#     set -gx HELM_HOME (helm home | head)
+# end
 
-test -z "$KREW_ROOT"; and set -gx KREW_ROOT "$HOME/.krew"
+test -z "$KREW_ROOT"; and set KREW_ROOT "$HOME/.krew"
 if test -e "$KREW_ROOT"
+    set -gx KREW_ROOT $KREW_ROOT
     set -gx PATH "$KREW_ROOT/bin" $PATH
 end
 
 #----
 # Dev
+
+# basher is a bash package manager
+if test -d ~/.basher
+  set basher ~/.basher/bin
+
+  set -gx PATH $basher $PATH
+  status --is-interactive; and source (basher init - fish|psub)
+end
+
+# Android
+set -gx ANDROID_HOME $HOME/Library/Android/sdk
 
 # Elixir/Erlang config
 set -gx ERL_AFLAGS "-kernel shell_history enabled"

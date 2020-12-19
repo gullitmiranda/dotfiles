@@ -70,6 +70,7 @@ Session.vim
 
 .s3cfg
 .env*
+!.envrc
 !.env.sample
 .kube/config
 

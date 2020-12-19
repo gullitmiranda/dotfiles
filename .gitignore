@@ -20,3 +20,5 @@ customs/
 .config/fish/fishd.*
 .config/fish/fish_variables
 .config/nvim/plugged
+.deps
+.devkit

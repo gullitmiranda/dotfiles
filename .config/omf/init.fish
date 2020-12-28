@@ -80,7 +80,8 @@ if test -f (which fzf)
     # https://remysharp.com/2018/08/23/cli-improved#fzf--ctrlr
     alias preview="fzf --preview 'bat --color \"always\" {}'"
     # add support for ctrl+o to open selected file in VS Code
-    set -gx FZF_DEFAULT_OPTS "--bind='ctrl-o:execute(code {})+abort'"
+    # set -gx FZF_DEFAULT_OPTS "--bind='ctrl-o:execute(code {})+abort'"
+    set -U FZF_COMPLETE 1
 end
 
 if test -f (which ncdu)

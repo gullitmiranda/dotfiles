@@ -1,1 +1,0 @@
-/Users/gmmaster/Google Drive/dotfiles/.config/nvim/plugged/fzf/shell/key-bindings.fish

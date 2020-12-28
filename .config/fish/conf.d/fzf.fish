@@ -6,6 +6,16 @@ set -q FZF_PREVIEW_FILE_CMD; or set -U FZF_PREVIEW_FILE_CMD "head -n 10"
 set -q FZF_PREVIEW_DIR_CMD; or set -U FZF_PREVIEW_DIR_CMD "ls"
 
 if test "$FZF_DISABLE_KEYBINDINGS" -ne 1
+    # https://github.com/jethrokuan/fzf#quickstart
+    # Legacy       | New Keybindings    | Remarks
+    # ------------------------------------------------
+    # Ctrl-t       | Ctrl-o             | Find a file.
+    # Ctrl-r       | Ctrl-r             | Search through command history.
+    # Alt-c        | Alt-c              | cd into sub-directories (recursively searched).
+    # Alt-Shift    | Alt-Shift-c        | cd into sub-directories, including hidden ones.
+    # Ctrl-o       | Alt-o              | Open a file/dir using default editor ($EDITOR)
+    # Ctrl-g       | Alt-Shift-o        | Open a file/dir using xdg-open or open command
+
     if test "$FZF_LEGACY_KEYBINDINGS" -eq 1
         bind \ct '__fzf_find_file'
         bind \cr '__fzf_reverse_isearch'

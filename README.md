@@ -60,15 +60,15 @@ Gets the current working directory
 - bash
 
 ```bash
-# Gets the current working directory
-CWD=$(realpath $(dirname ${BASH_SOURCE[0]:-$0}))
+# Gets the current working directory - with preventiong of duplicated pwd)
+__DIRNAME="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd | head)"
 ```
 
 - fish
 
 ```fish
 # Gets the current working directory
-set CWD (realpath (dirname (status filename)))
+set __DIRNAME (realpath (dirname (status filename)))
 ```
 
 ## References

@@ -13,8 +13,6 @@ set -gx CDPATH . $HOME/Works $CDPATH
 
 set -gx PATH $HOME/.local/bin/ $HOME/dotfiles/bin /opt $PATH
 
-set -gx STARSHIP_CONFIG $HOME/dotfiles/starship.toml
-
 # Fix to prevent asdf shims override system binaries
 # --- Use a link to ~/.local/bin/ instead
 # --- ex: ln -s /usr/bin/which ~/.local/bin/

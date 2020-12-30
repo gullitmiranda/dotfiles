@@ -96,12 +96,13 @@
   # GitHub Pull Request Managment - https://gist.github.com/gnarf/5406589#file-add-git-pr-alias-sh
 	pr = "!f() { git fetch -fu ${2:-$(git remote |grep ^upstream || echo origin)} refs/pull/$1/head:pr/$1 && git checkout pr/$1; }; f"
 	pr-clean = "!git for-each-ref refs/heads/pr/* --format=\"%(refname)\" | while read ref ; do branch=${ref#refs/heads/} ; git branch -D $branch ; done"
-	permission-reset = !git diff -p -R | grep -E \"^(diff|(old|new) mode)\" | git apply
+	diff-permission = "!git diff -p -R | grep -E \"^(diff|(old|new) mode)\""
+	permission-reset = "!git diff -p -R | grep -E \"^(diff|(old|new) mode)\" | git apply"
 
   # Git pull submodules
 	spull = "!__git_spull() { git pull \"$@\" && git submodule sync --recursive && git submodule update --init --recursive; }; __git_spull"
 [format]
-  pretty = format:%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an]%Creset
+  pretty = "format:%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an]%Creset"
 [mergetool]
   prompt = false
 [mergetool "mvimdiff"]
@@ -124,7 +125,7 @@
   autocrlf = false
   # editor = subl -n -w
 	editor = vim
-	excludesfile = /Users/gmmaster/.gitignore
+	excludesfile = "$HOME/.gitignore"
 	ignorecase = false
   pager = delta
 
@@ -149,7 +150,7 @@
 	email = gullitmiranda@gmail.com
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
+	path =
 [mergetool "sourcetree"]
 	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true

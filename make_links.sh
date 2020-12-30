@@ -1,74 +1,103 @@
-#!/bin/sh
+#!/usr/bin/env bash
+
+# Make sure globstar (glob using **) is enabled
+shopt -s globstar
 
 # Make Defaults Links
-set -e
 
-BASE_PATH=${1:-$BASE_PATH}
-SYNC_DIR_PATH=${SYNC_DIR_PATH:-$HOME/Dropbox}
+DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd | head)"
 
-if [ ! -n "${BASE_PATH}" ]; then
-	BASE_PATH=$(pwd)
+LN_OPTS=${LN_OPTS:-"-s"}
+
+if [ ! -d "${DOTFILES_DIR}" ]; then
+  echo "not found DOTFILES_DIR="$DOTFILES_DIR""
+  exit 1
 fi
 
-if [[ ! -d "$SYNC_DIR_PATH" ]]; then
-	echo "not found SYNC_DIR_PATH=${SYNC_DIR_PATH}"
-	exit 1
-fi
+cat <<EOF
+==> Link dotfiles directory
+  DOTFILES_DIR=$DOTFILES_DIR
+  HOME=$HOME
+EOF
 
-echo "==> Making symbolic links"
-echo "		BASE_PATH=${BASE_PATH}"
-echo "		SYNC_DIR_PATH=${SYNC_DIR_PATH}"
+_cd() {
+  local _cmd=(cd $@)
 
-build_link() {
-	# get all elements except the last
-	echo origin=${@:1:${#@}-1}
-	# get last element
-	echo target=${@: -1}
+  echo "+ ${_cmd[@]}"
+  ${_cmd[@]}
+}
 
-	echo "[build_link] link \"$origin\" into \"$target\""
-	# ln -sf "$origin" "$target"
-	ln -s "$origin" "$target"
+abspath() {
+  local p=$1
+
+  if [[ ! "$p" =~ ^(\.|\/) ]]; then
+    p="./$p"
+  fi
+
+  cd "$(dirname "$p")"
+  printf "%s/%s\n" "$(pwd)" "$(basename "$p")"
+  cd "$OLDPWD"
 }
 
 build_link() {
-	build_link "$BASE_PATH/$1" "$HOME/$2"
+  local origin=$1
+  local target=${2:-.}
+
+  echo "+ ln $LN_OPTS "$origin" "$target""
+  ln $LN_OPTS "$origin" "$target"
 }
 
-link_to_sync() {
-	build_link "$BASE_PATH/$1" "$SYNC_DIR_PATH/$2"
+# Usage:
+#   $ link_files_from origin target
+#
+# Or with find filters:
+#   $ FIND_OPTS="-type f" link_files_from origin target
+link_files_from() {
+  local origin_dir=$1
+  local target=${2:-.}
+
+  echo -e "\n[link_files_from] Link all files from \"$origin_dir\" to \"${target}\""
+
+  origin_dir="$(abspath "$origin_dir")"
+  target="$(abspath "$target")"
+
+  if [ ! -d "$origin_dir" ]; then
+    echo "not found directory $origin_dir"
+  else
+    local prev_cwd=$(pwd)
+
+    _cd "$target"
+
+    while IFS= read -r -d '' file; do
+      build_link "$file"
+    done < <(find "$origin_dir" -depth 1 -print0)
+
+    _cd $prev_cwd
+  fi
 }
 
-# ########
-# DOTFILES
-# ########
+cd "$HOME"
 
-cd "$BASE_PATH"
+dotdir=$(basename "$DOTFILES_DIR")
 
-if [[ "$SHELL" == "zsh" ]]; then
-	## terminal and zsh
-	build_link .zshrc
-	build_link .zdirs
-	build_link .zshenv
-	build_link .zsh-update
-	build_link .oh-my-zsh
-	link_to_sync .zsh_history
+if [ "$DOTFILES_DIR" != "$HOME/$dotdir" ]; then
+  build_link "$DOTFILES_DIR"
 fi
 
-build_link .tmux.conf
+# $HOME files
+link_files_from "$dotdir/home"
+build_link ".gitignore_global" ".gitignore"
 
-## git
-build_link .gitconfig
-build_link .gitignore_global .gitignore
+# $HOME/.config
+mkdir -p ".config"
+link_files_from "$dotdir/.config" ".config"
 
-build_link .editorconfig
-build_link .npmignore
-build_link .npmrc
-
-## application settings
-mkdir -p "$HOME/.config"
-build_link ".config/"* "${HOME}/.config"
-
-if [[ -f "customs/make_links.sh" ]]; then
-	cd ./customs
-	./make_links.sh
+customs_dir="./$dotdir/customs"
+if [ -d "$customs_dir" ]; then
+  if [ -d "$customs_dir/home" ]; then
+    link_files_from "$customs_dir/home"
+  fi
+  if [ -d "$customs_dir/.config" ]; then
+    link_files_from "$customs_dir/.config" ".config"
+  fi
 fi

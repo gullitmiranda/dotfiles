@@ -18,6 +18,3 @@ indent_style = tab
 
 # [*.sh]
 # indent_style = tab
-
-[*.fish]
-indent_size = 2

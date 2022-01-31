@@ -1,15 +1,11 @@
 set -U EDITOR vim
 
 # base cdpath's
-set -gx CDPATH $HOME/Works/request $HOME/odrive/pessoal $HOME
-# azuki cdpath's
-set -gx CDPATH $HOME/Works/azuki-sh $HOME/Works/azuki $HOME/Works/azuki-mafia $CDPATH
+set -gx CDPATH $HOME $HOME/Works
 # yube cdpath's
 set -gx CDPATH $HOME/Works/yube $CDPATH
-# parafuzo cdpath's
-set -gx CDPATH $HOME/Works/parafuzo $HOME/Works/parafuzo/services $CDPATH
-# priority base cdpath's
-set -gx CDPATH . $HOME/Works $CDPATH
+# priority local dir cdpath's
+set -gx CDPATH . $CDPATH
 
 set -gx PATH $HOME/.local/bin/ $HOME/dotfiles/bin /opt $PATH
 

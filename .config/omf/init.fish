@@ -30,15 +30,17 @@ if test $TERM_PROGRAM = "iTerm.app"
 end
 
 # https://direnv.net/
-# direnv hook fish | source
-
-# Hook direnv into your shell.
-# https://github.com/asdf-community/asdf-direnv
-asdf exec direnv hook fish | source
-# A shortcut for asdf managed direnv.
-function direnv
-  asdf exec direnv "$argv"
+if type -q direnv
+    direnv hook fish | source
 end
+
+# # Hook direnv  your shell (using asdf).
+# # https://github.com/asdf-community/asdf-direnv
+# asdf exec direnv hook fish | source
+# # A shortcut for asdf managed direnv.
+# function direnv
+#   asdf exec direnv "$argv"
+# end
 
 # https://starship.rs/
 starship init fish | source

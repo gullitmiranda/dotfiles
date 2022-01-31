@@ -1,3 +1,6 @@
+# clean fish greeting
+set fish_greeting
+
 set -U EDITOR vim
 
 # base cdpath's

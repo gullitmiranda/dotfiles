@@ -7,7 +7,9 @@ set -gx CDPATH $HOME/Works/yube $CDPATH
 # priority local dir cdpath's
 set -gx CDPATH . $CDPATH
 
-set -gx PATH $HOME/.local/bin/ $HOME/dotfiles/bin /opt $PATH
+contains /opt $PATH; or set -gx PATH /opt $PATH
+contains $HOME/dotfiles/bin $PATH; or set -gx PATH $HOME/dotfiles/bin $PATH
+contains $HOME/.local/bin/ $PATH; or set -gx PATH $HOME/.local/bin/ $PATH
 
 # Fix to prevent asdf shims override system binaries
 # --- Use a link to ~/.local/bin/ instead

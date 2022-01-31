@@ -19,9 +19,10 @@ set -gx PATH $HOME/.local/bin/ $HOME/dotfiles/bin /opt $PATH
 
 set -x LC_ALL en_US.UTF-8
 
-# Install shell integrations
-
-source ~/dotfiles/.iterm2_shell_integration.fish
+if test $TERM_PROGRAM = "iTerm.app"
+    # Install shell integrations
+    source ~/dotfiles/.iterm2_shell_integration.fish
+end
 
 # https://direnv.net/
 # direnv hook fish | source

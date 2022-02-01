@@ -13,8 +13,5 @@ format = ""
 [directory]
 truncate_to_repo = false
 
-[git_status]
-show_sync_count = true
-
 [kubernetes]
 # disabled = false

@@ -1,6 +1,8 @@
 # clean fish greeting
 set fish_greeting
 
+set -x LC_ALL en_US.UTF-8
+
 set -U EDITOR vim
 
 # base cdpath's
@@ -22,8 +24,6 @@ contains $HOME/.local/bin/ $PATH; or set -gx PATH $HOME/.local/bin/ $PATH
 # # override native coreutils with gnu coreutils
 # set GNUBIN (brew --prefix)/opt/coreutils/libexec/gnubin
 # contains $GNUBIN $PATH; or set -gx PATH $GNUBIN PATH
-
-set -x LC_ALL en_US.UTF-8
 
 if test $TERM_PROGRAM = "iTerm.app"
     # Install shell integrations

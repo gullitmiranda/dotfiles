@@ -20,7 +20,8 @@ contains $HOME/.local/bin/ $PATH; or set -gx PATH $HOME/.local/bin/ $PATH
 # set -xg PATH /usr/local/bin /usr/bin /bin /usr/sbin /sbin $PATH
 
 # # override native coreutils with gnu coreutils
-# set -xg PATH /usr/local/opt/coreutils/libexec/gnubin $PATH
+# set GNUBIN (brew --prefix)/opt/coreutils/libexec/gnubin
+# contains $GNUBIN $PATH; or set -gx PATH $GNUBIN PATH
 
 set -x LC_ALL en_US.UTF-8
 
@@ -156,7 +157,7 @@ end
 # gcloud
 if type -q gcloud
     set gcloud_bin_dir (dirname (which gcloud))
-    set -gx PATH $PATH $gcloud_bin_dir
+    contains $gcloud_bin_dir $PATH; or set -gx PATH $gcloud_bin_dir $PATH
 end
 
 # helm configs
@@ -166,9 +167,9 @@ end
 # end
 
 test -z "$KREW_ROOT"; and set KREW_ROOT "$HOME/.krew"
-if test -e "$KREW_ROOT"
+if test -d "$KREW_ROOT"
     set -gx KREW_ROOT $KREW_ROOT
-    set -gx PATH "$KREW_ROOT/bin" $PATH
+    contains "$KREW_ROOT/bin" $PATH; or set -gx PATH "$KREW_ROOT/bin" $PATH
 end
 
 #----
@@ -196,11 +197,12 @@ set -xg NODE_ENV development
 set -xg BABEL_ENV $NODE_ENV
 
 if type -q yarn
-    set -gx PATH $PATH (yarn global bin)
+    set yarn_bin (yarn global bin)
+    contains $yarn_bin $PATH; or set -gx PATH $PATH $yarn_bin
 end
 
 if test -d ./node_modules/.bin
-    set -gx PATH ./node_modules/.bin $PATH
+    contains ./node_modules/.bin $PATH; or set -gx PATH ./node_modules/.bin $PATH
 end
 
 # Rust
@@ -210,5 +212,5 @@ end
 
 # Python
 if test -d "$HOME/Library/Python/3.7/bin"
-    set -gx PATH $PATH $HOME/Library/Python/3.7/bin
+    contains $HOME/Library/Python/3.7/bin $PATH; or set -gx PATH $PATH $HOME/Library/Python/3.7/bin
 end

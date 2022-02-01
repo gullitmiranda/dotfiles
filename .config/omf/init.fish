@@ -197,3 +197,11 @@ end
 if test -d "$HOME/Library/Python/3.7/bin"
     contains $HOME/Library/Python/3.7/bin $PATH; or set -gx PATH $PATH $HOME/Library/Python/3.7/bin
 end
+
+# Finder-launched applications missing PATH env
+# - https://apple.stackexchange.com/questions/51677/how-to-set-path-for-finder-launched-applications/198282#198282
+# - https://community.atlassian.com/t5/Bitbucket-questions/SourceTree-Hook-failing-because-paths-don-t-seem-to-be-set/qaq-p/274792
+switch (uname)
+    case Darwin
+        launchctl setenv PATH (fish --no-config 'echo $PATH')
+end

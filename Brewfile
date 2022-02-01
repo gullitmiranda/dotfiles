@@ -23,28 +23,44 @@ brew 'cask'
 tap 'argon/mas'
 brew 'mas'
 
-# Terminal tools
+# Terminal Tools
 ######################
-tap 'clementtsang/bottom'
-# tap 'wdullaer/scotty'
+cask 'iterm2'
 
+# upgrade bash
 brew 'bash'
 brew 'bash-completion'
+
+# install fish-shell
+brew 'fish'
+
+# https://starship.rs/ - The minimal, blazing-fast, and infinitely customizable prompt for any shell!
+brew 'starship'
+
+# Terminal basic tools
+######################
+
+# # https://github.com/ClementTsang/bottom - Yet another cross-platform graphical process/system monitor.
+# tap 'clementtsang/bottom'
+# brew 'bottom'
+
+# Transports you to any directory you have visited before
+# https://github.com/wdullaer/scotty
+# tap 'wdullaer/scotty'
+# brew 'scotty'
+
 brew 'bat'
 brew 'exa'
-brew 'fish'
-brew 'fzf'
+# brew 'fzf'
 brew 'htop'
 brew 'httpie'
 brew 'iproute2mac'
-brew 'starship'
 brew 'tldr'
 brew 'wget'
-brew 'prettyping'
-brew 'ncdu'
-brew 'bottom'
+brew 'jq'
 
-cask 'iterm2' || true
+# NCurses Disk Usage
+brew 'ncdu'
 
 # Productivity tools
 ######################
@@ -52,10 +68,9 @@ cask 'alfred'
 # cask 'background-music'
 # cask 'dropbox'
 # cask 'firefox'
-# cask 'google-backup-and-sync'
-cask 'google-drive-file-stream'
+# cask 'google-drive'
 # cask 'google-chrome'
-cask 'skype'
+# cask 'skype'
 cask 'slack'
 cask 'spotify'
 cask 'vlc'
@@ -63,46 +78,82 @@ cask 'vlc'
 # Development tools
 ######################
 tap 'github/gh'
+brew 'gh'
+
 tap 'neovim/neovim'
+brew 'neovim'
+
 # tap 'webhookrelay/tap'
-# tap 'homebrew/cask'
 
 brew 'coreutils'
 brew 'diff-so-fancy'
-brew 'gh'
 brew 'gist'
 brew 'git'
 brew 'git-delta'
 brew 'git-lfs'
-brew 'neovim'
 brew 'wakatime-cli'
 brew 'watchman' # https://facebook.github.io/watchman/docs/install.html
 brew 'postgresql'
-brew 'python'
+# brew 'python'
 
-cask 'dash'
+# # https://github.com/stevegrunwell/asimov - Automatically exclude development dependencies from Apple Time Machine backups
+# brew 'asimov'
+# run after install: sudo brew services start asimov
+
 cask 'androidtool'
-cask 'sourcetree'
-cask 'ngrok'
-cask 'dash4'
+# cask 'sourcetree'
+# cask 'ngrok'
+# cask 'dash'
+# cask 'dash4'
 
-# DevOps tools
-######################
-tap 'derailed/k9s'
-tap 'johanhaleby/kubetail'
+# https://setapp.com/
+cask 'setapp'
+
+brew 'dust'
+brew 'duf'
+# https://github.com/dalance/procs - A modern replacement for ps written in Rust
+brew 'procs'
+
+# https://github.com/orf/gping - Ping, but with a graph
+brew 'gping'
+# https://github.com/denilsonsa/prettyping - `prettyping` is a wrapper around the standard `ping` tool, making the output prettier, more colorful, more compact, and easier to read.
+brew 'prettyping'
+
+# https://github.com/cantino/mcfly - Fly through your shell history. Great Scott!
+tap 'cantino/mcfly'
+brew 'mcfly'
+
+# # https://curlie.io/ - The power of curl, the ease of use of httpie.
+# tap 'rs/tap'
+# brew 'curlie'
+
+# https://github.com/ogham/dog - A command-line DNS client.
+brew 'dog'
+
+# https://github.com/ClementTsang/bottom
+tap 'clementtsang/bottom'
+brew 'bottom'
+
+# https://github.com/VSCodium/vscodium - Binary releases of VS Code without MS branding/telemetry/licensing
+cask 'codium'
+
+# # DevOps tools
+# ######################
+# tap 'derailed/k9s'
+# brew 'k9s'
+
+# tap 'johanhaleby/kubetail'
+# brew 'kubetail'
 
 # brew 'direnv'
-brew 'dnsmasq'
-brew 'jq'
-brew 'k9s'
-brew 'kerl'
-brew 'kubetail'
-brew 's3cmd'
-brew 'sops'
-brew 'terraform'
-brew 'minikube'
+# brew 'dnsmasq'
+# brew 'kerl'
+# brew 's3cmd'
+# brew 'sops'
+# brew 'terraform'
+# brew 'minikube'
 
-cask 'google-cloud-sdk'
+# cask 'google-cloud-sdk'
 
 # Others
 ######################
@@ -119,30 +170,37 @@ cask 'quicklook-csv'
 cask 'webpquicklook'
 cask 'suspicious-package'
 
+# https://www.speedtest.net/apps/cli
+tap 'teamookla/speedtest'
+brew 'speedtest'
+
 # quicklook-csv webpquicklook suspicious-package
 
 # ---
 
 # rubocop:disable Style/NumericLiterals
 
-mas 'Bear', id: 1091189122
+# mas 'Bear', id: 1091189122
 mas 'DaisyDisk', id: 411643860
-mas 'Enpass', id: 732710998
+# mas 'Enpass', id: 732710998
 mas 'HiddenMe', id: 467040476
 mas 'Keynote', id: 409183694
 # mas 'Kindle', id: 405399194
 mas 'Lungo', id: 1263070803
 # mas 'Mahjong 2K', id: 431469123
-mas 'Monosnap', id: 540348655
+# mas 'Monosnap', id: 540348655
 mas 'Numbers', id: 409203825
-mas 'Shush', id: 496437906
+# mas 'Shush', id: 496437906
 # mas 'Simplenote', id: 692867256
-mas 'Sip', id: 507257563
+# mas 'Sip', id: 507257563
 mas 'StuffIt Expander', id: 405580712
 mas 'Telegram', id: 747648890
-mas 'Todoist', id: 585829637
-mas 'WhatsApp', id: 1147396723
-mas 'Xcode', id: 497799835
-mas 'Yoink', id: 457622435
+# mas 'Todoist', id: 585829637
+# mas 'WhatsApp', id: 1147396723
+# mas 'Xcode', id: 497799835
+# mas 'Yoink', id: 457622435
+mas 'Unsplash Wallpapers', id: 1284863847
+# safari extension
+mas 'Save to Raindrop.io', id: 1549370672
 
 # rubocop:enable Style/NumericLiterals

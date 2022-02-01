@@ -1,3 +1,13 @@
+# Prompt - https://starship.rs/config/#prompt
+# Wait 10 milliseconds for starship to check files under the current directory.
+scan_timeout = 10
+command_timeout = 2_000
+
+# Command Duration - https://starship.rs/config/#command-duration
+[cmd_duration]
+min_time = 0
+format = "[$duration](bold yellow)"
+
 [custom.fishcognito]
 command = """ echo 👻 """
 description = "Show 👻 when in fishcognito"

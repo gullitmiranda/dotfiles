@@ -60,3 +60,9 @@ us-west4 = "uw4"
 [elixir]
 symbol = "🔮 "
 
+# https://starship.rs/config/#environment-variable
+[env_var]
+variable = "ENV_NAME"
+default = ""
+style = "bold dimmed"
+format = "\\([$env_value]($style) env\\) "

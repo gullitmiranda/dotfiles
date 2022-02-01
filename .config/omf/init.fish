@@ -67,18 +67,21 @@ source (dirname (status filename))/alias/git.fish
 alias datestamp='date +%Y%m%d-%H%M%S'
 alias dateiso='date +%Y-%m-%dT%H:%M:%S%z'
 
-if test -f (which exa)
+#----
+# Setup tools (also override some aliases)
+
+if type -q exa
     alias ls='exa -G --color auto --icons -a -s type'
     alias ll='exa -l --color always --icons -a -s type'
     alias la='exa --color auto -abghHliS'
 end
 
-if test -f (which bat)
+if type -q bat
     alias _cat=(which cat)
     alias cat='bat -pp --theme="Dracula"'
 end
 
-if test -f (which fzf)
+if type -q fzf
     # https://remysharp.com/2018/08/23/cli-improved#fzf--ctrlr
     alias preview="fzf --preview 'bat --color \"always\" {}'"
     # add support for ctrl+o to open selected file in VS Code
@@ -86,22 +89,22 @@ if test -f (which fzf)
     set -U FZF_COMPLETE 1
 end
 
-if test -f (which ncdu)
+if type -q ncdu
     alias _du=(which du)
     alias du="ncdu --color dark -rr -x --exclude .git --exclude node_modules"
 end
 
-if test -f (which prettyping)
+if type -q prettyping
     alias _ping=(which ping)
     alias ping='prettyping --nolegend'
 end
 
 alias brew-list-tree="brew leaves | xargs brew deps --include-build --tree"
 
-if test -f (which tldr)
-  alias _man=(which man)
-  alias man='tldr'
-  alias human='tldr'
+if type -q tldr
+    alias _man=(which man)
+    alias man='tldr'
+    alias human='tldr'
 end
 
 switch (uname)
@@ -151,7 +154,7 @@ end
 # DevOps
 
 # gcloud
-if test (which gcloud)
+if type -q gcloud
     set gcloud_bin_dir (dirname (which gcloud))
     set -gx PATH $PATH $gcloud_bin_dir
 end
@@ -192,7 +195,7 @@ set -gx GOPATH $HOME/Works/git/go
 set -xg NODE_ENV development
 set -xg BABEL_ENV $NODE_ENV
 
-if test (which yarn)
+if type -q yarn
     set -gx PATH $PATH (yarn global bin)
 end
 

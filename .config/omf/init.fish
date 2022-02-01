@@ -67,6 +67,8 @@ source (dirname (status filename))/alias/git.fish
 
 alias datestamp='date +%Y%m%d-%H%M%S'
 alias dateiso='date +%Y-%m-%dT%H:%M:%S%z'
+# like iso, but work well with file path/name
+alias datefiso='date +%Y%m%dT%H%M%S%z'
 
 #----
 # Setup tools (also override some aliases)
@@ -109,8 +111,8 @@ end
 alias brew-list-tree="brew leaves | xargs brew deps --include-build --tree"
 
 if type -q tldr
-    alias _man=(which man)
-    alias man='tldr'
+    # alias _man=(which man)
+    # alias man='tldr'
     alias human='tldr'
 end
 
@@ -123,8 +125,6 @@ switch (uname)
             open -a SourceTree "$repo"
         end
         alias st='sourcetree'
-
-        alias ccat='pygmentize'
 
         alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
         alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
@@ -145,12 +145,6 @@ end
 function pgrep -a str -d "grep in all running process"
     command ps aux | grep -v grep | grep "$str"
 end
-
-## TODOs
-alias atodo='code ~/Works/azuki/TODO'
-alias btodo='code ~/Works/brainn-co/TODO'
-alias ytodo='code ~/Works/yube/TODO'
-alias ptodo='code ~/Documents/Personal.todo'
 
 # https://github.com/fish-shell/fish-shell/issues/1156#issuecomment-371493891
 function fishcognito

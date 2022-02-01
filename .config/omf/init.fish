@@ -203,5 +203,5 @@ end
 # - https://community.atlassian.com/t5/Bitbucket-questions/SourceTree-Hook-failing-because-paths-don-t-seem-to-be-set/qaq-p/274792
 switch (uname)
     case Darwin
-        launchctl setenv PATH (fish --no-config 'echo $PATH')
+        launchctl setenv PATH (bash -c 'echo $PATH')
 end

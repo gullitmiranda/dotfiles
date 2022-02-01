@@ -160,12 +160,6 @@ if type -q gcloud
     contains $gcloud_bin_dir $PATH; or set -gx PATH $gcloud_bin_dir $PATH
 end
 
-# helm configs
-# if test (which helm)
-#     and test -z "$HELM_HOME"
-#     set -gx HELM_HOME (helm home | head)
-# end
-
 test -z "$KREW_ROOT"; and set KREW_ROOT "$HOME/.krew"
 if test -d "$KREW_ROOT"
     set -gx KREW_ROOT $KREW_ROOT
@@ -175,22 +169,11 @@ end
 #----
 # Dev
 
-# basher is a bash package manager
-if test -d ~/.basher
-  set basher ~/.basher/bin
-
-  set -gx PATH $basher $PATH
-  status --is-interactive; and source (basher init - fish|psub)
-end
-
 # Android
 set -gx ANDROID_HOME $HOME/Library/Android/sdk
 
 # Elixir/Erlang config
 set -gx ERL_AFLAGS "-kernel shell_history enabled"
-
-## GoLang
-set -gx GOPATH $HOME/Works/git/go
 
 # ## NodeJS
 set -xg NODE_ENV development

@@ -1,10 +1,14 @@
 [custom.fishcognito]
-command = """ printf ' \\xF0\\x9F\\x91\\xBB' """
+command = """ echo 👻 """
+description = "Show 👻 when in fishcognito"
+# FIXME: this is very slow in fish without option to disable config files
+#   - https://github.com/fish-shell/fish-shell/issues/1256
+#   - https://github.com/fish-shell/fish-shell/pull/7921
+# shell = ["bash", "--noprofile", "--norc"]
+# FIXED by https://github.com/fish-shell/fish-shell/pull/7921
+shell = ["fish", "--no-config"]
+format = "[$symbol$output]($style) "
 when = """ test "$fishcognito_active" = "true" """
-# https://starship.rs/migrating-to-0.45.0/
-# prefix = ""
-format = ""
-
 
 [directory]
 truncate_to_repo = false

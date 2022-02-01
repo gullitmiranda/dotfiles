@@ -56,3 +56,7 @@ us-west1 = "uw1"
 us-west2 = "uw2"
 us-west3 = "uw3"
 us-west4 = "uw4"
+
+[elixir]
+symbol = "🔮 "
+

@@ -75,6 +75,7 @@ cask 'slack'
 cask 'spotify'
 cask 'vlc'
 cask 'appcleaner'
+cask 'sizeup'
 
 # Development tools
 ######################

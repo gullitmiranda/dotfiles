@@ -944,6 +944,15 @@
           }
         }
       },
+      "sizeup": {
+        "version": "1.7.4,1360",
+        "options": {
+          "full_name": "sizeup",
+          "args": {
+            "appdir": "/Applications"
+          }
+        }
+      },
       "fork": {
         "version": "2.15.1",
         "options": {

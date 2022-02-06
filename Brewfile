@@ -74,6 +74,7 @@ cask 'alfred'
 cask 'slack'
 cask 'spotify'
 cask 'vlc'
+cask 'appcleaner'
 
 # Development tools
 ######################

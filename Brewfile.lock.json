@@ -934,6 +934,15 @@
             "appdir": "/Applications"
           }
         }
+      },
+      "appcleaner": {
+        "version": "3.6.0,4070",
+        "options": {
+          "full_name": "appcleaner",
+          "args": {
+            "appdir": "/Applications"
+          }
+        }
       }
     }
   },

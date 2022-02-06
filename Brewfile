@@ -135,7 +135,7 @@ tap 'clementtsang/bottom'
 brew 'bottom'
 
 # https://github.com/VSCodium/vscodium - Binary releases of VS Code without MS branding/telemetry/licensing
-cask 'codium'
+cask 'vscodium'
 
 # # DevOps tools
 # ######################

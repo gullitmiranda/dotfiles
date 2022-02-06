@@ -925,6 +925,15 @@
             "appdir": "/Applications"
           }
         }
+      },
+      "vscodium": {
+        "version": "1.64.0",
+        "options": {
+          "full_name": "vscodium",
+          "args": {
+            "appdir": "/Applications"
+          }
+        }
       }
     }
   },

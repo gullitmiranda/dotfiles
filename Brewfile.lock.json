@@ -943,6 +943,15 @@
             "appdir": "/Applications"
           }
         }
+      },
+      "fork": {
+        "version": "2.15.1",
+        "options": {
+          "full_name": "fork",
+          "args": {
+            "appdir": "/Applications"
+          }
+        }
       }
     }
   },

@@ -138,6 +138,9 @@ brew 'bottom'
 # https://github.com/VSCodium/vscodium - Binary releases of VS Code without MS branding/telemetry/licensing
 cask 'vscodium'
 
+# https://fork.dev - Git client
+cask 'fork'
+
 # # DevOps tools
 # ######################
 # tap 'derailed/k9s'

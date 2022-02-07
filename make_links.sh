@@ -86,7 +86,6 @@ fi
 
 # $HOME files
 link_files_from "$dotdir/home"
-build_link ".gitignore_global" ".gitignore"
 
 # $HOME/.config
 mkdir -p ".config"

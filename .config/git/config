@@ -125,7 +125,6 @@
   autocrlf = false
   # editor = subl -n -w
 	editor = vim
-	excludesfile = "$HOME/.gitignore"
 	ignorecase = false
   pager = delta
 

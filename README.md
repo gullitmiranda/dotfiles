@@ -15,7 +15,18 @@ sh -c "`curl -fsSL https://raw.github.com/gullitmiranda/dotfiles/master/install.
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 # install brew packages (from Brewfile)
-brew install
+brew bundle
+```
+
+## Configure Git
+
+create a local gitconfig file from sample
+
+```shell
+cp .config/git/sample.local.gitconfig ~/dotfiles/customs/git/local.gitconfig
+# replace global gitconfig link to the new config file
+# NOTE: the new config file already include ~/dotfiles/git/config
+ln -sf ~/dotfiles/customs/git/local.gitconfig ~/.gitconfig
 ```
 
 ## Mac Update

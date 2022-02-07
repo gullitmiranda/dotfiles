@@ -43,7 +43,7 @@ build_link() {
   local origin=$1
   local target=${2:-.}
 
-  echo "+ ln $LN_OPTS "$origin" "$target""
+  echo "+ ln $LN_OPTS \"$origin\" \"$target\""
   ln $LN_OPTS "$origin" "$target"
 }
 
@@ -100,3 +100,5 @@ if [ -d "$customs_dir" ]; then
     link_files_from "$customs_dir/.config" ".config"
   fi
 fi
+
+build_link "$dotdir/git/config" ~/.gitconfig

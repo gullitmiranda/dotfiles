@@ -127,6 +127,7 @@
 	editor = vim
 	ignorecase = false
   pager = delta
+  excludesfile = "~/dotfiles/git/ignore"
 
 [interactive]
   diffFilter = delta --color-only
@@ -142,11 +143,7 @@
   # Remember my merges
   # http://gitfu.wordpress.com/2008/04/20/git-rerere-rereremember-what-you-did-last-time/
 	enabled = false
-[include]
-  path = .gitconfig.user
-[user]
-	name = Gullit Miranda
-	email = gullitmiranda@gmail.com
+
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path =
@@ -179,7 +176,7 @@
   diff = diff-so-fancy | less --tabs=1,5 -RFX
   show = diff-so-fancy | less --tabs=1,5 -RFX
 [commit]
-	template = /Users/gmmaster/.stCommitMsg
+	template = ~/.stCommitMsg
 [init]
 	defaultBranch = main
 

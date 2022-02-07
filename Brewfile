@@ -76,6 +76,8 @@ cask 'spotify'
 cask 'vlc'
 cask 'appcleaner'
 cask 'sizeup'
+# https://contexts.co/ - Allows switching between application windows
+cask 'contexts'
 
 # Development tools
 ######################

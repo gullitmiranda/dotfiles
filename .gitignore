@@ -8,7 +8,9 @@
 fish_history
 
 # sensitive data
-customs/
+customs/home
+customs/.config
+!customs/.gitkeep
 
 # project files
 *.code-workspace

@@ -8,8 +8,12 @@
 fish_history
 
 # sensitive data
+customs/*
+!customs/README.md
+!customs/home
 customs/home/*
 !customs/home/.gitkeep
+!customs/git
 customs/git/*
 !customs/git/.gitkeep
 

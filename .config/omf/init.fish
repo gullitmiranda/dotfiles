@@ -32,16 +32,17 @@ end
 
 # https://direnv.net/
 if type -q direnv
-    direnv hook fish | source
-end
+    # direnv hook fish | source
 
-# # Hook direnv  your shell (using asdf).
-# # https://github.com/asdf-community/asdf-direnv
-# asdf exec direnv hook fish | source
-# # A shortcut for asdf managed direnv.
-# function direnv
-#   asdf exec direnv "$argv"
-# end
+    # Hook direnv into your shell (using asdf).
+    # https://github.com/asdf-community/asdf-direnv
+    asdf exec direnv hook fish | source
+
+    # # A shortcut for asdf managed direnv.
+    # function direnv
+    #   asdf exec direnv "$argv"
+    # end
+end
 
 # https://starship.rs/
 starship init fish | source

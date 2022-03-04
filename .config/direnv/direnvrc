@@ -1,0 +1,2 @@
+# load asdf-direnv - https://github.com/asdf-community/asdf-direnv#the-envrc-file-in-your-project-root
+source "$(asdf direnv hook asdf)"

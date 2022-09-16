@@ -200,3 +200,7 @@
 
 [tag]
   sort = -v:refname
+
+# auto convert https urls to ssh
+[url "git@github.com:"]
+  insteadOf = https://github.com/

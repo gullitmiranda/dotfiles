@@ -28,7 +28,6 @@
 
   # commit
   c = commit -m # commit with message
-  ca = commit -am # commit all with message
   ci = commit # commit
   amend = commit --amend # ammend your last commit
   ammend = commit --amend # ammend your last commit
@@ -77,6 +76,9 @@
   uncommit = reset --soft HEAD^ # go back before last commit, with files in uncommitted state
   filelog = log -u # show changes to a file
   mt = mergetool # fire up the merge tool
+
+  reset-main = update-ref refs/heads/main refs/remotes/origin/main
+  reset-stable = update-ref refs/heads/stable refs/remotes/origin/stable
   reset-master = update-ref refs/heads/master refs/remotes/origin/master
 
   # stash

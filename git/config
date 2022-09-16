@@ -115,7 +115,10 @@
 [apply]
   whitespace = nowarn
 [branch]
-	autoSetupMerge = always
+  # Tells git branch, git switch and git checkout to set up new branches so that
+  # git-pull[1] will appropriately merge from the starting point branch
+  # https://git-scm.com/docs/git-config#Documentation/git-config.txt-branchautoSetupMerge
+	autoSetupMerge = true
 [push]
   # 'git push' will push the current branch to its tracking branch
   # the usual default is to push all branches

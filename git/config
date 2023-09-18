@@ -126,6 +126,8 @@
   # the usual default is to push all branches
   default = current
   # default = tracking
+  # https://git-scm.com/docs/git-config#Documentation/git-config.txt-pushautoSetupRemote
+  autoSetupRemote = true
 [core]
   autocrlf = false
 	editor = vim
@@ -204,3 +206,6 @@
 # auto convert https urls to ssh
 [url "git@github.com:"]
   insteadOf = https://github.com/
+
+[url "git@gitlab.com:"]
+  insteadOf = https://gitlab.com/

@@ -60,6 +60,7 @@ Session.vim
 *.code-workspace
 *.sublime-workspace
 *.sublime-project
+.vscode/*.log
 
 # sensitive data
 *privkey.asc
@@ -75,6 +76,7 @@ Session.vim
 .kube/config
 
 !.tool-versions
+/tmp
 
 ## By languages
 ################

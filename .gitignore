@@ -19,6 +19,7 @@ customs/git/*
 
 # project files
 *.code-workspace
+.vscode/*.log
 
 # temp files
 *.log
@@ -29,3 +30,4 @@ customs/git/*
 .config/nvim/plugged
 .deps
 .devkit
+/tmp

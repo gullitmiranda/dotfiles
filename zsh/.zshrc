@@ -127,15 +127,15 @@ alias flushdns='dscacheutil -flushcache;sudo killall -HUP mDNSResponder;say flus
 # bindkey '^[OB' history-beginning-search-forward
 # bindkey '^[[A' history-beginning-search-backward
 # bindkey '^[[B' history-beginning-search-forward
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
+# bindkey '^[[A' history-substring-search-up
+# bindkey '^[[B' history-substring-search-down
 
 # Mac OSX
 if [[ "$OSTYPE" == "darwin"* ]]; then
 
-  # Word Jump
-  bindkey '^[[1;9C' forward-word
-  bindkey '^[[1;9D' backward-word
+  # # Word Jump
+  # bindkey '^[[1;9C' forward-word
+  # bindkey '^[[1;9D' backward-word
 
   # Line limits jumping
   # bindkey '\033f' beginning-of-line

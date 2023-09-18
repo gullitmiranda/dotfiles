@@ -4,7 +4,7 @@ call plug#begin()
 Plug 'xolox/vim-misc'
 Plug 'junegunn/vim-easy-align'
 Plug 'tpope/vim-unimpaired'
-Plug 'Valloric/MatchTagAlways'
+" Plug 'Valloric/MatchTagAlways'
 Plug 'Yggdroot/indentLine'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -55,14 +55,14 @@ Plug 'mattn/emmet-vim'
 Plug 'slashmili/alchemist.vim'
 
 " autocomplete
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
+" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
 
 Plug 'Shougo/neco-syntax'
 Plug 'Shougo/neco-vim'
 Plug 'zchee/deoplete-zsh'
 
-Plug 'fszymanski/deoplete-emoji'
+" Plug 'fszymanski/deoplete-emoji'
 Plug 'thalesmello/webcomplete.vim'
 
 "Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --tern-completer --racer-completer' }

@@ -1,5 +1,5 @@
 # clean fish greeting
-set fish_greeting
+set -U fish_greeting ""
 
 set -x LC_ALL en_US.UTF-8
 

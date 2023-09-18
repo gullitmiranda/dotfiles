@@ -6,9 +6,15 @@ set -x LC_ALL en_US.UTF-8
 set -U EDITOR vim
 
 # base cdpath's
-set -gx CDPATH $HOME $HOME/Works
-# yube cdpath's
+set -gx CDPATH $HOME
+# add Works and some subdirs to cdpath
+# DEPRECATED: Works folder
+set -gx CDPATH $HOME/Works $CDPATH
+set -gx CDPATH $HOME/Works/sumup $CDPATH
 set -gx CDPATH $HOME/Works/yube $CDPATH
+set -gx CDPATH $HOME/Works/Morada $CDPATH
+# add Code and subdirs to cdpath
+set -gx CDPATH $HOME/Code/* $HOME/Code $CDPATH
 # priority local dir cdpath's
 set -gx CDPATH . $CDPATH
 

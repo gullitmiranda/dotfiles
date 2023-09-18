@@ -15,7 +15,7 @@ set --export --prepend PATH "$HOME/.rd/bin"
 ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
 
 # Only override docker aliases if rancher desktop is installed, checking if the folder $HOME/.rd/bin and $PATH contains it
-if test -d $HOME/.rd/bin and contains $HOME/.rd/bin $PATH
+if test -d $HOME/.rd/bin; and contains $HOME/.rd/bin $PATH
     alias docker=nerdctl
     alias docker-compose='nerdctl compose'
 end

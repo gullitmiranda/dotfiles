@@ -3,7 +3,7 @@ set -U fish_greeting ""
 
 set -x LC_ALL en_US.UTF-8
 
-set -U EDITOR vim
+set -gx EDITOR vim
 
 # base cdpath's
 set -gx CDPATH $HOME

@@ -176,10 +176,20 @@ set -gx ERL_AFLAGS "-kernel shell_history enabled"
 set -xg NODE_ENV development
 set -xg BABEL_ENV $NODE_ENV
 
-if type -q yarn
-    set yarn_bin (yarn global bin)
-    contains $yarn_bin $PATH; or set -gx PATH $PATH $yarn_bin
-end
+# if test -n $PNPM_HOME
+#     alias npm="pnpm"
+#     alias npx="pnpx"
+# end
+
+# if type -q npm
+#     set npm_bin (npm bin --global)
+#     contains $npm_bin $PATH; or set -gx PATH $PATH $npm_bin
+# end
+
+# if type -q yarn
+#     set yarn_bin (yarn global bin)
+#     contains $yarn_bin $PATH; or set -gx PATH $PATH $yarn_bin
+# end
 
 if test -d ./node_modules/.bin
     contains ./node_modules/.bin $PATH; or set -gx PATH ./node_modules/.bin $PATH

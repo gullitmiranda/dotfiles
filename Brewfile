@@ -211,3 +211,7 @@ mas 'Unsplash Wallpapers', id: 1284863847
 mas 'Save to Raindrop.io', id: 1549370672
 
 # rubocop:enable Style/NumericLiterals
+
+# https://developer.1password.com/docs/cli/app-integration/
+cask '1password'
+cask '1password-cli'

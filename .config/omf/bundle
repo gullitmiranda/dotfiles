@@ -1,7 +1,6 @@
 package bang-bang
 package config
 package foreign-env
-package https://github.com/doughsay/omf-asdf
 package spark
 package weather
 theme bobthefish

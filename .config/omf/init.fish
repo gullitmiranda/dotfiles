@@ -25,10 +25,6 @@ contains $HOME/.local/bin/ $PATH; or set -gx PATH $HOME/.local/bin/ $PATH
 # set GNUBIN (brew --prefix)/opt/coreutils/libexec/gnubin
 # contains $GNUBIN $PATH; or set -gx PATH $GNUBIN PATH
 
-if test $TERM_PROGRAM = "iTerm.app"
-    # Install shell integrations
-    source ~/dotfiles/.iterm2_shell_integration.fish
-end
 
 # https://direnv.net/
 if type -q direnv

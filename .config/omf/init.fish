@@ -34,11 +34,11 @@ contains $HOME/.local/bin/ $PATH; or set -gx PATH $HOME/.local/bin/ $PATH
 
 # https://direnv.net/
 if type -q direnv
-    # direnv hook fish | source
+    direnv hook fish | source
 
     # Hook direnv into your shell (using asdf).
     # https://github.com/asdf-community/asdf-direnv
-    asdf exec direnv hook fish | source
+    # asdf exec direnv hook fish | source
 
     # # A shortcut for asdf managed direnv.
     # function direnv

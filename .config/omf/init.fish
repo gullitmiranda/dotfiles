@@ -166,10 +166,8 @@ end
 #----
 # Dev
 
-# Android
-set -gx ANDROID_HOME $HOME/Library/Android/sdk
-
 # Elixir/Erlang config
+######################
 set -gx ERL_AFLAGS "-kernel shell_history enabled"
 
 # ## NodeJS

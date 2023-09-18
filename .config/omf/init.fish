@@ -46,8 +46,12 @@ if type -q direnv
     # end
 end
 
-# https://starship.rs/
-starship init fish | source
+# check if Warp is the current terminal
+
+if test "$TERM_PROGRAM" != WarpTerminal
+    # https://starship.rs/
+    starship init fish | source
+end
 
 # #----
 # # Theme configs

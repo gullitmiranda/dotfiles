@@ -177,34 +177,6 @@ fi
 
 export PATH="/opt/local/bin:$PATH"
 
-if [ -d "$HOME/Works/azuki/azk/bin" ]; then
-  export AZK_SOURCE_PATH="$HOME/Works/azuki/azk"
-  export AZK_LIB_PATH="$HOME/Works/azuki/azk/lib"
-  export PATH="${AZK_SOURCE_PATH}/bin:$PATH"
-  alias a="${AZK_SOURCE_PATH}/bin/azk"
-  # alias azk="${AZK_SOURCE_PATH}/bin/azk"
-  # alias docker="${AZK_SOURCE_PATH}/bin/adocker"
-  alias anvm='a nvm'
-  alias anode='anvm node'
-
-  # alias nvm='anvm'
-  # alias anpm='anvm npm'
-  # alias npm='anpm'
-
-  # alias node='anode'
-  # alias gulp='agulp'
-
-  export AZK_ENV=development
-  export AZK_VM_MEMORY=512
-  export AZK_AGENT_CHECK_INTERVAL=30000
-  export AZK_DISABLE_TRACKER=true
-fi
-
-if [ -f "/usr/local/bin/azk" ]; then
-  alias bazk='/usr/local/bin/azk'
-  alias bdocker='/usr/local/bin/adocker'
-fi
-
 alias k="kubectl"
 alias d="docker"
 alias dc="docker-compose"

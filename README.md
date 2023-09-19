@@ -7,6 +7,10 @@ Project TODOs.
 - [ ] Refactor `./install.sh` to work with fish and omf
 - [ ] Setup https://github.com/bashup/.devkit
 - [ ] Replace `customs/git/local.gitconfig` by `git/config`
+- [ ] Refactor `./make_links.sh` to show what todo, but don't run, but will work with a `eval`
+- [ ] bash/zsh
+  - [ ] Fix oh-my-zsh setup
+  - [ ] Enable startship
 
 ## Installation
 
@@ -18,12 +22,25 @@ xcode-select --install
 # if --install don't work, reset the cli path and try again
 # sudo xcode-select --reset
 
-# install brew
+# install brew from https://brew.sh/
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 # Install new terminal
 brew install --cask iterm2
 ```
+
+## Update system bash
+
+On MacOS the buid-in bash is very outdated, so update and change the default bash.
+
+```shell
+brew install --bash --bash-completion
+bash
+# You need to start a new session to use the new bash
+```
+
+> macOS 13.5.2 (22G91) has `GNU bash, version 3.2.57(1)-release (arm64-apple-darwin22)`
+> The latest versions was `GNU bash, version 5.2.15(1)-release (aarch64-apple-darwin22.1.0)`
 
 ### Setup dotfiles
 
@@ -55,6 +72,8 @@ brew bundle --verbose
 Install shell integration - https://iterm2.com/documentation-shell-integration.html
 
 ```shell
+# bash
+curl -L https://iterm2.com/shell_integration/bash -o ~/.iterm2_shell_integration.bash
 # fish
 curl -L https://iterm2.com/shell_integration/fish -o ~/.iterm2_shell_integration.fish
 # zsh
@@ -65,19 +84,20 @@ curl -L https://iterm2.com/shell_integration/zsh -o ~/.iterm2_shell_integration.
 
 ## fish
 
-> fish is already installed by the `brew bundle --verbose` command
+> TODO: test setting fish only on terminal emulators (iTerm and Warp) as recommended on https://fishshell.com/docs/current/index.html#default-shell
 
-Set fish as default shell - https://fishshell.com/docs/current/tutorial.html#switching-to-fish
+> fish is installed on `brew bundle` command
 
-```shell
-which bash | sudo tee -a /etc/shells
-chsh -s $(which bash)
-````
+Set fish as default shell https://fishshell.com/docs/current/index.html#default-shell
 
 ```shell
 which fish | sudo tee -a /etc/shells
 chsh -s $(which fish)
+# to revert to bash
+which bash | sudo tee -a /etc/shells
+chsh -s $(which bash)
 ````
+
 
 Install [omf](https://github.com/oh-my-fish/oh-my-fish)
 

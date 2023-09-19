@@ -19,3 +19,10 @@ if test -d $HOME/.rd/bin; and contains $HOME/.rd/bin $PATH
     alias docker=nerdctl
     alias docker-compose='nerdctl compose'
 end
+
+# pnpm
+set -gx PNPM_HOME "$HOME/Library/pnpm"
+if not string match -q -- $PNPM_HOME $PATH
+    set -gx PATH "$PNPM_HOME" $PATH
+end
+# pnpm end

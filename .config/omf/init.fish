@@ -31,6 +31,48 @@ contains $HOME/.local/bin/ $PATH; or set -gx PATH $HOME/.local/bin/ $PATH
 # set GNUBIN (brew --prefix)/opt/coreutils/libexec/gnubin
 # contains $GNUBIN $PATH; or set -gx PATH $GNUBIN PATH
 
+# brew setup Apple M1 vs intel
+###############################
+
+alias brew-list-tree="brew leaves | xargs brew deps --include-build --tree"
+
+if contains (uname) Darwin
+    # if contains (sysctl -n machdep.cpu.brand_string) "Apple M1"
+    #   set -gx HOMEBREW_PREFIX "/opt/homebrew";
+    #   set -gx HOMEBREW_CELLAR "/opt/homebrew/Cellar";
+    #   set -gx HOMEBREW_REPOSITORY "/opt/homebrew/Homebrew";
+    #   set -q PATH; or set PATH ''; set -gx PATH "/opt/homebrew/bin" "/opt/homebrew/sbin" $PATH;
+    #   set -q MANPATH; or set MANPATH ''; set -gx MANPATH "/opt/homebrew/share/man" $MANPATH;
+    #   set -q INFOPATH; or set INFOPATH ''; set -gx INFOPATH "/opt/homebrew/share/info" $INFOPATH;
+    # else
+    #   set -gx HOMEBREW_PREFIX "/usr/local";
+    #   set -gx HOMEBREW_CELLAR "/usr/local/Cellar";
+    #   set -gx HOMEBREW_REPOSITORY "/usr/local/Homebrew";
+    #   set -q PATH; or set PATH ''; set -gx PATH "/usr/local/bin" "/usr/local/sbin" $PATH;
+    #   set -q MANPATH; or set MANPATH ''; set -gx MANPATH "/usr/local/share/man" $MANPATH;
+    #   set -q INFOPATH; or set INFOPATH ''; set -gx INFOPATH "/usr/local/share/info" $INFOPATH;
+    # end
+
+    # WORKAROUND remove the paths from universal $fish_user_paths to prevent brew shellenv to override asdf binaries
+    removepath /usr/loca/bin
+    removepath /usr/loca/sbin
+
+    # if contains (uname -p) i386
+    #     # echo "Running in intel arch"
+    #     /usr/local/bin/brew shellenv | source
+    #     # alias brew='/usr/local/homebrew/bin/brew'
+    # else
+    #     # echo "Running in ARM arch"
+    #     /opt/homebrew/bin/brew shellenv | source
+    #     # alias brew='/opt/homebrew/bin/brew'
+    # end
+
+    # alias arm='arch -arm64e $SHELL -l'
+    # alias intel='arch -x86_64 $SHELL -l'
+
+    # alias abrew='arch -arm64e /opt/homebrew/bin/brew'
+    # alias ibrew='arch -x86_64 /usr/local/bin/brew'
+end
 
 # https://direnv.net/
 if type -q direnv
@@ -114,8 +156,6 @@ if type -q prettyping
     alias _ping=(which ping)
     alias ping='prettyping --nolegend'
 end
-
-alias brew-list-tree="brew leaves | xargs brew deps --include-build --tree"
 
 if type -q tldr
     # alias _man=(which man)

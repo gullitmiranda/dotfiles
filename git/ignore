@@ -84,3 +84,6 @@ Session.vim
 # Elixir
 .elixir_ls
 *.numi
+
+# NodeJS
+.yarn/

@@ -4,6 +4,7 @@
 #   - https://mths.be/macos
 #   - https://github.com/kakulukia/dotfiles/blob/a04a4f416a8c5c32099bab2c570111733b25c2db/misc/better-osx-settings
 #   - https://github.com/kevinSuttle/macOS-Defaults
+#   - https://gist.github.com/justsml/f76fc9e751f76cc1074a9dcadac146bc
 
 # Close any open System Preferences panes, to prevent them from overriding
 # settings we're about to change
@@ -37,26 +38,31 @@ defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
 defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
 defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
 
-# Save to disk (not to iCloud) by default
-defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
+# # Save to disk (not to iCloud) by default
+# defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
 
 # Disable the "Are you sure you want to open this application?" dialog
-defaults write com.apple.LaunchServices LSQuarantine -bool false
+# # https://osxdaily.com/2010/03/29/disable-the-are-you-sure-you-want-to-open-this-file-warning-dialogue-in-mac-os-x/
+# defaults write com.apple.LaunchServices LSQuarantine -bool false
+# https://apple.stackexchange.com/questions/196729/permanently-allow-apps-downloaded-from-anywhere
+# TODO: conferir se isto funcionou
+sudo defaults write /Library/Preferences/com.apple.security GKAutoRearm -bool NO
 
-# Remove duplicates in the "Open With" menu (also see `lscleanup` alias)
-/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
+# # Remove duplicates in the "Open With" menu (also see `lscleanup` alias)
+# /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
 
-# Disable Resume system-wide - https://www.defaults-write.com/disable-resume-system-wide/
-defaults write com.apple.systempreferences NSQuitAlwaysKeepsWindows -bool false
+# # Disable Resume system-wide - https://www.defaults-write.com/disable-resume-system-wide/
+# defaults write com.apple.systempreferences NSQuitAlwaysKeepsWindows -bool false
 
 # Disable automatic termination of inactive apps
-#defaults write NSGlobalDomain NSDisableAutomaticTermination -bool true
+# defaults read NSGlobalDomain NSDisableAutomaticTermination -bool true
 
-# Disable the crash reporter
-defaults write com.apple.CrashReporter DialogType -string "none"
+# # Disable the crash reporter
+# defaults write com.apple.CrashReporter DialogType -string "none"
 
 # Reveal IP address, hostname, OS version, etc. when clicking the clock
 # in the login window
+# TODO: check if this work
 sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
 
 # Disable smart quotes as they're annoying when typing code
@@ -66,8 +72,8 @@ defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
 # Trackpad, mouse, keyboard, Bluetooth accessories, and input                 #
 ###############################################################################
 
-# Increase sound quality for Bluetooth headphones/headsets
-defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int 40
+# # Increase sound quality for Bluetooth headphones/headsets
+# defaults read com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int 40
 
 # Enable full keyboard access for all controls
 # (e.g. enable Tab in modal dialogs)
@@ -78,33 +84,46 @@ defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
 # launchctl unload -w /System/Library/LaunchAgents/com.apple.rcd.plist 2>/dev/null
 
 # Follow the keyboard focus while zoomed in
+# TODO: check if this work
 defaults write com.apple.universalaccess closeViewZoomFollowsFocus -bool true
 
 # Disable press-and-hold for keys in favor of key repeat
+# TODO: check if this work
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 
 # Set a blazingly fast keyboard repeat rate
 defaults write NSGlobalDomain KeyRepeat -int 2
 defaults write NSGlobalDomain InitialKeyRepeat -int 10
 
+# Set sidebar icon size to medium
+defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 2
+
+# Always show scrollbars
+defaults write NSGlobalDomain AppleShowScrollBars -string "Always"
+# Possible values: `WhenScrolling`, `Automatic` and `Always`
+
 # disable text replacement as they're annoying
 defaults write -g WebAutomaticTextReplacementEnabled -bool false
+
+# Increase window resize speed for Cocoa applications
+defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
 
 ###############################################################################
 # Screen                                                                      #
 ###############################################################################
 
-# Switch default screenshots dir
-mkdir -p ~/Screenshots
-defaults write com.apple.screencapture location -string "~/Screenshots"
-# Tip: Add the ~/Screenshots into Google Drive sync
+# # Switch default screenshots dir
+# mkdir -p ~/Screenshots
+# defaults write com.apple.screencapture location -string "~/Screenshots"
+# # Tip: Add the ~/Screenshots into Google Drive sync
 
 # # Enable subpixel font rendering on non-Apple LCDs
 # # Reference: https://github.com/kevinSuttle/macOS-Defaults/issues/17#issuecomment-266633501
-# defaults write NSGlobalDomain AppleFontSmoothing -int 1
+# defaults read NSGlobalDomain AppleFontSmoothing -int 1
 
 # Enable HiDPI display modes (requires restart)
-sudo defaults write /Library/Preferences/com.apple.windowserver DisplayResolutionEnabled -bool true
+# TODO: check if this work
+sudo defaults read /Library/Preferences/com.apple.windowserver DisplayResolutionEnabled -bool true
 # /Library/Displays/Contents/Resources/Overrides/DisplayVendorID-10ac/DisplayProductID-d06e
 
 ###############################################################################
@@ -116,25 +135,25 @@ sudo defaults write /Library/Preferences/com.apple.windowserver DisplayResolutio
 # # Set standby delay to 12 hours (default is 1 hour)
 # sudo pmset -a standbydelay 43200
 
-# Enable lid wakeup
-sudo pmset -a lidwake 1
+# # Enable lid wakeup
+# sudo pmset -a lidwake 1
 
-# Restart automatically on power loss
-sudo pmset -a autorestart 1
+# # Restart automatically on power loss
+# sudo pmset -a autorestart 1
 
 ###############################################################################
 # Finder                                                                      #
 ###############################################################################
 
-# Finder: allow quitting via ⌘ + Q; doing so will also hide desktop icons
-defaults write com.apple.finder QuitMenuItem -bool true
+# # Finder: allow quitting via ⌘ + Q; doing so will also hide desktop icons
+# defaults write com.apple.finder QuitMenuItem -bool true
 
-# Finder: disable window animations and Get Info animations
-defaults write com.apple.finder DisableAllAnimations -bool true
+# # Finder: disable window animations and Get Info animations
+# defaults write com.apple.finder DisableAllAnimations -bool true
 
-# Set Desktop as the default location for new Finder windows
+# Set the default location for new Finder windows
 # For other paths, use `PfLo` and `file:///full/path/here/`
-defaults write com.apple.finder NewWindowTarget -string "PfDe"
+defaults write com.apple.finder NewWindowTarget -string "PfLo"
 defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/Downloads/"
 
 # Finder: show hidden files by default
@@ -202,9 +221,9 @@ defaults write com.apple.finder FXInfoPanesExpanded -dict \
 # Dock, Dashboard, and hot corners                                            #
 ###############################################################################
 
-# Don't group windows by application in Mission Control
-# (i.e. use the old Exposé behavior instead)
-defaults write com.apple.dock expose-group-by-app -bool false
+# # Don't group windows by application in Mission Control
+# # (i.e. use the old Exposé behavior instead)
+# defaults write com.apple.dock expose-group-by-app -bool false
 
 ###############################################################################
 # Terminal & iTerm 2                                                          #
@@ -230,5 +249,12 @@ hash tmutil &>/dev/null && sudo tmutil disablelocal
 # Enable the debug menu in Disk Utility
 defaults write com.apple.DiskUtility DUDebugMenuEnabled -bool true
 defaults write com.apple.DiskUtility advanced-image-options -bool true
+
+# Window resizing is off slightly for iTerm2
+# By default iTerm2 will only resize in increments of character widths. There might be a setting inside iTerm2 to disable this, but you can change it with the following command.
+defaults write com.googlecode.iterm2 DisableWindowSizeSnap -integer 1
+
+# enable web inspector in safari
+defaults write "bundle-identifier-here" WebKitDeveloperExtras -bool true
 
 echo "Done. Note that some of these changes require a logout/restart to take effect."

@@ -1,5 +1,13 @@
 # Gullit Miranda dotfiles
 
+## TODO
+
+Project TODOs.
+
+- [ ] Refactor `./install.sh` to work with fish and omf
+- [ ] Setup https://github.com/bashup/.devkit
+- [ ] Replace `customs/git/local.gitconfig` by `git/config`
+
 ## Installation
 
 ### Install dependencies

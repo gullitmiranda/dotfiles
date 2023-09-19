@@ -1,4 +1,4 @@
-## This file will be loaded by bash and zsh
+## This file will be loaded by bash (.bashrc) and zsh (.zshrc)
 #########
 
 # Setup asdf - https://asdf-vm.com/guide/getting-started.html#_1-install-dependencies

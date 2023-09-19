@@ -4,4 +4,5 @@
 # Install shell integration - https://iterm2.com/documentation-shell-integration.html
 test $TERM_PROGRAM = "iTerm.app" -a -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh" || true
 
+[ -f ~/.profile ] && source ~/.profile
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

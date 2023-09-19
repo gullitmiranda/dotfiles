@@ -2,20 +2,112 @@
 
 ## Installation
 
-### Setup dotfiles
-
-```bash
-sh -c "`curl -fsSL https://raw.github.com/gullitmiranda/dotfiles/master/install.sh`"
-```
-
 ### Install dependencies
 
 ```shell
+# install Xcode cli tools
+xcode-select --install
+# if --install don't work, reset the cli path and try again
+# sudo xcode-select --reset
+
 # install brew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
+# Install new terminal
+brew install --cask iterm2
+```
+
+### Setup dotfiles
+
+Clone the repository
+
+```bash
+export DOTFILES_DIR=~/dotfiles
+git clone https://github.com/gullitmiranda/dotfiles "$DOTFILES_DIR"
+cd "$DOTFILES_DIR"
+```
+
+Create default synlinks:
+
+```shell
+./make_links.sh
+```
+
+### brew bundle
+
+Bundle brew dependencies (brew, cask and mas)
+
+```shell
 # install brew packages (from Brewfile)
-brew bundle
+brew bundle --verbose
+```
+
+> [`mas`](https://github.com/mas-cli/mas) is a Mac App Store command-line interfac
+
+Install shell integration - https://iterm2.com/documentation-shell-integration.html
+
+```shell
+# fish
+curl -L https://iterm2.com/shell_integration/fish -o ~/.iterm2_shell_integration.fish
+# zsh
+curl -L https://iterm2.com/shell_integration/zsh -o ~/.iterm2_shell_integration.zsh
+```
+
+> dotfiles already load iterm2 shell integrations if the file `$HOME/.iterm2_shell_integration.$SHELL` is found
+
+## fish
+
+> fish is already installed by the `brew bundle --verbose` command
+
+Set fish as default shell - https://fishshell.com/docs/current/tutorial.html#switching-to-fish
+
+```shell
+which bash | sudo tee -a /etc/shells
+chsh -s $(which bash)
+````
+
+```shell
+which fish | sudo tee -a /etc/shells
+chsh -s $(which fish)
+````
+
+Install [omf](https://github.com/oh-my-fish/oh-my-fish)
+
+```shell
+curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
+```
+
+Install [fisher](https://github.com/jorgebucaran/fisher) plugins:
+
+```shell
+# force install
+fisher list | fisher install
+```
+
+## asdf
+
+Install asdf plugins
+
+```shell
+asdf plugin add aws-vault
+asdf plugin add awscli
+asdf plugin add direnv
+asdf plugin add elixir
+asdf plugin add erlang
+asdf plugin add golang
+asdf plugin add gomplate
+asdf plugin add krew
+asdf plugin add kubergrunt
+asdf plugin add nodejs
+asdf plugin add pnpm
+asdf plugin add ruby
+asdf plugin add terragrunt
+```
+
+Install dependencies
+
+```shell
+asdf install
 ```
 
 ## Configure Git

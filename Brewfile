@@ -8,9 +8,7 @@ cask_args appdir: '/Applications'
 # brew extensions
 ########################
 tap 'homebrew/bundle'
-tap 'homebrew/cask'
 tap 'homebrew/cask-versions'
-tap 'homebrew/core'
 tap 'homebrew/services'
 
 brew 'cask'

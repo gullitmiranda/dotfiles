@@ -163,8 +163,11 @@ Gets the current working directory
 - bash
 
 ```bash
-# Gets the current working directory - with preventiong of duplicated pwd)
-__DIRNAME="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd | head)"
+# bash directory helpers (with pwd duplication prevention)
+__CWD="$(dirname "${BASH_SOURCE[0]:-$0}")"
+__DIRNAME="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" &>/dev/null && pwd)"
+__ROOT="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")/../.." &>/dev/null && pwd)"
+__RELATIVE="$(echo $__DIRNAME | sed -e "s#$__ROOT/##g")"
 ```
 
 - fish

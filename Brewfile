@@ -9,7 +9,6 @@ cask_args appdir: '/Applications'
 ########################
 tap 'homebrew/bundle'
 tap 'homebrew/cask'
-tap 'homebrew/cask-fonts'
 tap 'homebrew/cask-versions'
 tap 'homebrew/core'
 tap 'homebrew/services'
@@ -58,6 +57,12 @@ brew 'iproute2mac'
 brew 'tldr'
 brew 'wget'
 brew 'jq'
+# Display directories as trees (with optional color/HTML output)
+# http://mama.indstate.edu/users/ice/tree/
+brew 'tree'
+# CLI tool for quick access to files and directories
+# https://github.com/clvv/fasd
+# brew 'fasd'
 
 # NCurses Disk Usage
 brew 'ncdu'
@@ -69,8 +74,7 @@ cask 'alfred'
 # cask 'dropbox'
 # cask 'firefox'
 # cask 'google-drive'
-# cask 'google-chrome'
-# cask 'skype'
+cask 'google-chrome'
 cask 'slack'
 cask 'spotify'
 cask 'vlc'
@@ -78,6 +82,24 @@ cask 'appcleaner'
 cask 'sizeup'
 # https://contexts.co/ - Allows switching between application windows
 cask 'contexts'
+
+# Replacement for RCDefaultApps, written in Swift - https://github.com/Lord-Kamina/SwiftDefaultApps
+cask 'swiftdefaultappsprefpane'
+
+# https://www.whatsapp.com/ - Desktop client for WhatsApp
+cask 'whatsapp'
+
+# open-in-code - 📂 macOS Finder toolbar app to open current folder in Visual Studio Code
+# https://github.com/sozercan/OpenInCode
+cask 'open-in-code'
+
+# Identify Intel-only apps
+# https://github.com/DigiDNA/Silicon
+cask 'silicon'
+
+# Create beautiful image of your source code
+# https://github.com/Aloxaf/silicon/
+brew 'silicon'
 
 # Development tools
 ######################
@@ -90,12 +112,22 @@ brew 'neovim'
 # tap 'webhookrelay/tap'
 
 brew 'coreutils'
-brew 'diff-so-fancy'
+brew 'wakatime-cli'
+
+# Git related
 brew 'gist'
 brew 'git'
 brew 'git-delta'
 brew 'git-lfs'
-brew 'wakatime-cli'
+brew 'diff-so-fancy'
+# Git Credential Manager https://docs.github.com/en/get-started/getting-started-with-git/caching-your-github-credentials-in-git#git-credential-manager
+tap 'microsoft/git'
+cask 'git-credential-manager-core'
+
+# Security
+brew 'gpg'
+cask 'gpg-suite'
+
 brew 'watchman' # https://facebook.github.io/watchman/docs/install.html
 brew 'postgresql'
 # brew 'python'
@@ -105,7 +137,6 @@ brew 'postgresql'
 # run after install: sudo brew services start asimov
 
 cask 'androidtool'
-# cask 'sourcetree'
 # cask 'ngrok'
 # cask 'dash'
 # cask 'dash4'
@@ -122,10 +153,17 @@ brew 'procs'
 brew 'gping'
 # https://github.com/denilsonsa/prettyping - `prettyping` is a wrapper around the standard `ping` tool, making the output prettier, more colorful, more compact, and easier to read.
 brew 'prettyping'
+# https://www.speedtest.net/apps/cli
+tap 'teamookla/speedtest'
+brew 'speedtest'
+
 
 # https://github.com/cantino/mcfly - Fly through your shell history. Great Scott!
 tap 'cantino/mcfly'
 brew 'mcfly'
+
+# https://github.com/sharkdp/hyperfine - A command-line benchmarking tool
+brew 'hyperfine'
 
 # # https://curlie.io/ - The power of curl, the ease of use of httpie.
 # tap 'rs/tap'
@@ -141,8 +179,17 @@ brew 'bottom'
 # https://github.com/VSCodium/vscodium - Binary releases of VS Code without MS branding/telemetry/licensing
 cask 'vscodium'
 
+# VS Code - https://code.visualstudio.com/
+cask 'visual-studio-code'
+
 # https://fork.dev - Git client
 cask 'fork'
+
+# https://www.sourcetreeapp.com - Git client
+cask 'sourcetree'
+
+# https://logseq.com - A privacy-first, open-source knowledge base
+cask 'logseq'
 
 # # DevOps tools
 # ######################
@@ -155,18 +202,25 @@ cask 'fork'
 # brew 'direnv'
 # brew 'dnsmasq'
 # brew 'kerl'
-# brew 's3cmd'
 # brew 'sops'
 # brew 'terraform'
 # brew 'minikube'
 
-# cask 'google-cloud-sdk'
+# https://www.datree.io required by https://marketplace.visualstudio.com/items?itemName=SuyashSonawane.vscode-datree
+tap 'datreeio/datree'
+brew 'datree'
 
 # Others
 ######################
 
+# required by font-fira-mono-for-powerline--svn
+brew 'svn'
+tap 'homebrew/cask-fonts'
 cask 'font-fira-code'
-cask 'font-hack-nerd-font'
+cask 'font-fira-mono'
+cask 'font-fira-mono-for-powerline'
+cask 'font-fira-mono-nerd-font'
+# cask 'font-hack-nerd-font'
 
 cask 'provisionql'
 cask 'quicklook-json'
@@ -176,10 +230,6 @@ cask 'diffmerge'
 cask 'quicklook-csv'
 cask 'webpquicklook'
 cask 'suspicious-package'
-
-# https://www.speedtest.net/apps/cli
-tap 'teamookla/speedtest'
-brew 'speedtest'
 
 # quicklook-csv webpquicklook suspicious-package
 
@@ -209,6 +259,7 @@ mas 'Telegram', id: 747648890
 mas 'Unsplash Wallpapers', id: 1284863847
 # safari extension
 mas 'Save to Raindrop.io', id: 1549370672
+mas 'Fantastical - Calendar & Tasks', id: 975937182
 
 # rubocop:enable Style/NumericLiterals
 

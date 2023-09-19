@@ -1,0 +1,139 @@
+tap "argon/mas"
+tap "cantino/mcfly"
+tap "clementtsang/bottom"
+tap "datreeio/datree"
+tap "github/gh"
+tap "homebrew/bundle"
+tap "homebrew/cask"
+tap "homebrew/cask-fonts"
+tap "homebrew/cask-versions"
+tap "homebrew/core"
+tap "homebrew/services"
+tap "microsoft/git"
+tap "neovim/neovim"
+tap "teamookla/speedtest"
+brew "act"
+brew "openssl@1.1"
+brew "autoconf"
+brew "automake"
+brew "bash"
+brew "bash-completion"
+brew "bat"
+brew "bottom"
+brew "coreutils"
+brew "libtool"
+brew "readline"
+brew "cask"
+brew "curl"
+brew "datree"
+brew "diff-so-fancy"
+brew "direnv"
+brew "dog"
+brew "duf"
+brew "dust"
+brew "exa"
+brew "fasd"
+brew "folly"
+brew "fish"
+brew "fop"
+brew "gh"
+brew "gist"
+brew "git"
+brew "git-delta"
+brew "git-lfs"
+brew "gnupg", link: false
+brew "go"
+brew "gping"
+brew "grpcurl"
+brew "htop"
+brew "python@3.10"
+brew "httpie"
+brew "hyperfine"
+brew "iproute2mac"
+brew "jq"
+brew "k9s"
+brew "libxslt"
+brew "libyaml"
+brew "mas"
+brew "mcfly"
+brew "ncdu"
+brew "neovim"
+brew "openssl@3"
+brew "pandoc"
+brew "postgresql@14"
+brew "prettyping"
+brew "procs"
+brew "silicon"
+brew "starship"
+brew "subversion"
+brew "telnet"
+brew "tldr"
+brew "tree"
+brew "unixodbc"
+brew "unzip"
+brew "wakatime-cli"
+brew "watchman"
+brew "wget"
+brew "wxwidgets"
+brew "teamookla/speedtest/speedtest"
+cask "1password-cli"
+cask "alfred", args: { appdir: "/Applications" }
+cask "androidtool", args: { appdir: "/Applications" }
+cask "appcleaner", args: { appdir: "/Applications" }
+cask "betterzip", args: { appdir: "/Applications" }
+cask "contexts", args: { appdir: "/Applications" }
+cask "diffmerge", args: { appdir: "/Applications" }
+cask "figma"
+cask "font-fira-code", args: { appdir: "/Applications" }
+cask "font-fira-mono", args: { appdir: "/Applications" }
+cask "font-fira-mono-for-powerline", args: { appdir: "/Applications" }
+cask "font-fira-mono-nerd-font", args: { appdir: "/Applications" }
+cask "font-hack-nerd-font", args: { appdir: "/Applications" }
+cask "fork"
+cask "google-chrome"
+cask "google-drive"
+cask "gpg-suite", args: { appdir: "/Applications" }
+cask "insomnia"
+cask "iterm2", args: { appdir: "/Applications" }
+cask "logseq", args: { appdir: "/Applications" }
+cask "open-in-code", args: { appdir: "/Applications" }
+cask "postman"
+cask "provisionql", args: { appdir: "/Applications" }
+cask "quicklook-csv", args: { appdir: "/Applications" }
+cask "quicklook-json", args: { appdir: "/Applications" }
+cask "rancher"
+cask "rectangle"
+cask "setapp", args: { appdir: "/Applications" }
+cask "silicon", args: { appdir: "/Applications" }
+cask "sizeup"
+cask "slack", args: { appdir: "/Applications" }
+cask "sourcetree", args: { appdir: "/Applications" }
+cask "spotify", args: { appdir: "/Applications" }
+cask "suspicious-package", args: { appdir: "/Applications" }
+cask "swiftdefaultappsprefpane", args: { appdir: "/Applications" }
+cask "tunnelblick"
+cask "visual-studio-code", args: { appdir: "/Applications" }
+cask "vlc", args: { appdir: "/Applications" }
+cask "vscodium", args: { appdir: "/Applications" }
+cask "webpquicklook", args: { appdir: "/Applications" }
+cask "whatsapp", args: { appdir: "/Applications" }
+cask "wkhtmltopdf"
+mas "1Password for Safari", id: 1569813296
+mas "DaisyDisk", id: 411643860
+mas "Fantastical", id: 975937182
+mas "GarageBand", id: 682658836
+mas "iMovie", id: 408981434
+mas "Keynote", id: 409183694
+mas "LanguageTool", id: 1534275760
+mas "Lungo", id: 1263070803
+mas "Numbers", id: 409203825
+mas "Octotree", id: 1457450145
+mas "OneTab", id: 1540160809
+mas "Pages", id: 409201541
+mas "Save to Raindrop.io", id: 1549370672
+mas "Session Pal", id: 1515213004
+mas "StuffIt Expander", id: 919269455
+mas "Telegram", id: 747648890
+mas "Unsplash Wallpapers", id: 1284863847
+mas "WhatsApp", id: 1147396723
+mas "Xcode", id: 497799835

@@ -1,0 +1,58 @@
+# Terminal basic tools
+######################
+
+# # https://github.com/ClementTsang/bottom - Yet another cross-platform graphical process/system monitor.
+# tap 'clementtsang/bottom'
+# brew 'bottom'
+
+# Transports you to any directory you have visited before
+# https://github.com/wdullaer/scotty
+# tap 'wdullaer/scotty'
+# brew 'scotty'
+
+brew 'bat'
+brew 'exa'
+# brew 'fzf'
+brew 'htop'
+brew 'httpie'
+brew 'iproute2mac'
+brew 'tldr'
+brew 'wget'
+brew 'jq'
+# Display directories as trees (with optional color/HTML output)
+# http://mama.indstate.edu/users/ice/tree/
+brew 'tree'
+# CLI tool for quick access to files and directories
+# https://github.com/clvv/fasd
+# brew 'fasd'
+
+# # NCurses Disk Usage
+# brew 'ncdu'
+
+# brew 'dust'
+# brew 'duf'
+# # https://github.com/dalance/procs - A modern replacement for ps written in Rust
+# brew 'procs'
+
+# # https://github.com/orf/gping - Ping, but with a graph
+# brew 'gping'
+# # https://github.com/denilsonsa/prettyping - `prettyping` is a wrapper around the standard `ping` tool, making the output prettier, more colorful, more compact, and easier to read.
+# brew 'prettyping'
+
+# # https://github.com/cantino/mcfly - Fly through your shell history. Great Scott!
+# tap 'cantino/mcfly'
+# brew 'mcfly'
+
+# # https://github.com/sharkdp/hyperfine - A command-line benchmarking tool
+# brew 'hyperfine'
+
+# # # https://curlie.io/ - The power of curl, the ease of use of httpie.
+# # tap 'rs/tap'
+# # brew 'curlie'
+
+# # https://github.com/ogham/dog - A command-line DNS client.
+# brew 'dog'
+
+# # https://github.com/ClementTsang/bottom
+# tap 'clementtsang/bottom'
+# brew 'bottom'

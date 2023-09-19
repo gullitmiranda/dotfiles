@@ -1,4 +1,7 @@
 {
   "makefile.extensionOutputFolder": "./.vscode",
-  "explorerExclude.backup": {}
+  "explorerExclude.backup": {},
+  "files.associations": {
+    "Brewfile-*": "ruby"
+  }
 }

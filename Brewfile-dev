@@ -1,0 +1,53 @@
+# Development tools
+######################
+tap 'github/gh'
+brew 'gh'
+
+# tap 'webhookrelay/tap'
+
+# brew 'wakatime-cli'
+
+# Git related
+brew 'gist'
+# brew 'git-delta'
+brew 'git-lfs'
+# brew 'diff-so-fancy'
+# # Git Credential Manager https://docs.github.com/en/get-started/getting-started-with-git/caching-your-github-credentials-in-git#git-credential-manager
+# tap 'microsoft/git'
+# cask 'git-credential-manager-core'
+
+# # Security
+# brew 'gpg'
+# cask 'gpg-suite'
+
+# brew 'watchman' # https://facebook.github.io/watchman/docs/install.html
+# brew 'postgresql'
+# brew 'python'
+
+# # https://github.com/stevegrunwell/asimov - Automatically exclude development dependencies from Apple Time Machine backups
+# brew 'asimov'
+# run after install: sudo brew services start asimov
+
+# cask 'androidtool'
+# cask 'ngrok'
+# cask 'dash'
+# cask 'dash4'
+
+# # DevOps tools
+# ######################
+# tap 'derailed/k9s'
+# brew 'k9s'
+
+# tap 'johanhaleby/kubetail'
+# brew 'kubetail'
+
+# brew 'direnv'
+# brew 'dnsmasq'
+# brew 'kerl'
+# brew 'sops'
+# brew 'terraform'
+# brew 'minikube'
+
+# https://www.datree.io required by https://marketplace.visualstudio.com/items?itemName=SuyashSonawane.vscode-datree
+tap 'datreeio/datree'
+brew 'datree'

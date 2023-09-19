@@ -1,0 +1,56 @@
+# Others
+######################
+
+# required by font-fira-mono-for-powerline--svn
+brew 'svn'
+tap 'homebrew/cask-fonts'
+cask 'font-fira-code'
+cask 'font-fira-mono'
+cask 'font-fira-mono-for-powerline'
+cask 'font-fira-mono-nerd-font'
+# cask 'font-hack-nerd-font'
+
+cask 'provisionql'
+cask 'quicklook-json'
+cask 'betterzip'
+cask 'diffmerge'
+
+cask 'quicklook-csv'
+cask 'webpquicklook'
+cask 'suspicious-package'
+
+# quicklook-csv webpquicklook suspicious-package
+
+---
+
+# Productivity tools
+######################
+# cask 'alfred'
+# cask 'background-music'
+# cask 'dropbox'
+# cask 'firefox'
+# cask 'google-drive'
+# cask 'google-chrome'
+# cask 'slack'
+# cask 'spotify'
+# cask 'vlc'
+# cask 'appcleaner'
+# cask 'sizeup'
+
+# # Replacement for RCDefaultApps, written in Swift - https://github.com/Lord-Kamina/SwiftDefaultApps
+# cask 'swiftdefaultappsprefpane'
+
+# # https://www.whatsapp.com/ - Desktop client for WhatsApp
+# cask 'whatsapp'
+
+# # open-in-code - 📂 macOS Finder toolbar app to open current folder in Visual Studio Code
+# # https://github.com/sozercan/OpenInCode
+# cask 'open-in-code'
+
+# # Identify Intel-only apps
+# # https://github.com/DigiDNA/Silicon
+# cask 'silicon'
+
+# # Create beautiful image of your source code
+# # https://github.com/Aloxaf/silicon/
+# brew 'silicon'

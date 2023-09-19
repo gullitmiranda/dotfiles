@@ -1,0 +1,34 @@
+# A command to download mac store app
+# http://www.softantenna.com/wp/mac/mas-cli/
+# https://github.com/argon/mas
+# brew 'argon/mas/mas'
+tap 'argon/mas'
+brew 'mas'
+
+# rubocop:disable Style/NumericLiterals
+
+# mas 'Bear', id: 1091189122
+mas 'DaisyDisk', id: 411643860
+# mas 'Enpass', id: 732710998
+mas 'HiddenMe', id: 467040476
+mas 'Keynote', id: 409183694
+# mas 'Kindle', id: 405399194
+mas 'Lungo', id: 1263070803
+# mas 'Mahjong 2K', id: 431469123
+# mas 'Monosnap', id: 540348655
+mas 'Numbers', id: 409203825
+# mas 'Shush', id: 496437906
+# mas 'Simplenote', id: 692867256
+# mas 'Sip', id: 507257563
+mas 'StuffIt Expander', id: 405580712
+mas 'Telegram', id: 747648890
+# mas 'Todoist', id: 585829637
+# mas 'WhatsApp', id: 1147396723
+# mas 'Xcode', id: 497799835
+# mas 'Yoink', id: 457622435
+mas 'Unsplash Wallpapers', id: 1284863847
+# safari extension
+mas 'Save to Raindrop.io', id: 1549370672
+mas 'Fantastical - Calendar & Tasks', id: 975937182
+
+# rubocop:enable Style/NumericLiterals

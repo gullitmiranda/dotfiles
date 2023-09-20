@@ -132,11 +132,11 @@
   autocrlf = false
 	editor = vim
 	ignorecase = false
-  pager = delta
+  # pager = delta
   excludesfile = "~/dotfiles/git/ignore"
 
-[interactive]
-  diffFilter = delta --color-only
+# [interactive]
+#   diffFilter = delta --color-only
 
 [advice]
   statusHints = false
@@ -180,25 +180,25 @@
 [init]
 	defaultBranch = main
 
-[delta]
-  # defaults
-  features = side-by-side unobtrusive-line-numbers decorations
-  whitespace-error-style = 22 reverse
+# [delta]
+#   # defaults
+#   features = side-by-side unobtrusive-line-numbers decorations
+#   whitespace-error-style = 22 reverse
 
-  syntax-theme = Dracula
-	# navigate = true
-  side-by-side = true
-  line-numbers = true
+#   syntax-theme = Dracula
+# 	# navigate = true
+#   side-by-side = true
+#   line-numbers = true
 
-[delta "unobtrusive-line-numbers"]
-    line-numbers = true
-    line-numbers-left-format = "{nm:>4}│"
-    line-numbers-right-format = "{np:>4}│"
+# [delta "unobtrusive-line-numbers"]
+#     line-numbers = true
+#     line-numbers-left-format = "{nm:>4}│"
+#     line-numbers-right-format = "{np:>4}│"
 
-[delta "decorations"]
-  commit-decoration-style = bold yellow box ul
-  file-style = bold yellow ul
-  file-decoration-style = none
+# [delta "decorations"]
+#   commit-decoration-style = bold yellow box ul
+#   file-style = bold yellow ul
+#   file-decoration-style = none
 
 [tag]
   sort = -v:refname

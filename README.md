@@ -65,9 +65,11 @@ Create default synlinks:
 Bundle brew dependencies (brew, cask and mas)
 
 ```shell
-# install brew packages (from Brewfile)
-brew bundle --verbose
+# install brew core packages
+brew bundle --file=Brewfile --verbose
 ```
+
+> TROUBLESHOOTING: If you receive the error `Error: It seems there is already an App at ...`, manually install the package with [`--force`](https://github.com/Homebrew/homebrew-cask/issues/46412) and try again.
 
 > [`mas`](https://github.com/mas-cli/mas) is a Mac App Store command-line interfac
 

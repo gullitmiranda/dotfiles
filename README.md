@@ -140,13 +140,20 @@ asdf install
 
 ## Configure Git
 
-create a local gitconfig file from sample
+Create a local git config file from the sample. This will make sure that custom configs (probably with sensitive data) aren't commited
 
 ```shell
-cp .config/git/sample.local.gitconfig ~/dotfiles/customs/git/local.gitconfig
-# replace global gitconfig link to the new config file
-# NOTE: the new config file already include ~/dotfiles/git/config
-ln -sf ~/dotfiles/customs/git/local.gitconfig ~/.gitconfig
+cp .config/git/sample.local.gitconfig ~/.gitconfig
+```
+
+How to check if all git config files are loaded
+
+```shell
+# needs to have a include.path=~/.config/git/config
+git config -l --global
+# test if all configs are loading
+git config -l --global --include
+
 ```
 
 ## Mac Update

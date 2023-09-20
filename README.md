@@ -11,6 +11,8 @@ Project TODOs.
 - [ ] bash/zsh
   - [ ] Fix oh-my-zsh setup
   - [ ] Enable startship
+- [ ] Use [Scripts to Rule Them All](https://github.blog/2015-06-30-scripts-to-rule-them-all/) pattern to scripts. Examples:
+  - <https://github.com/github/scripts-to-rule-them-all>
 
 ## Installation
 
@@ -181,11 +183,6 @@ Use the brew update, upgrade, and cleanup to install pending updates and upgrade
 ```shell
 brew update && brew upgrade && brew cleanup
 ```
-
-## TODO
-
-- [ ] Use [Scripts to Rule Them All](https://github.blog/2015-06-30-scripts-to-rule-them-all/) pattern to scripts. Examples:
-  - <https://github.com/github/scripts-to-rule-them-all>
 
 ## Utils Scripts
 

@@ -6,7 +6,7 @@ if test $TERM_PROGRAM = "iTerm.app" -a -e "$HOME/.iterm2_shell_integration.fish"
 end
 
 # https://developer.1password.com/docs/cli/shell-plugins/
-if type -q op -a -e "~/.config/op/plugins.sh"
+if type -q op; and test -e "~/.config/op/plugins.sh"
     source ~/.config/op/plugins.sh
 end
 

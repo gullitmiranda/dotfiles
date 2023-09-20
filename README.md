@@ -88,6 +88,30 @@ curl -L https://iterm2.com/shell_integration/zsh -o ~/.iterm2_shell_integration.
 
 ## fish
 
+### oh-my-fish
+
+Install [omf](https://github.com/oh-my-fish/oh-my-fish)
+
+```shell
+curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
+```
+
+### fisher 
+
+Install [fisher](https://github.com/jorgebucaran/fisher) and plugins
+
+```shell
+# Install fisher cli
+./script/install-fisher
+# or
+echo "curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source; and fisher install jorgebucaran/fisher" | fish
+
+# Force fisher plugins install:
+fisher list | fisher install
+```
+
+### Enable fish as default shell
+
 > TODO: test setting fish only on terminal emulators (iTerm and Warp) as recommended on https://fishshell.com/docs/current/index.html#default-shell
 
 > fish is installed on `brew bundle` command
@@ -101,20 +125,6 @@ chsh -s $(which fish)
 which bash | sudo tee -a /etc/shells
 chsh -s $(which bash)
 ````
-
-
-Install [omf](https://github.com/oh-my-fish/oh-my-fish)
-
-```shell
-curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
-```
-
-Install [fisher](https://github.com/jorgebucaran/fisher) plugins:
-
-```shell
-# force install
-fisher list | fisher install
-```
 
 ## asdf
 

@@ -101,4 +101,4 @@ if [ -d "$customs_dir" ]; then
   fi
 fi
 
-build_link "$dotdir/git/config" ~/.gitconfig
+# build_link "$dotdir/git/config" ~/.gitconfig

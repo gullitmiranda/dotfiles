@@ -170,13 +170,6 @@ alias ptodo='subl ~/Documents/Personal.todo'
 
 # alias wh='while; do $arg; done'
 
-# azk
-if [ -d "$HOME/.local/bin" ]; then
-  export PATH="$HOME/.local/bin:$PATH"
-fi
-
-export PATH="/opt/local/bin:$PATH"
-
 alias k="kubectl"
 alias d="docker"
 alias dc="docker-compose"

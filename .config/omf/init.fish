@@ -18,10 +18,10 @@ set -gx CDPATH $HOME/Code/* $HOME/Code $CDPATH
 # priority local dir cdpath's
 set -gx CDPATH . $CDPATH
 
-# contains /opt $PATH; or set -gx PATH /opt $PATH
-contains /opt/homebrew/bin $PATH; or set -gx PATH /opt/homebrew/bin $PATH
-contains $HOME/.local/bin/ $PATH; or set -gx PATH $HOME/.local/bin/ $PATH
-contains $HOME/dotfiles/bin $PATH; or set -gx PATH $HOME/dotfiles/bin $PATH
+fish_add_path /opt/homebrew/sbin
+fish_add_path /opt/homebrew/bin
+fish_add_path $HOME/.local/bin
+fish_add_path $HOME/dotfiles/bin
 
 # Fix to prevent asdf shims override system binaries
 # --- Use a link to ~/.local/bin/ instead

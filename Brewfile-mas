@@ -2,7 +2,6 @@
 # http://www.softantenna.com/wp/mac/mas-cli/
 # https://github.com/argon/mas
 # brew 'argon/mas/mas'
-tap 'argon/mas'
 brew 'mas'
 
 # rubocop:disable Style/NumericLiterals

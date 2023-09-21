@@ -133,6 +133,9 @@ To set Fish as the default shell on iTerm2, follow these steps:
 
 Now, whenever you open iTerm2 or create a new tab, Fish shell will be used as the default shell for that profile.
 
+#### Changing the default terminal shell in vscode
+
+Follow the instructions from https://gist.github.com/plembo/2a116930d107a6745f239be9e453953c
 
 ### Enable fish as default shell
 

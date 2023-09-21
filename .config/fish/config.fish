@@ -19,3 +19,7 @@ if test -d $HOME/.rd/bin; and contains $HOME/.rd/bin $PATH
     alias docker=nerdctl
     alias docker-compose='nerdctl compose'
 end
+
+# https://code.visualstudio.com/docs/terminal/shell-integration#_installation
+# WORKAROUND: ⚠️ This is currently experimental and automatic injection is not supported
+string match -q "$TERM_PROGRAM" vscode; and source (code --locate-shell-integration-path fish)

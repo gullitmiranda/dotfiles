@@ -14,6 +14,7 @@ Project TODOs.
 - [ ] Use [Scripts to Rule Them All](https://github.blog/2015-06-30-scripts-to-rule-them-all/) pattern to scripts. Examples:
   - <https://github.com/github/scripts-to-rule-them-all>
 - [ ] Try to customize [`$fisher_path`](https://github.com/jorgebucaran/fisher/issues/640)
+- [ ] Make sure the directory `~/.ssh/sockets` is created
 
 ## Installation
 

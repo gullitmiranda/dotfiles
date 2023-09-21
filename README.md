@@ -89,6 +89,8 @@ curl -L https://iterm2.com/shell_integration/zsh -o ~/.iterm2_shell_integration.
 
 ## fish
 
+> NOTE: fish is installed on `brew bundle` command
+
 ### oh-my-fish
 
 Install [omf](https://github.com/oh-my-fish/oh-my-fish)
@@ -97,7 +99,7 @@ Install [omf](https://github.com/oh-my-fish/oh-my-fish)
 curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
 ```
 
-### fisher 
+### fisher
 
 Install [fisher](https://github.com/jorgebucaran/fisher) and plugins
 
@@ -109,11 +111,30 @@ echo "curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functi
 fisher list | fisher install
 ```
 
+### Enable fish as default shell only on iTerm
+
+To set Fish as the default shell on iTerm2, follow these steps:
+
+1. Install Fish shell if you haven't already. You can download it from the official website or use a package manager like Homebrew.
+
+2. Open iTerm2.
+
+3. Go to the "iTerm2" menu and select "Preferences" or press `⌘` + `,`.
+
+4. In the Preferences window, click on the "Profiles" tab.
+
+5. Select the profile you want to use Fish as the default shell for or create a new profile.
+
+6. In the "Command" section, select the option "Custom Shell" and enter `/usr/local/bin/fish` or `/opt/homebrew/bin/brew` (on MacOS M1/M2) as the command. Note that the path might be different depending on your Fish shell installation location.
+
+7. Click "OK" to save the profile.
+
+8. Open a new iTerm2 tab for the changes to take effect.
+
+Now, whenever you open iTerm2 or create a new tab, Fish shell will be used as the default shell for that profile.
+
+
 ### Enable fish as default shell
-
-> TODO: test setting fish only on terminal emulators (iTerm and Warp) as recommended on https://fishshell.com/docs/current/index.html#default-shell
-
-> fish is installed on `brew bundle` command
 
 Set fish as default shell https://fishshell.com/docs/current/index.html#default-shell
 

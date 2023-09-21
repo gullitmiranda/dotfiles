@@ -2,7 +2,6 @@
   "makefile.extensionOutputFolder": "./.vscode",
   "explorerExclude.backup": {},
   "files.associations": {
-    "Brewfile-*": "ruby",
-    "ssh-config": "properties"
+    "Brewfile-*": "ruby"
   }
 }

@@ -210,7 +210,7 @@ git config --get-regexp '(user|gpg|ssh|commit)'
     ```shell
     mkdir ~/.ssh/
 
-    cat configs/ssh-config | tee -a ~/.ssh/config
+    cat configs/ssh_config | tee -a ~/.ssh/config
     ```
 
 3. [Sign Git commits with SSH](https://developer.1password.com/docs/ssh/git-commit-signing/)

@@ -1,4 +1,11 @@
 # 1Password SSH Agent
 # https://developer.1password.com/docs/ssh/
 Host *
-  IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+    IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+
+Host github.com
+    # Enabling SSH connections over HTTPS
+    # https://docs.github.com/en/authentication/troubleshooting-ssh/using-ssh-over-the-https-port#enabling-ssh-connections-over-https
+    Hostname ssh.github.com
+    Port 443
+    User git

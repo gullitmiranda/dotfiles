@@ -1,12 +1,12 @@
 [user]
-	# name = Gullit Miranda
-	# email = gullitmiranda@gmail.com
+# name = Your Name
+# email = name@email.com
 
 # include local git config - https://git-scm.com/docs/git-config#_includes
 [include]
-  path = ~/dotfiles/git/config
+path = ~/.config/git/config
 
-# # include local git config - https://git-scm.com/docs/git-config#_includes
-# # include for all repositories inside $HOME/Works/<project> (replace)
-# [includeIf "gitdir:~/Works/<project>/"]
-# path = ~/dotfiles/customs/git/<project>.gitconfig
+# include local git config - https://git-scm.com/docs/git-config#_includes
+# include for all repositories inside ~/Code/OSS
+[includeIf "gitdir:~/Code/"]
+path = ~/Code/.gitconfig

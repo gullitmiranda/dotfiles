@@ -151,7 +151,9 @@ Install dependencies
 asdf install
 ```
 
-## Configure Git
+## Git
+
+### Setup Git configs
 
 Create a local git config file from the sample. This will make sure that custom configs (probably with sensitive data) aren't commited
 
@@ -159,15 +161,51 @@ Create a local git config file from the sample. This will make sure that custom 
 cp .config/git/sample.local.gitconfig ~/.gitconfig
 ```
 
+Set your user name and email:
+
+```shell
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+```
+
 How to check if all git config files are loaded
 
 ```shell
-# needs to have a include.path=~/.config/git/config
-git config -l --global
-# test if all configs are loading
-git config -l --global --include
-
+git config --get-regexp '(user|gpg|ssh|commit)'
 ```
+
+### Git SSH and commit signing with 1Password
+
+1. [Turn on the 1Password SSH agent](https://developer.1password.com/docs/ssh/get-started/#step-3-turn-on-the-1password-ssh-agent)
+
+    On `1Password Settings > Developer` enable the option `Use the SSH agent` and `Integrate with 1Password CLI`
+
+2. [Configure your SSH or Git client](https://developer.1password.com/docs/ssh/get-started/#step-4-configure-your-ssh-or-git-client)
+
+    ```shell
+    mkdir ~/.ssh/
+
+    cat configs/ssh-config | tee -a ~/.ssh/config
+    ```
+
+3. [Sign Git commits with SSH](https://developer.1password.com/docs/ssh/git-commit-signing/)
+    - You can get all required configs from "1Password SSH key" > "..." > "Configure Commit Signing..."
+    - Save the config on `~/Code/$ORG/.gitconfig`. ex: `pbpaste > ~/Code/$ORG/.gitconfig`
+    - Configure git to only use this signin config on repositories from `~/Code/$ORG`
+
+        ```shell
+        git config --global includeIf.gitdir:~/Code/$ORG/.path ~/Code/$ORG/.gitconfig
+        ```
+
+4. Check the configs:
+
+    ```shell
+    git config --get-regexp '(user|gpg|ssh|commit)'
+    ```
+
+References:
+- [Get started with 1Password + SSH + Git](https://developer.1password.com/docs/ssh/get-started)
+- [Sign Git commits with SSH](https://developer.1password.com/docs/ssh/git-commit-signing)
 
 ## Mac Update
 

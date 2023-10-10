@@ -81,10 +81,10 @@ alias datefiso='date +%Y%m%dT%H%M%S%z'
 #----
 # Setup tools (also override some aliases)
 
-if type -q exa
-    alias ls='exa -G --color auto --icons -a -s type'
-    alias ll='exa -l --color always --icons -a -s type'
-    alias la='exa --color auto -abghHliS'
+if type -q eza
+    alias ls='eza -G --color auto --icons -a -s type'
+    alias ll='eza -l --color always --icons -a -s type'
+    alias la='eza --color auto -abghHliS'
 end
 
 if type -q bat

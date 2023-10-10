@@ -11,7 +11,8 @@
 # brew 'scotty'
 
 brew 'bat'
-brew 'exa'
+# A modern, maintained replacement for ls written in Rust
+brew 'eza'
 # brew 'fzf'
 brew 'htop'
 brew 'httpie'

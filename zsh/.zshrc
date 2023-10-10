@@ -112,8 +112,8 @@ alias vimrc='${EDITOR} ~/.vimrc'
 alias nvimc='${EDITOR} ~/.config/nvim'
 alias nvimrc='${EDITOR} ~/.config/nvim/init.vim'
 
-if [ -f "/usr/local/bin/exa" ]; then
-  alias la='exa -abghHliS'
+if [ -f "/usr/local/bin/eza" ]; then
+  alias la='eza -abghHliS'
 fi
 
 alias flushdns='dscacheutil -flushcache;sudo killall -HUP mDNSResponder;say flushed'

@@ -196,8 +196,77 @@ git config --global user.email "your.email@example.com"
 How to check if all git config files are loaded
 
 ```shell
-git config --get-regexp '(user|gpg|ssh|commit)'
+git config --show-origin --get-regexp '(user|gpg|ssh|commit|credential|include)'
 ```
+
+### Git Credentials with 1password
+
+#### 1password CLI
+
+First, ensure the 1Password CLI is installed and configured https://support.1password.com/command-line-getting-started/
+
+#### Create a Personal Access Token
+
+To create a Personal Access Token following the instructions from your provider:
+
+##### Create Github PAT
+
+1. Follow this link to create a Personal Access Token on GitHub: <https://github.com/settings/tokens/new?description=git-credential-1password&expires_in=7776000&scopes=repo,public_repo>.
+2. Fill in the required information and click 'Generate token'.
+3. [Import the token into 1password](#import-the-pat-into-1password)
+
+> Once you leave or refresh the page, you won’t be able to access it again.
+> How to use 1password browser extension to auto import the PAT: https://developer.1password.com/docs/cli/shell-plugins/github/#step-1-create-and-save-a-github-personal-access-token
+
+##### Create GitLab PAT
+
+1. Follow this link to create a Personal Access Token on GitLab: <https://gitlab.com/-/profile/personal_access_tokens>.
+2. Fill in the required information
+   - scopes: `read_repository, write_repository`
+3. Click 'Create personal access token'
+4. [Import the token into 1password](#import-the-pat-into-1password)
+
+> Once you leave or refresh the page, you won’t be able to access it again.
+
+#### Import the PAT into 1Password
+
+You can import the Personal Access Token into 1Password using one of the options bellow:
+
+##### Using 1Password App
+  - Open 1Password.
+  - Click on the '+' button to create a new item.
+  - Choose 'Password' as the type.
+  - Fill in the details, pasting your Personal Access Token into the 'password' field.
+  - Save the new item.
+
+##### Using 1Password CLI
+
+```shell
+op item create \
+  --category=Password \
+  --title='GitHub PAT git-credential-1password' \
+  password[password]='<Your GitHub PAT>'
+```
+
+> This item will be saved into default vault. Run `op item create --help` for more info.
+
+#### Set up Git to use 1Password for credentials
+
+Configure Git to use the [`git-credential-1password`](./bin/git-credential-1password) script as the credential helper
+
+```shell
+git config --global credential.helper "git-credential-1password 'op://Personal/GitHub PAT git-credential-1password/password'"
+git config --global credential.useHttpPath true
+```
+
+```properties
+# expected .gitconfig
+[credential]
+  helper = git-credential-1password "op://Personal/GitHub PAT git-credential-1password/password"
+  useHttpPath = true
+```
+
+> Replace `op://Personal/GitHub PAT git-credential-1password/password` with the name of the 1Password item that contains your personal access token. More info at <https://developer.1password.com/docs/cli/secret-references>
 
 ### Git SSH and commit signing with 1Password
 
@@ -225,12 +294,29 @@ git config --get-regexp '(user|gpg|ssh|commit)'
 4. Check the configs:
 
     ```shell
-    git config --get-regexp '(user|gpg|ssh|commit)'
+    git config --show-origin --get-regexp '(user|gpg|ssh|commit|credential|include)'
     ```
+
+5. [Use multiple GitHub accounts](https://developer.1password.com/docs/ssh/agent/advanced/#use-multiple-github-accounts)
 
 References:
 - [Get started with 1Password + SSH + Git](https://developer.1password.com/docs/ssh/get-started)
 - [Sign Git commits with SSH](https://developer.1password.com/docs/ssh/git-commit-signing)
+
+References to try:
+- https://stackoverflow.com/questions/63307136/git-includeif-not-working-with-git-clone
+
+### Git Crendentials from file
+
+To use multiple accounts on one server (e.g. github) you can force git to put the username on the URL.
+
+```shell
+git config --global url."https://username@github.com/".insteadOf "https://github.com/"
+
+# with store --file
+echo "https://x-access-token:$GHA_PAT@github.com" > ~/Code/Org/.git-credentials && \
+git config --global credential.helper 'store --file ~/Code/Org/.git-credentials'
+```
 
 ## Mac Update
 

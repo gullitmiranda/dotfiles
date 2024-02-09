@@ -79,6 +79,7 @@
 
   reset-main = update-ref refs/heads/main refs/remotes/origin/main
   reset-stable = update-ref refs/heads/stable refs/remotes/origin/stable
+  reset-staging = update-ref refs/heads/staging refs/remotes/origin/staging
   reset-master = update-ref refs/heads/master refs/remotes/origin/master
 
   # stash

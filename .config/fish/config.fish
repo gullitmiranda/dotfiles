@@ -10,16 +10,20 @@ if type -q op; and test -e "~/.config/op/plugins.sh"
     source ~/.config/op/plugins.sh
 end
 
-### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
-set --export --prepend PATH "$HOME/.rd/bin"
-### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
-
-# Only override docker aliases if rancher desktop is installed, checking if the folder $HOME/.rd/bin and $PATH contains it
-if test -d $HOME/.rd/bin; and contains $HOME/.rd/bin $PATH
-    alias docker=nerdctl
-    alias docker-compose='nerdctl compose'
-end
+# Add custom alinas to nerdctl and nerdctl compose (alternative to docker and docker-compose)
+alias n=nerdctl
+alias nc='nerdctl compose'
+alias ndocker=nerdctl
+alias ndocker-compose='nerdctl compose'
 
 # https://code.visualstudio.com/docs/terminal/shell-integration#_installation
 # WORKAROUND: ⚠️ This is currently experimental and automatic injection is not supported
 string match -q "$TERM_PROGRAM" vscode; and source (code --locate-shell-integration-path fish)
+
+# ### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+# set --export --prepend PATH "/Users/gullitmiranda/.rd/bin"
+# ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
+
+# customize docker host for https://github.com/abiosoft/colima or rancher desktop
+export DOCKER_HOST=unix://$HOME/.colima/default/docker.sock
+# export DOCKER_HOST=unix://$HOME/.rd/docker.sock

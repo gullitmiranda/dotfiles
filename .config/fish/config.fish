@@ -5,8 +5,15 @@ if test $TERM_PROGRAM = "iTerm.app" -a -e "$HOME/.iterm2_shell_integration.fish"
     source ~/.iterm2_shell_integration.fish
 end
 
+# https://medium.com/@msvechla/customizing-the-new-iterm2-status-bar-to-your-needs-252eee06bf39
+function iterm2_print_user_vars
+    # Preferences >Profiles > Session > Configure Status Bar > Interpolated String
+    # - String Value: arch=\(user.TERM_ARCH)
+    iterm2_set_user_var TERM_ARCH (arch)
+end
+
 # https://developer.1password.com/docs/cli/shell-plugins/
-if type -q op; and test -e "~/.config/op/plugins.sh"
+if type -q op; and test -e "$HOME/.config/op/plugins.sh"
     source ~/.config/op/plugins.sh
 end
 

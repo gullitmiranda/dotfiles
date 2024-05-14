@@ -16,6 +16,9 @@ alias nc='nerdctl compose'
 alias ndocker=nerdctl
 alias ndocker-compose='nerdctl compose'
 
+# https://tailscale.com/kb/1080/cli#using-the-cli
+alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
+
 # https://code.visualstudio.com/docs/terminal/shell-integration#_installation
 # WORKAROUND: ⚠️ This is currently experimental and automatic injection is not supported
 string match -q "$TERM_PROGRAM" vscode; and source (code --locate-shell-integration-path fish)

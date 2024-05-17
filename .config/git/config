@@ -134,7 +134,7 @@
 	editor = vim
 	ignorecase = false
   # pager = delta
-  excludesfile = "~/dotfiles/git/ignore"
+  # excludesfile = "~/dotfiles/git/ignore"
 
 # [interactive]
 #   diffFilter = delta --color-only

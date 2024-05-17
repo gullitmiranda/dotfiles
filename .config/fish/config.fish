@@ -14,7 +14,7 @@ end
 
 # https://developer.1password.com/docs/cli/shell-plugins/
 if type -q op; and test -e "$HOME/.config/op/plugins.sh"
-    source ~/.config/op/plugins.sh
+    source "$HOME/.config/op/plugins.sh"
 end
 
 # Add custom alinas to nerdctl and nerdctl compose (alternative to docker and docker-compose)
@@ -30,9 +30,9 @@ alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
 # WORKAROUND: ⚠️ This is currently experimental and automatic injection is not supported
 string match -q "$TERM_PROGRAM" vscode; and source (code --locate-shell-integration-path fish)
 
-# ### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
-# set --export --prepend PATH "/Users/gullitmiranda/.rd/bin"
-# ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
+### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+set --export --prepend PATH "$HOME/.rd/bin"
+### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
 
 # customize docker host for https://github.com/abiosoft/colima or rancher desktop
 export DOCKER_HOST=unix://$HOME/.colima/default/docker.sock

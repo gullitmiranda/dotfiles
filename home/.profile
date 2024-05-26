@@ -12,6 +12,9 @@
 # https://dev.to/onpointvn/installing-erlang-elixir-on-m1-macs-1b8g
 # https://cpufun.substack.com/p/setting-up-the-apple-m1-for-native
 
+# disable homebrew auto update
+export HOMEBREW_NO_AUTO_UPDATE=1
+
 export PATH="/opt/homebrew/sbin:$PATH"
 export PATH="/opt/homebrew/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"

@@ -16,3 +16,8 @@ export PATH="/opt/homebrew/sbin:$PATH"
 export PATH="/opt/homebrew/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/dotfiles/bin:$PATH"
+
+# add the mise shim directory to PATH. https://mise.jdx.dev/ide-integration.html
+eval "$(mise activate zsh --shims)"
+
+# export PATH="$HOME/.profile:$PATH"

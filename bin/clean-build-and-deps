@@ -1,0 +1,34 @@
+#!/bin/bash
+
+set -e
+
+# Define the base directory for the search
+base_dir="${1}"
+tmp_dir="${2:-$(mktemp -d /tmp/clean-build-and-deps-XXXXXX)}"
+
+# the base directory is required
+if [ -z "$base_dir" ]; then
+  echo "Usage: $0 <base_dir> [tmp_dir]"
+  exit 1
+fi
+
+cd $base_dir
+
+# Create the destination directory
+mkdir -p "$tmp_dir"
+
+echo "Cleaning build files in $base_dir, moving to $tmp_dir (as a backup)"
+
+# Move node_modules directories
+echo "- Moving node_modules directories"
+find . -type d -name "node_modules" -print -exec rsync -aR {} "$tmp_dir/" \; -exec rm -rf {} +
+
+# Move Elixir build directories and deps directories
+echo "- Moving Elixir build directories"
+find . -type d \( -name ".elixir_ls" -o -name "_build" \) -print -exec rsync -aR {} "$tmp_dir/" \; -exec rm -rf {} +
+echo "- Moving Elixir deps directories"
+find . -type f -name "mix.exs" -print -execdir rsync -aR deps "$tmp_dir/" \; -execdir rm -rf deps \;
+
+echo "✔ All unwantend files moved to $tmp_dir"
+echo "    To remove it permanently, run: rm -rf $tmp_dir"
+echo "    To restore, run: mv $tmp_dir/* $base_dir/"

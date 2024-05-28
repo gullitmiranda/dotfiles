@@ -37,3 +37,6 @@ set --export --prepend PATH "$HOME/.rd/bin"
 # customize docker host for https://github.com/abiosoft/colima or rancher desktop
 export DOCKER_HOST=unix://$HOME/.colima/default/docker.sock
 # export DOCKER_HOST=unix://$HOME/.rd/docker.sock
+
+# disable homebrew auto update
+export HOMEBREW_NO_AUTO_UPDATE=1

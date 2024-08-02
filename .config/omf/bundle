@@ -1,6 +1,4 @@
-package asdf
 package bang-bang
-package config
 package foreign-env
 package spark
 package weather

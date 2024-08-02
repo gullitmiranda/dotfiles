@@ -150,30 +150,12 @@ which bash | sudo tee -a /etc/shells
 chsh -s $(which bash)
 ```
 
-## asdf
-
-Install asdf plugins
-
-```shell
-asdf plugin add aws-vault
-asdf plugin add awscli
-asdf plugin add direnv
-asdf plugin add elixir
-asdf plugin add erlang
-asdf plugin add golang
-asdf plugin add gomplate
-asdf plugin add krew
-asdf plugin add kubergrunt
-asdf plugin add nodejs
-asdf plugin add pnpm
-asdf plugin add ruby
-asdf plugin add terragrunt
-```
+## mise
 
 Install dependencies
 
 ```shell
-asdf install
+mise install
 ```
 
 ## 1Password SSH Agent

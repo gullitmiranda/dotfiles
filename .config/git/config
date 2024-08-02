@@ -158,7 +158,7 @@
   autoSetupRemote = true
 [core]
   autocrlf = false
-	editor = vim
+	editor = "cursor --wait"
 	ignorecase = false
   # pager = delta
   # excludesfile = "~/dotfiles/git/ignore"
@@ -201,8 +201,8 @@
 # [pager]
 #   diff = diff-so-fancy | less --tabs=1,5 -RFX
 #   show = diff-so-fancy | less --tabs=1,5 -RFX
-[commit]
-	template = ~/.stCommitMsg
+# [commit]
+# 	template = ~/.stCommitMsg
 [init]
 	defaultBranch = main
 

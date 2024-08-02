@@ -14,7 +14,6 @@ Plug 'mileszs/ack.vim'
 Plug 'junegunn/fzf', { 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 "Plug 'vim-ctrlspace/vim-ctrlspace'
-Plug 'tpope/vim-fugitive'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'kien/rainbow_parentheses.vim'
 Plug 'mbbill/undotree'
@@ -36,6 +35,10 @@ Plug 'terryma/vim-expand-region'
 Plug 'kassio/neoterm'
 
 Plug 'neomake/neomake'
+
+" Git merge tools
+Plug 'tpope/vim-fugitive'
+Plug 'samoshkin/vim-mergetool'
 
 " Snippet engines
 " Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'

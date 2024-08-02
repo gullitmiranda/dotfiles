@@ -5,12 +5,12 @@
 Project TODOs.
 
 - [ ] Refactor `./install.sh` to work with fish and omf
-- [ ] Setup https://github.com/bashup/.devkit
+- [ ] Setup <https://github.com/bashup/.devkit>
 - [ ] Replace `customs/git/local.gitconfig` by `git/config`
 - [ ] Refactor `./make_links.sh` to show what todo, but don't run, but will work with a `eval`
 - [ ] bash/zsh
   - [ ] Fix oh-my-zsh setup
-  - [ ] Enable startship
+  - [ ] Enable starship
 - [ ] Use [Scripts to Rule Them All](https://github.blog/2015-06-30-scripts-to-rule-them-all/) pattern to scripts. Examples:
   - <https://github.com/github/scripts-to-rule-them-all>
 - [ ] Try to customize [`$fisher_path`](https://github.com/jorgebucaran/fisher/issues/640)
@@ -75,7 +75,7 @@ brew bundle --file=Brewfile --verbose
 
 > [`mas`](https://github.com/mas-cli/mas) is a Mac App Store command-line interfac
 
-Install shell integration - https://iterm2.com/documentation-shell-integration.html
+Install shell integration - <https://iterm2.com/documentation-shell-integration.html>
 
 ```shell
 # bash
@@ -136,11 +136,11 @@ Now, whenever you open iTerm2 or create a new tab, Fish shell will be used as th
 
 #### Changing the default terminal shell in vscode
 
-Follow the instructions from https://gist.github.com/plembo/2a116930d107a6745f239be9e453953c
+Follow the instructions from <https://gist.github.com/plembo/2a116930d107a6745f239be9e453953c>
 
 ### Enable fish as default shell
 
-Set fish as default shell https://fishshell.com/docs/current/index.html#default-shell
+Set fish as default shell <https://fishshell.com/docs/current/index.html#default-shell>
 
 ```shell
 which fish | sudo tee -a /etc/shells
@@ -148,7 +148,7 @@ chsh -s $(which fish)
 # to revert to bash
 which bash | sudo tee -a /etc/shells
 chsh -s $(which bash)
-````
+```
 
 ## asdf
 

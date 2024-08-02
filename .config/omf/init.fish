@@ -27,18 +27,29 @@ contains "$HOME/.local/bin" $PATH; or fish_add_path $HOME/.local/bin
 # contains $GNUBIN $PATH; or set -gx PATH $GNUBIN PATH
 
 
-# https://direnv.net/
-if type -q direnv
-    direnv hook fish | source
+# # https://direnv.net/
+# NOTE: when installed using brew, already loaded
+# if type -q direnv
+#     direnv hook fish | source
 
-    # Hook direnv into your shell (using asdf).
-    # https://github.com/asdf-community/asdf-direnv
-    # asdf exec direnv hook fish | source
+#     # Hook direnv into your shell (using asdf).
+#     # https://github.com/asdf-community/asdf-direnv
+#     # asdf exec direnv hook fish | source
 
-    # # A shortcut for asdf managed direnv.
-    # function direnv
-    #   asdf exec direnv "$argv"
-    # end
+#     # # A shortcut for asdf managed direnv.
+#     # function direnv
+#     #   asdf exec direnv "$argv"
+#     # end
+# end
+
+#
+if status is-interactive
+    # echo "Activating mise in interactive shell"
+    mise activate fish | source
+    mise hook-env -s fish | source
+else
+    # echo "Activating mise in non-interactive shell"
+    mise activate fish --shims | source
 end
 
 # check if Warp is the current terminal
@@ -154,59 +165,11 @@ function fishcognito
 end
 
 #----
-# DevOps
-
-# gcloud
-if type -q gcloud
-    set gcloud_bin_dir (dirname (which gcloud))
-    contains $gcloud_bin_dir $PATH; or set -gx PATH $gcloud_bin_dir $PATH
-end
-
-test -z "$KREW_ROOT"; and set KREW_ROOT "$HOME/.krew"
-if test -d "$KREW_ROOT"
-    set -gx KREW_ROOT $KREW_ROOT
-    contains "$KREW_ROOT/bin" $PATH; or set -gx PATH "$KREW_ROOT/bin" $PATH
-end
-
-#----
 # Dev
 
 # Elixir/Erlang config
 ######################
 set -gx ERL_AFLAGS "-kernel shell_history enabled"
-
-# ## NodeJS
-set -xg NODE_ENV development
-set -xg BABEL_ENV $NODE_ENV
-
-# if test -n $PNPM_HOME
-#     alias npm="pnpm"
-#     alias npx="pnpx"
-# end
-
-# if type -q npm
-#     set npm_bin (npm bin --global)
-#     contains $npm_bin $PATH; or set -gx PATH $PATH $npm_bin
-# end
-
-# if type -q yarn
-#     set yarn_bin (yarn global bin)
-#     contains $yarn_bin $PATH; or set -gx PATH $PATH $yarn_bin
-# end
-
-if test -d ./node_modules/.bin
-    contains ./node_modules/.bin $PATH; or set -gx PATH ./node_modules/.bin $PATH
-end
-
-# Rust
-# if test -d "$HOME/.cargo/bin"
-#   set -gx PATH $PATH $HOME/.cargo/bin
-# end
-
-# Python
-if test -d "$HOME/Library/Python/3.7/bin"
-    contains $HOME/Library/Python/3.7/bin $PATH; or set -gx PATH $PATH $HOME/Library/Python/3.7/bin
-end
 
 # Finder-launched applications missing PATH env
 # - https://apple.stackexchange.com/questions/51677/how-to-set-path-for-finder-launched-applications/198282#198282

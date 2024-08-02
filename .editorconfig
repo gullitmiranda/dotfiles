@@ -21,3 +21,6 @@ indent_style = tab
 
 [*.fish]
 indent_size = 2
+
+[{**/git/config,**/.git/config,*.gitconfig,.editorconfig}]
+indent_size = 2

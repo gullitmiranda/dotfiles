@@ -30,13 +30,8 @@ alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
 # WORKAROUND: ⚠️ This is currently experimental and automatic injection is not supported
 string match -q "$TERM_PROGRAM" vscode; and source (code --locate-shell-integration-path fish)
 
-### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
-set --export --prepend PATH "$HOME/.rd/bin"
-### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
-
-# customize docker host for https://github.com/abiosoft/colima or rancher desktop
-export DOCKER_HOST=unix://$HOME/.colima/default/docker.sock
-# export DOCKER_HOST=unix://$HOME/.rd/docker.sock
-
 # disable homebrew auto update
 export HOMEBREW_NO_AUTO_UPDATE=1
+
+# https://krew.sigs.k8s.io/docs/user-guide/setup/install/
+set -q KREW_ROOT; and set -gx PATH $PATH $KREW_ROOT/.krew/bin; or set -gx PATH $PATH $HOME/.krew/bin

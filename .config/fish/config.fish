@@ -1,16 +1,9 @@
-set -x LC_ALL en_US.UTF-8
+# set -x LC_ALL en_US.UTF-8
 
-# Install shell integration - https://iterm2.com/documentation-shell-integration.html
-if test $TERM_PROGRAM = "iTerm.app" -a -e "$HOME/.iterm2_shell_integration.fish"
-    source ~/.iterm2_shell_integration.fish
-end
-
-# https://medium.com/@msvechla/customizing-the-new-iterm2-status-bar-to-your-needs-252eee06bf39
-function iterm2_print_user_vars
-    # Preferences >Profiles > Session > Configure Status Bar > Interpolated String
-    # - String Value: arch=\(user.TERM_ARCH)
-    iterm2_set_user_var TERM_ARCH (arch)
-end
+# # Install shell integration - https://iterm2.com/documentation-shell-integration.html
+# if test $TERM_PROGRAM = "iTerm.app" -a -e "$HOME/.iterm2_shell_integration.fish"
+#     source ~/.iterm2_shell_integration.fish
+# end
 
 # https://developer.1password.com/docs/cli/shell-plugins/
 if type -q op; and test -e "$HOME/.config/op/plugins.sh"

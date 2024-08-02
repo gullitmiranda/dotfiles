@@ -7,21 +7,15 @@ set -gx EDITOR vim
 
 # base cdpath's
 set -gx CDPATH $HOME
-# add Works and some subdirs to cdpath
-# DEPRECATED: Works folder
-set -gx CDPATH $HOME/Works $CDPATH
-set -gx CDPATH $HOME/Works/sumup $CDPATH
-set -gx CDPATH $HOME/Works/yube $CDPATH
-set -gx CDPATH $HOME/Works/Morada $CDPATH
 # add Code and subdirs to cdpath
 set -gx CDPATH $HOME/Code/* $HOME/Code $CDPATH
 # priority local dir cdpath's
 set -gx CDPATH . $CDPATH
 
-fish_add_path /opt/homebrew/sbin
-fish_add_path /opt/homebrew/bin
-fish_add_path $HOME/.local/bin
-fish_add_path $HOME/dotfiles/bin
+contains /opt/homebrew/sbin $PATH; or fish_add_path /opt/homebrew/sbin
+contains /opt/homebrew/bin $PATH; or fish_add_path /opt/homebrew/bin
+contains "$HOME/dotfiles/bin" $PATH; or fish_add_path $HOME/dotfiles/bin
+contains "$HOME/.local/bin" $PATH; or fish_add_path $HOME/.local/bin
 
 # Fix to prevent asdf shims override system binaries
 # --- Use a link to ~/.local/bin/ instead

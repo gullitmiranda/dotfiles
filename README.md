@@ -138,6 +138,17 @@ Now, whenever you open iTerm2 or create a new tab, Fish shell will be used as th
 
 Follow the instructions from <https://gist.github.com/plembo/2a116930d107a6745f239be9e453953c>
 
+- Cursor (alternative to vscode)
+
+When working with [Cursor.so](https://www.cursor.com/), don't forget to override the `code` command to open the cursor app.
+
+```shell
+# Override the code command to open cursor
+ln -fs /Applications/Cursor.app/Contents/Resources/app/bin/code /usr/local/bin/code
+```
+
+This will ensure that the `code` command opens the Cursor app instead of VSCode, and also configure shell integration for Cursor. More info at <https://code.visualstudio.com/docs/terminal/shell-integration#_manual-installation>
+
 ### Enable fish as default shell
 
 Set fish as default shell <https://fishshell.com/docs/current/index.html#default-shell>

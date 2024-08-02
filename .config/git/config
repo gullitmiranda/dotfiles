@@ -106,15 +106,42 @@
 	spull = "!__git_spull() { git pull \"$@\" && git submodule sync --recursive && git submodule update --init --recursive; }; __git_spull"
 [format]
   pretty = "format:%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an]%Creset"
-[mergetool]
-  prompt = false
-[mergetool "mvimdiff"]
-  cmd = mvim -c 'Gdiff' $MERGED # use fugitive.vim for 3-way merge
-  keepbackup = false
+
+# Merge configuration
+###########################
+
 [merge]
   summary = true
   verbosity = 1
-	tool = code
+	tool = nvim_diff
+  guitool = cursor
+
+  # # Merge conflict style can be set to 'merge' (default) or 'diff3'
+  # # Standard conflict markers include only ours and theirs changes
+  # # Use 'diff3' to include base ancestor changes as well
+  # # https://git-scm.com/docs/git-config#Documentation/git-config.txt-mergeconflictStyle
+  # conflictStyle = diff3
+
+[mergetool]
+  prompt = false
+
+# GUI merge tools
+[mergetool "cursor"]
+  cmd = cursor --wait "$MERGED"
+[mergetool "vscode"]
+  cmd = code --wait "$MERGED"
+[mergetool "diffmerge"] # require [DiffMerge](https://sourcegear.com/diffmerge/)
+  cmd = diffmerge --merge --result="$MERGED" "$LOCAL" "$BASE" "$REMOTE"
+  trustExitCode = true
+
+# vim merge tools
+[mergetool "nvim_mergetool"] # require [vim-mergetool](https://github.com/samoshkin/vim-mergetool)
+  cmd = nvim -f -c "MergetoolStart" "$MERGED" "$BASE" "$LOCAL" "$REMOTE"
+  trustExitCode = true
+[mergetool "nvim_diff"] # require [fugitive.vim](https://github.com/tpope/vim-fugitive) for 3-way merge
+  cmd = nvim -c 'Gdiff' $MERGED
+  keepbackup = false
+
 [apply]
   whitespace = nowarn
 [branch]

@@ -176,6 +176,48 @@ Install dependencies
 asdf install
 ```
 
+## 1Password SSH Agent
+
+- <https://developer.1password.com/docs/ssh>
+
+### 1Password CLI
+
+First, ensure the 1Password CLI is installed and configured <https://support.1password.com/command-line-getting-started/>
+
+```shell
+brew install 1password-cli
+```
+
+### Enable 1Password SSH agent
+
+To turn on the [1Password SSH agent](https://developer.1password.com/docs/ssh/get-started#step-3-turn-on-the-1password-ssh-agent)
+on 1Password App, access `Settings > Developer` enable the option `Use the SSH agent` and `Integrate with 1Password CLI`
+
+(Optional) Make the agent socket easier to access:
+
+```shell
+mkdir -p ~/.ssh/sockets
+
+ln -s ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock ~/.ssh/sockets/1password-agent.sock
+```
+
+### Change the SSH client to use the 1Password agent
+
+Change the SSH client to use the 1Password agent
+
+```shell
+mkdir -p ~/.ssh
+# configure the SSH client
+cat <<EOF | tee -a ~/.ssh/config
+Host *
+    IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+
+EOF
+
+# or you can also set the SSH_AUTH_SOCK environment variable
+export SSH_AUTH_SOCK=~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
+```
+
 ## Git
 
 ### Setup Git configs
@@ -199,26 +241,77 @@ How to check if all git config files are loaded
 git config --show-origin --get-regexp '(user|gpg|ssh|commit|credential|include)'
 ```
 
-### Git Credentials with 1password
+### Git Authentication
 
-#### 1password CLI
+#### 1Password SSH with Multiple accounts
 
-First, ensure the 1Password CLI is installed and configured https://support.1password.com/command-line-getting-started/
+First you need to setup the [1password SSH agent](#1password-ssh-agent).
 
-#### Create a Personal Access Token
+- <https://developer.1password.com/docs/ssh/agent/advanced/#use-multiple-github-accounts>
+
+download ssh public keys from 1password into ~/.ssh/
+
+```shell
+# list all ssh keys
+op item list --categories "SSH Key"
+ID                            TITLE                         VAULT                EDITED
+0000004JFGSYAKHH7NVQ9G4B47    GitHub SSH Key Work           Work                 10 months ago
+0000004JFGSYAKHH7NVQ9G4B48    GitHub SSH Key Personal       Personal             1 year ago
+
+# download the ssh public key
+op read "op://Work/GitHub SSH Key Work/public key" --out-file ~/.ssh/op_Work.pub
+op read "op://Personal/GitHub SSH Key Personal/public key" --out-file ~/.ssh/op_Personal.pub
+
+# set the permissions
+chmod 600 ~/.ssh/op_*.pub
+```
+
+Configure git to rewrite the ssh url to use the 1password agent
+
+```shell
+git config --global url."git@github.Work:Work/".insteadOf "https://github.com/Work/"
+git config --global url."git@github.com:".insteadOf "https://github.com/"
+```
+
+Configure SSH hosts
+
+```shell
+cat <<EOF | tee -a ~/.ssh/config
+# Work GitHub
+Host github.Work
+    HostName github.com
+    User git
+    # this only works with the 1password agent
+    IdentityFile ~/.ssh/op_Work.pub
+    IdentitiesOnly yes
+
+# Personal GitHub
+Host github.com
+    HostName github.com
+    User git
+    # this only works with the 1password agent
+    IdentityFile ~/.ssh/op_Personal.pub
+    IdentitiesOnly yes
+
+EOF
+```
+
+#### Git Credentials with 1Password PAT
+
+##### Create a Personal Access Token
 
 To create a Personal Access Token following the instructions from your provider:
 
-##### Create Github PAT
+###### Create Github PAT
 
 1. Follow this link to create a Personal Access Token on GitHub: <https://github.com/settings/tokens/new?description=git-credential-1password&expires_in=7776000&scopes=repo,public_repo>.
 2. Fill in the required information and click 'Generate token'.
 3. [Import the token into 1password](#import-the-pat-into-1password)
 
-> Once you leave or refresh the page, you won’t be able to access it again.
-> How to use 1password browser extension to auto import the PAT: https://developer.1password.com/docs/cli/shell-plugins/github/#step-1-create-and-save-a-github-personal-access-token
+> Once you leave or refresh the page, you won't be able to access it again.
+> How to use 1password browser extension to auto import the PAT: <https://developer.1password.com/docs/cli/shell-plugins/github/#step-1-create-and-save-a-github-personal-access-token>
 
-##### Create GitLab PAT
+###### Create GitLab PAT
 
 1. Follow this link to create a Personal Access Token on GitLab: <https://gitlab.com/-/profile/personal_access_tokens>.
 2. Fill in the required information
@@ -226,20 +319,21 @@ To create a Personal Access Token following the instructions from your provider:
 3. Click 'Create personal access token'
 4. [Import the token into 1password](#import-the-pat-into-1password)
 
-> Once you leave or refresh the page, you won’t be able to access it again.
+> Once you leave or refresh the page, you won't be able to access it again.
 
-#### Import the PAT into 1Password
+##### Import the PAT into 1Password
 
 You can import the Personal Access Token into 1Password using one of the options bellow:
 
-##### Using 1Password App
-  - Open 1Password.
-  - Click on the '+' button to create a new item.
-  - Choose 'Password' as the type.
-  - Fill in the details, pasting your Personal Access Token into the 'password' field.
-  - Save the new item.
+###### Using 1Password App
 
-##### Using 1Password CLI
+- Open 1Password.
+- Click on the '+' button to create a new item.
+- Choose 'Password' as the type.
+- Fill in the details, pasting your Personal Access Token into the 'password' field.
+- Save the new item.
+
+###### Using 1Password CLI
 
 ```shell
 op item create \
@@ -250,7 +344,7 @@ op item create \
 
 > This item will be saved into default vault. Run `op item create --help` for more info.
 
-#### Set up Git to use 1Password for credentials
+##### Set up Git to use 1Password for credentials
 
 Configure Git to use the [`git-credential-1password`](./bin/git-credential-1password) script as the credential helper
 
@@ -268,45 +362,7 @@ git config --global credential.useHttpPath true
 
 > Replace `op://Personal/GitHub PAT git-credential-1password/password` with the name of the 1Password item that contains your personal access token. More info at <https://developer.1password.com/docs/cli/secret-references>
 
-### Git SSH and commit signing with 1Password
-
-1. [Turn on the 1Password SSH agent](https://developer.1password.com/docs/ssh/get-started/#step-3-turn-on-the-1password-ssh-agent)
-
-    On `1Password Settings > Developer` enable the option `Use the SSH agent` and `Integrate with 1Password CLI`
-
-2. [Configure your SSH or Git client](https://developer.1password.com/docs/ssh/get-started/#step-4-configure-your-ssh-or-git-client)
-
-    ```shell
-    mkdir ~/.ssh/
-
-    cat configs/ssh_config | tee -a ~/.ssh/config
-    ```
-
-3. [Sign Git commits with SSH](https://developer.1password.com/docs/ssh/git-commit-signing/)
-    - You can get all required configs from "1Password SSH key" > "..." > "Configure Commit Signing..."
-    - Save the config on `~/Code/$ORG/.gitconfig`. ex: `pbpaste > ~/Code/$ORG/.gitconfig`
-    - Configure git to only use this signin config on repositories from `~/Code/$ORG`
-
-        ```shell
-        git config --global includeIf.gitdir:~/Code/$ORG/.path ~/Code/$ORG/.gitconfig
-        ```
-
-4. Check the configs:
-
-    ```shell
-    git config --show-origin --get-regexp '(user|gpg|ssh|commit|credential|include)'
-    ```
-
-5. [Use multiple GitHub accounts](https://developer.1password.com/docs/ssh/agent/advanced/#use-multiple-github-accounts)
-
-References:
-- [Get started with 1Password + SSH + Git](https://developer.1password.com/docs/ssh/get-started)
-- [Sign Git commits with SSH](https://developer.1password.com/docs/ssh/git-commit-signing)
-
-References to try:
-- https://stackoverflow.com/questions/63307136/git-includeif-not-working-with-git-clone
-
-### Git Crendentials from file
+#### Git Crendentials from file
 
 To use multiple accounts on one server (e.g. github) you can force git to put the username on the URL.
 
@@ -317,6 +373,33 @@ git config --global url."https://username@github.com/".insteadOf "https://github
 echo "https://x-access-token:$GHA_PAT@github.com" > ~/Code/Org/.git-credentials && \
 git config --global credential.helper 'store --file ~/Code/Org/.git-credentials'
 ```
+
+### Git commit signing with 1Password
+
+1. [Sign Git commits with SSH](https://developer.1password.com/docs/ssh/git-commit-signing/)
+    - You can get all required configs from "1Password SSH key" > "..." > "Configure Commit Signing..."
+    - Save the config on `~/Code/$ORG/.gitconfig`. ex: `pbpaste > ~/Code/$ORG/.gitconfig`
+    - Configure git to only use this signin config on repositories from `~/Code/$ORG`
+
+        ```shell
+        git config --global includeIf.gitdir:~/Code/$ORG/.path ~/Code/$ORG/.gitconfig
+        ```
+
+2. Check the configs:
+
+    ```shell
+    git config --show-origin --get-regexp '(user|gpg|ssh|commit|credential|include)'
+    ```
+
+3. [Use multiple GitHub accounts](https://developer.1password.com/docs/ssh/agent/advanced/#use-multiple-github-accounts)
+
+References:
+
+- [Get started with 1Password + SSH + Git](https://developer.1password.com/docs/ssh/get-started)
+- [Sign Git commits with SSH](https://developer.1password.com/docs/ssh/git-commit-signing)
+
+References to try:
+- <https://stackoverflow.com/questions/63307136/git-includeif-not-working-with-git-clone>
 
 ## Mac Update
 

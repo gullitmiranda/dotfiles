@@ -175,11 +175,11 @@ alias d="docker"
 alias dc="docker-compose"
 alias dct="docker-compose -f docker-compose.yml -f docker-compose.test.yml"
 
-# fuse search
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-export FZF_DEFAULT_OPTS="-m --bind ctrl-a:select-all,ctrl-d:deselect-all,ctrl-t:toggle-all"
-export FZF_DEFAULT_COMMAND='ag -l --nocolor --hidden --ignore .git -g ""'
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+# # fuse search
+# [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# export FZF_DEFAULT_OPTS="-m --bind ctrl-a:select-all,ctrl-d:deselect-all,ctrl-t:toggle-all"
+# export FZF_DEFAULT_COMMAND='ag -l --nocolor --hidden --ignore .git -g ""'
+# export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 # powerline
 if [[ -r ~/.local/lib/python2.7/site-packages/ ]]; then
@@ -228,9 +228,9 @@ fi
 # . $HOME/.asdf/completions/asdf.bash
 [[ -s "$HOME/.kiex/scripts/kiex" ]] && source "$HOME/.kiex/scripts/kiex"
 
-if which pyenv > /dev/null; then
+if which pyenv >/dev/null; then
   eval "$(pyenv init -)"
-  if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
+  if which pyenv-virtualenv-init >/dev/null; then eval "$(pyenv virtualenv-init -)"; fi
   export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 fi
 
@@ -241,8 +241,8 @@ eval "$(anyenv init -)"
 
 # Java home
 if [[ -f "/usr/libexec/java_home" ]]; then
- #export JAVA_HOME="/System/Library/Frameworks/JavaVM.framework/Home"
- export JAVA_HOME=$(/usr/libexec/java_home)
+  #export JAVA_HOME="/System/Library/Frameworks/JavaVM.framework/Home"
+  export JAVA_HOME=$(/usr/libexec/java_home)
 fi
 
 $debug && zprof

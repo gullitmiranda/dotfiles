@@ -1,6 +1,21 @@
 # Gullit Miranda dotfiles
 
-## TODO
+## Revamp zsh
+
+- [ ] Commit all changes
+- [ ] Clean up repository
+- [ ] Set up zsh environment as close as possible to fish
+  - [ ] Replicate fish/omf/fisher
+    - [ ] plugins
+    - [ ] completions
+    - [ ] functions
+    - [ ] init
+    - [ ] themes
+    - [ ] config
+    - [ ] update
+- [ ] Set zsh as default shell (because AI works better with bash)
+
+## TODO (old)
 
 Project TODOs.
 
@@ -87,6 +102,21 @@ curl -L https://iterm2.com/shell_integration/zsh -o ~/.iterm2_shell_integration.
 ```
 
 > dotfiles already load iterm2 shell integrations if the file `$HOME/.iterm2_shell_integration.$SHELL` is found
+
+### Customizations
+
+#### Update eza-themes
+
+```bash
+cd ~/Code/OSS/
+git clone https://github.com/eza-community/eza-themes.git
+
+mkdir -p ~/dotfiles/.config/eza
+cp -f "$(pwd)/eza-themes/themes/dracula.yml" ~/dotfiles/.config/eza/theme.yml
+ln -sf ~/dotfiles/.config/eza ~/.config/eza
+
+mkdir -p ~/.config/eza
+```
 
 ## fish
 
@@ -370,19 +400,20 @@ git config --global credential.helper 'store --file ~/Code/Org/.git-credentials'
 ### Git commit signing with 1Password
 
 1. [Sign Git commits with SSH](https://developer.1password.com/docs/ssh/git-commit-signing/)
-    - You can get all required configs from "1Password SSH key" > "..." > "Configure Commit Signing..."
-    - Save the config on `~/Code/$ORG/.gitconfig`. ex: `pbpaste > ~/Code/$ORG/.gitconfig`
-    - Configure git to only use this signin config on repositories from `~/Code/$ORG`
 
-        ```shell
-        git config --global includeIf.gitdir:~/Code/$ORG/.path ~/Code/$ORG/.gitconfig
-        ```
+   - You can get all required configs from "1Password SSH key" > "..." > "Configure Commit Signing..."
+   - Save the config on `~/Code/$ORG/.gitconfig`. ex: `pbpaste > ~/Code/$ORG/.gitconfig`
+   - Configure git to only use this signin config on repositories from `~/Code/$ORG`
+
+     ```shell
+     git config --global includeIf.gitdir:~/Code/$ORG/.path ~/Code/$ORG/.gitconfig
+     ```
 
 2. Check the configs:
 
-    ```shell
-    git config --show-origin --get-regexp '(user|gpg|ssh|commit|credential|include)'
-    ```
+   ```shell
+   git config --show-origin --get-regexp '(user|gpg|ssh|commit|credential|include)'
+   ```
 
 3. [Use multiple GitHub accounts](https://developer.1password.com/docs/ssh/agent/advanced/#use-multiple-github-accounts)
 
@@ -392,6 +423,7 @@ References:
 - [Sign Git commits with SSH](https://developer.1password.com/docs/ssh/git-commit-signing)
 
 References to try:
+
 - <https://stackoverflow.com/questions/63307136/git-includeif-not-working-with-git-clone>
 
 ## Mac Update

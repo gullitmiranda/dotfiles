@@ -5,26 +5,58 @@
 #     source ~/.iterm2_shell_integration.fish
 # end
 
-# https://developer.1password.com/docs/cli/shell-plugins/
-if type -q op; and test -e "$HOME/.config/op/plugins.sh"
-    source "$HOME/.config/op/plugins.sh"
+set -gx SHELL_DEBUG_FILE ~/.local/var/log/fish-debug.log
+mkdir -p (dirname $SHELL_DEBUG_FILE)
+function fish_debug_log
+    # echo -e $argv >> $SHELL_DEBUG_FILE
+    printf '%s\n' $argv >> $SHELL_DEBUG_FILE
 end
 
-# Add custom alinas to nerdctl and nerdctl compose (alternative to docker and docker-compose)
-alias n=nerdctl
-alias nc='nerdctl compose'
-alias ndocker=nerdctl
-alias ndocker-compose='nerdctl compose'
+# Activating mise
+# set -gx __MISE_INTERACTIVE (test -q (status is-interactive); and echo true; or echo false)
+if status is-interactive
+  set -gx __MISE_INTERACTIVE true
+else
+  set -gx __MISE_INTERACTIVE false
+end
 
-# https://tailscale.com/kb/1080/cli#using-the-cli
-alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
+fish_debug_log ""
+fish_debug_log "<<< mise activation start (interactive: $__MISE_INTERACTIVE)"
+fish_debug_log "PATH: $PATH"
+fish_debug_log "__MISE_ORIG_PATH: $__MISE_ORIG_PATH"
+fish_debug_log ""
 
-# https://code.visualstudio.com/docs/terminal/shell-integration#_installation
-# WORKAROUND: ⚠️ This is currently experimental and automatic injection is not supported
-string match -q "$TERM_PROGRAM" vscode; and source (code --locate-shell-integration-path fish)
+# https://github.com/jdx/mise/issues/2270#issuecomment-2211805443
+if test "$VSCODE_RESOLVING_ENVIRONMENT" = 1
+  fish_debug_log "+ mise activate fish --shims (VSCODE_RESOLVING_ENVIRONMENT)"
+  fish_debug_log (mise activate fish --shims)
+  mise activate fish --shims | source
+else if status is-interactive
+  fish_debug_log "+ mise activate fish"
+  fish_debug_log (mise activate fish)
+  mise activate fish | source
 
-# disable homebrew auto update
-export HOMEBREW_NO_AUTO_UPDATE=1
+  fish_debug_log "+ mise hook-env -s fish"
+  fish_debug_log (mise hook-env -s fish)
+  mise hook-env -s fish | source
+else
+  fish_debug_log "+ mise activate fish --shims"
+  fish_debug_log (mise activate fish --shims)
+  mise activate fish --shims | source
+end
 
-# https://krew.sigs.k8s.io/docs/user-guide/setup/install/
-set -q KREW_ROOT; and set -gx PATH $PATH $KREW_ROOT/.krew/bin; or set -gx PATH $PATH $HOME/.krew/bin
+fish_debug_log "=== mise activated (interactive: $__MISE_INTERACTIVE)"
+fish_debug_log "PATH: $PATH"
+fish_debug_log "__MISE_ORIG_PATH: $__MISE_ORIG_PATH"
+fish_debug_log ">>> mise activation end"
+fish_debug_log ""
+
+# # Automatically "Warpify" subshells
+# # https://docs.warp.dev/features/subshells
+# if status is-interactive; and test "$TERM_PROGRAM" = "WarpTerminal"
+#   printf '\eP$f{"hook": "SourcedRcFileForWarp", "value": { "shell": "fish"}}\x9c'
+# end
+
+fish_debug_log "<<< direnv status"
+fish_debug_log (direnv status)
+fish_debug_log ">>> direnv status"

@@ -1,1 +1,1 @@
-/Users/gmmaster/.local/share/nvim/plugged/fzf/shell/key-bindings.fish
+/Users/guma/.local/share/nvim/plugged/fzf/shell/key-bindings.fish

@@ -1,1 +1,1 @@
-/Users/gmmaster/.local/share/omf/themes/default/fish_prompt.fish
+/Users/guma/.local/share/omf/themes/default/functions/fish_prompt.fish

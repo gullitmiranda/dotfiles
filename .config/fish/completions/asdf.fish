@@ -1,1 +1,0 @@
-/Users/gmmaster/.asdf/completions/asdf.fish

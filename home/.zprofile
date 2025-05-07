@@ -1,4 +1,13 @@
-# add the mise shim directory to PATH. https://mise.jdx.dev/ide-integration.html
-eval "$(mise activate zsh --shims)"
+SHELL_DEBUG_FILE=$HOME/.shell.debug
+now=$(date +%Y-%m-%dT%H:%M:%S%z)
 
-export PATH="$HOME/.zprofile:$PATH"
+echo -e "\n\n" >>$SHELL_DEBUG_FILE
+echo ".zprofile $now" >>$SHELL_DEBUG_FILE
+
+echo "env:" >>$SHELL_DEBUG_FILE
+env >>$SHELL_DEBUG_FILE
+echo -e "----\n" >>$SHELL_DEBUG_FILE
+
+[ -f ~/.profile ] && source ~/.profile
+
+export PATH="$PATH:$HOME/.zprofile"

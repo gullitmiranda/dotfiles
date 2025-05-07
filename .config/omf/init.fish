@@ -1,63 +1,8 @@
+# -----------------------------------------------------------------------------
+# Fish customizations
+
 # clean fish greeting
 set -U fish_greeting ""
-
-set -x LC_ALL en_US.UTF-8
-
-set -gx EDITOR vim
-
-# base cdpath's
-set -gx CDPATH $HOME
-# add Code and subdirs to cdpath
-set -gx CDPATH $HOME/Code/* $HOME/Code $CDPATH
-# priority local dir cdpath's
-set -gx CDPATH . $CDPATH
-
-contains /opt/homebrew/sbin $PATH; or fish_add_path /opt/homebrew/sbin
-contains /opt/homebrew/bin $PATH; or fish_add_path /opt/homebrew/bin
-contains "$HOME/dotfiles/bin" $PATH; or fish_add_path $HOME/dotfiles/bin
-contains "$HOME/.local/bin" $PATH; or fish_add_path $HOME/.local/bin
-
-# Fix to prevent asdf shims override system binaries
-# --- Use a link to ~/.local/bin/ instead
-# --- ex: ln -s /usr/bin/which ~/.local/bin/
-# set -xg PATH /usr/local/bin /usr/bin /bin /usr/sbin /sbin $PATH
-
-# # override native coreutils with gnu coreutils
-# set GNUBIN (brew --prefix)/opt/coreutils/libexec/gnubin
-# contains $GNUBIN $PATH; or set -gx PATH $GNUBIN PATH
-
-
-# # https://direnv.net/
-# NOTE: when installed using brew, already loaded
-# if type -q direnv
-#     direnv hook fish | source
-
-#     # Hook direnv into your shell (using asdf).
-#     # https://github.com/asdf-community/asdf-direnv
-#     # asdf exec direnv hook fish | source
-
-#     # # A shortcut for asdf managed direnv.
-#     # function direnv
-#     #   asdf exec direnv "$argv"
-#     # end
-# end
-
-#
-if status is-interactive
-    # echo "Activating mise in interactive shell"
-    mise activate fish | source
-    mise hook-env -s fish | source
-else
-    # echo "Activating mise in non-interactive shell"
-    mise activate fish --shims | source
-end
-
-# check if Warp is the current terminal
-
-if test "$TERM_PROGRAM" != WarpTerminal
-    # https://starship.rs/
-    starship init fish | source
-end
 
 # #----
 # # Theme configs
@@ -73,7 +18,77 @@ end
 # set -g theme_newline_chart "↪"
 # set -g theme_newline_chart "$right_arrow_glyph"
 
-#----
+# -----------------------------------------------------------------------------
+# Environment
+
+set -x LC_ALL en_US.UTF-8
+
+set -gx EDITOR nvim
+
+# base cdpath's
+set -gx CDPATH $HOME
+# add Code and subdirs to cdpath
+set -gx CDPATH $HOME/Code/* $HOME/Code $CDPATH
+# priority local dir cdpath's
+set -gx CDPATH . $CDPATH
+
+# -----------------------------------------------------------------------------
+# PATH Setup
+
+fish_add_path --path /opt/homebrew/sbin
+fish_add_path --path /opt/homebrew/bin
+fish_add_path --path $HOME/dotfiles/bin
+fish_add_path --path $HOME/.local/bin
+fish_add_path --path $HOME/.cargo/bin
+# contains /opt/homebrew/sbin $PATH; or fish_add_path --path /opt/homebrew/sbin
+# contains /opt/homebrew/bin $PATH; or fish_add_path --path /opt/homebrew/bin
+# contains "$HOME/dotfiles/bin" $PATH; or fish_add_path --path $HOME/dotfiles/bin
+# contains "$HOME/.local/bin" $PATH; or fish_add_path --path $HOME/.local/bin
+
+# Fix to prevent asdf shims override system binaries
+# --- Use a link to ~/.local/bin/ instead
+# --- ex: ln -s /usr/bin/which ~/.local/bin/
+# set -xg PATH /usr/local/bin /usr/bin /bin /usr/sbin /sbin $PATH
+
+# # override native coreutils with gnu coreutils
+# set GNUBIN (brew --prefix)/opt/coreutils/libexec/gnubin
+# contains $GNUBIN $PATH; or set -gx PATH $GNUBIN PATH
+
+# -----------------------------------------------------------------------------
+# Initializers
+
+# if the file ~/.env.sh exists, source it
+if test -f ~/.env.sh
+    source ~/.env.sh
+end
+
+# https://direnv.net/
+# NOTE: when installed using brew, already loaded, but it will not be loaded in other apps
+if type -q direnv
+    direnv hook fish | source
+
+    # Hook direnv into your shell (using asdf).
+    # https://github.com/asdf-community/asdf-direnv
+    # asdf exec direnv hook fish | source
+
+    # # A shortcut for asdf managed direnv.
+    # function direnv
+    #   asdf exec direnv "$argv"
+    # end
+end
+
+# check if Warp is the current terminal
+if test "$TERM_PROGRAM" != WarpTerminal
+    # https://starship.rs/
+    starship init fish | source
+end
+
+# https://developer.1password.com/docs/cli/shell-plugins/
+if type -q op; and test -e "$HOME/.config/op/plugins.sh"
+    source "$HOME/.config/op/plugins.sh"
+end
+
+# -----------------------------------------------------------------------------
 # Aliases
 
 source (dirname (status filename))/alias/git.fish

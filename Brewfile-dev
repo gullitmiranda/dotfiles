@@ -51,3 +51,12 @@ brew 'git-lfs'
 # https://www.datree.io required by https://marketplace.visualstudio.com/items?itemName=SuyashSonawane.vscode-datree
 tap 'datreeio/datree'
 brew 'datree'
+
+# required by font-fira-mono-for-powerline--svn
+# tap 'homebrew/cask-fonts'
+# cask 'font-fira-code'
+# cask 'font-fira-mono'
+# cask 'font-fira-mono-for-powerline'
+cask 'font-fira-mono-nerd-font'
+cask 'font-jetbrains-mono-nerd-font'
+# cask 'font-hack-nerd-font'

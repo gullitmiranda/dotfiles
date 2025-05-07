@@ -1,23 +1,16 @@
 # Others
 ######################
 
-# required by font-fira-mono-for-powerline--svn
-brew 'svn'
-tap 'homebrew/cask-fonts'
-cask 'font-fira-code'
-cask 'font-fira-mono'
-cask 'font-fira-mono-for-powerline'
-cask 'font-fira-mono-nerd-font'
-# cask 'font-hack-nerd-font'
+# brew 'svn'
 
 cask 'provisionql'
 cask 'quicklook-json'
-cask 'betterzip'
-cask 'diffmerge'
+# cask 'betterzip'
+# cask 'diffmerge'
 
-cask 'quicklook-csv'
-cask 'webpquicklook'
-cask 'suspicious-package'
+# cask 'quicklook-csv'
+# cask 'webpquicklook'
+# cask 'suspicious-package'
 
 # quicklook-csv webpquicklook suspicious-package
 

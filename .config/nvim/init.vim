@@ -146,11 +146,11 @@ vnoremap <Space> zf
 " shell for syntax highlighting purposes.
 let g:is_posix = 1
 
-" shel options
-if executable('zsh')
-  set shell=zsh\ -l
-endif
-set shellcmdflag=-lc
+" " shel options
+" if executable('zsh')
+"   set shell=zsh\ -l
+" endif
+" set shellcmdflag=-lc
 set showcmd
 
 " configure syntastic syntax checking to check on open as well as save

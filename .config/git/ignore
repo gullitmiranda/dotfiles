@@ -42,6 +42,12 @@ tags
 *.un~
 Session.vim
 
+# AI - Files used by AI
+# ----------------------------------------------------------------------------------------------
+diff.patch
+action-plan.md
+pr_description.md
+
 # SASS
 # ----------------------------------------------------------------------------------------------
 .sass-cache
@@ -84,6 +90,3 @@ Session.vim
 # Elixir
 .elixir_ls
 *.numi
-
-# NodeJS
-.yarn/

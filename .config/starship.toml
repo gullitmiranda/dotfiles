@@ -8,17 +8,17 @@ command_timeout = 2_000
 min_time = 0
 format = "[$duration](bold yellow)"
 
-[custom.fishcognito]
-command = """ echo 👻 """
-description = "Show 👻 when in fishcognito"
-# FIXME: this is very slow in fish without option to disable config files
-#   - https://github.com/fish-shell/fish-shell/issues/1256
-#   - https://github.com/fish-shell/fish-shell/pull/7921
-# shell = ["bash", "--noprofile", "--norc"]
-# FIXED by https://github.com/fish-shell/fish-shell/pull/7921
-shell = ["fish", "--no-config"]
-format = "[$symbol$output]($style) "
-when = """ test "$fishcognito_active" = "true" """
+# [custom.fishcognito]
+# command = """ echo 👻 """
+# description = "Show 👻 when in fishcognito"
+# # FIXME: this is very slow in fish without option to disable config files
+# #   - https://github.com/fish-shell/fish-shell/issues/1256
+# #   - https://github.com/fish-shell/fish-shell/pull/7921
+# # shell = ["bash", "--noprofile", "--norc"]
+# # FIXED by https://github.com/fish-shell/fish-shell/pull/7921
+# shell = ["fish", "--no-config"]
+# format = "[$symbol$output]($style) "
+# when = """ test "$fishcognito_active" = "true" """
 
 [directory]
 truncate_to_repo = false
@@ -60,9 +60,9 @@ us-west4 = "uw4"
 [elixir]
 symbol = "🔮 "
 
-# https://starship.rs/config/#environment-variable
-[env_var]
-variable = "ENV_NAME"
-default = ""
-style = "bold dimmed"
-format = "\\([$env_value]($style) env\\) "
+# # https://starship.rs/config/#environment-variable
+# [env_var]
+# variable = "ENV_NAME"
+# default = ""
+# style = "bold dimmed"
+# format = "\\([$env_value]($style) env\\) "

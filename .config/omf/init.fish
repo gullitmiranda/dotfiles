@@ -101,9 +101,19 @@ alias datefiso='date +%Y%m%dT%H%M%S%z'
 #----
 # Setup tools (also override some aliases)
 
+if type -q cursor
+    alias c=cursor
+end
+
+if type -q nvim
+    alias vim=nvim
+end
+
 if type -q eza
-    alias ls='eza -G --color auto --icons -a -s type'
-    alias ll='eza -l --color always --icons -a -s type'
+    alias ls='eza -G --color auto -a -s type'
+    alias ll='eza -l --color always -a -s type'
+    # alias ls='eza -G --color auto --icons -a -s type'
+    # alias ll='eza -l --color always --icons -a -s type'
     alias la='eza --color auto -abghHliS'
 end
 
@@ -142,18 +152,12 @@ if type -q tldr
     # alias _man=(which man)
     # alias man='tldr'
     alias human='tldr'
+
+    set -gx TLDR_AUTO_UPDATE_DISABLED true
 end
 
 switch (uname)
     case Darwin
-        function sourcetree -a repo
-            # when repo is not defined use "."
-            set -l default_repo (git rev-parse --show-cdup)
-            set -q $repo; and set -l repo "$default_repo"
-            open -a SourceTree "$repo"
-        end
-        alias st='sourcetree'
-
         alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
         alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
 end
@@ -174,11 +178,6 @@ function pgrep -a str -d "grep in all running process"
     command ps aux | grep -v grep | grep "$str"
 end
 
-# https://github.com/fish-shell/fish-shell/issues/1156#issuecomment-371493891
-function fishcognito
-    env fish_history='' fishcognito_active='true' fish
-end
-
 #----
 # Dev
 
@@ -186,10 +185,39 @@ end
 ######################
 set -gx ERL_AFLAGS "-kernel shell_history enabled"
 
-# Finder-launched applications missing PATH env
-# - https://apple.stackexchange.com/questions/51677/how-to-set-path-for-finder-launched-applications/198282#198282
-# - https://community.atlassian.com/t5/Bitbucket-questions/SourceTree-Hook-failing-because-paths-don-t-seem-to-be-set/qaq-p/274792
-switch (uname)
-    case Darwin
-        launchctl setenv PATH (bash -c 'echo $PATH')
-end
+# # Finder-launched applications missing PATH env
+# # - https://apple.stackexchange.com/questions/51677/how-to-set-path-for-finder-launched-applications/198282#198282
+# # - https://community.atlassian.com/t5/Bitbucket-questions/SourceTree-Hook-failing-because-paths-don-t-seem-to-be-set/qaq-p/274792
+# switch (uname)
+#     case Darwin
+#         launchctl setenv PATH (bash -c 'echo $PATH')
+# end
+
+# DevOps tools
+########################
+
+set -q KREW_ROOT; and set -gx PATH $PATH $KREW_ROOT/.krew/bin; or set -gx PATH $PATH $HOME/.krew/bin
+
+alias k=kubectl
+# Add custom alinas to nerdctl and nerdctl compose (alternative to docker and docker-compose)
+alias n=nerdctl
+alias nc='nerdctl compose'
+alias ndocker=nerdctl
+alias ndocker-compose='nerdctl compose'
+
+# use chef-cli from gem instead of chef workstation
+alias chef=chef-cli
+
+# https://tailscale.com/kb/1080/cli#using-the-cli
+alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
+
+# # https://code.visualstudio.com/docs/terminal/shell-integration#_installation
+# # WORKAROUND: ⚠️ This is currently experimental and automatic injection is not supported
+# string match -q "$TERM_PROGRAM" vscode; and source (code --locate-shell-integration-path fish)
+
+# disable homebrew auto update
+export HOMEBREW_NO_AUTO_UPDATE=1
+
+# # https://krew.sigs.k8s.io/docs/user-guide/setup/install/
+# set -q KREW_ROOT; and set -gx PATH $PATH $KREW_ROOT/.krew/bin; or set -gx PATH $PATH $HOME/.krew/bin
+# set -gx PATH $PATH $HOME/.krew/bin

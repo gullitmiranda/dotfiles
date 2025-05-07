@@ -74,6 +74,7 @@
   # reset
   unstage = reset HEAD # remove files from index (tracking)
   uncommit = reset --soft HEAD^ # go back before last commit, with files in uncommitted state
+  undo = reset --soft HEAD^ # go back before last commit, with files in uncommitted state
   filelog = log -u # show changes to a file
   mt = mergetool # fire up the merge tool
 
@@ -125,6 +126,10 @@
 [mergetool]
   prompt = false
 
+# DIFFTOOLS
+[difftool "cursor"]
+  cmd = cursor --wait "$LOCAL" "$REMOTE"
+
 # GUI merge tools
 [mergetool "cursor"]
   cmd = cursor --wait "$MERGED"
@@ -140,6 +145,7 @@
   trustExitCode = true
 [mergetool "nvim_diff"] # require [fugitive.vim](https://github.com/tpope/vim-fugitive) for 3-way merge
   cmd = nvim -c 'Gdiff' $MERGED
+  trustExitCode = true
   keepbackup = false
 
 [apply]
@@ -235,3 +241,25 @@
 
 # [url "git@gitlab.com:"]
 #   insteadOf = https://gitlab.com/
+
+########################################################
+# Credentials
+########################################################
+
+# # [credential "https://github.com/cloudwalk"]
+# [credential]
+#   # first disable system helper
+#   helper =
+
+#   # then use our custom helper
+#   # use the GITHUB_TOKEN environment variable
+#   helper = !/Users/guma/dotfiles/bin/git-credential-helper
+#   # helper = osxkeychain
+# 	useHttpPath = true
+
+# [credential "https://github.com"]
+# 	helper = 
+# 	helper = !/opt/homebrew/bin/gh auth git-credential
+# [credential "https://gist.github.com"]
+# 	helper = 
+# 	helper = !/opt/homebrew/bin/gh auth git-credential

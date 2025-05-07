@@ -21,6 +21,7 @@ abbr -a gba git branch -a -vv
 abbr -a gc git commit -v
 abbr -a gcm git commit -v -m
 abbr -a gcan git commit -v -s --no-edit --amend
+abbr -a gcw git commit -v -mWIP
 
 abbr -a gfa git fetch --all
 abbr -a gfap git fetch --all --prune

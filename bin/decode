@@ -1,7 +1,0 @@
-#!/bin/sh
-
-function decode() {
-  printf "%s" "${@}" | base64 --decode ; echo
-}
-
-decode ${@}

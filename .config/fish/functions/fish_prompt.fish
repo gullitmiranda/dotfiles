@@ -1,1 +1,0 @@
-/Users/guma/.local/share/omf/themes/default/functions/fish_prompt.fish

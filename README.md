@@ -1,4 +1,4 @@
-# Gullit Miranda's Dotfiles (Restructured)
+# Gullit Miranda's Dotfiles
 
 ## Overview
 
@@ -10,7 +10,8 @@ This repository contains my personal dotfiles - configuration files for various 
 - **Modular Design**: Configurations separated into logical components
 - **Secure**: Sensitive data kept out of the repository
 - **Simple Installation**: Easy to install and configure
-- **Customizable**: Support for local customizations without modifying the repository
+- **Customizable**: Support for local customizations directly in your shell config files
+- **Portable**: Uses dynamic paths for easy relocation of the dotfiles repository
 
 ## Repository Structure
 
@@ -28,8 +29,7 @@ dotfiles/
 ├── home/                 # Files for $HOME directory
 ├── bin/                  # Executable scripts
 ├── tools/                # Installation tools
-├── packages/             # Package management
-└── local/                # Machine-specific configurations (git-ignored)
+└── packages/             # Package management
 ```
 
 ## Installation
@@ -57,12 +57,12 @@ For more options:
 
 ## Customization
 
-Create local override files (outside of version control):
+Add your machine-specific configurations directly to your shell configuration files:
 
-- `~/.config/fish/local.fish` for Fish shell
-- `~/.zshrc.local` for ZSH shell
+- `~/.config/fish/config.fish` for Fish shell (after the line that sources from dotfiles)
+- `~/.zshrc` for ZSH shell (after the line that sources from dotfiles)
 
-These files are automatically sourced if they exist, allowing you to add machine-specific configurations.
+The installer creates these files with a designated section for your customizations that won't be overwritten when updating the dotfiles repository.
 
 ## Package Management
 

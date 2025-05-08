@@ -10,8 +10,8 @@ linux|darwin:
     # config.fish: ~/.config/fish/config.fish
 
   installs:
-    # depends:
-    #   - ../../
+    depends:
+      - common
     cmd: |
       # Install Fish shell and Fisher
       brew install fish fisher

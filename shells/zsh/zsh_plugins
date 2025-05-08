@@ -1,49 +1,37 @@
-# Zinit Plugins Definition File
-# This file is sourced directly by .zshrc after Zinit is initialized
+# # Zsh plugins using Zinit
+# # This file is sourced by the main .zshrc file
 
-# Example plugins (commented out)
-# -----------------------------------------------
+# # Core plugins
+# zinit light zsh-users/zsh-autosuggestions     # Fish-like autosuggestions
+# zinit light zsh-users/zsh-syntax-highlighting # Syntax highlighting for commands
+# zinit light zsh-users/zsh-completions         # Additional completion definitions
 
-# Fast syntax highlighting
-# zinit light zdharma-continuum/fast-syntax-highlighting
+# # Oh-My-Zsh libraries and plugins
+# zinit snippet OMZ::lib/completion.zsh
+# zinit snippet OMZ::lib/history.zsh
+# zinit snippet OMZ::lib/key-bindings.zsh
+# zinit snippet OMZ::plugins/git/git.plugin.zsh
+# zinit snippet OMZ::plugins/sudo/sudo.plugin.zsh
+# zinit snippet OMZ::plugins/command-not-found/command-not-found.plugin.zsh
 
-# Fish-like autosuggestions
-# zinit light zsh-users/zsh-autosuggestions
+# # Enhanced cd command
+# zinit light agkozak/zsh-z # Jump quickly to directories you visit frequently
 
-# History substring search
-# zinit light zsh-users/zsh-history-substring-search
+# # Improved command line navigation
+# zinit light jeffreytse/zsh-vi-mode # vi mode for zsh (comment out if you prefer emacs bindings)
 
-# Completions
-# zinit light zsh-users/zsh-completions
+# # Utilities
+# zinit light zdharma-continuum/fast-syntax-highlighting # Improved syntax highlighting
+# zinit light MichaelAquilina/zsh-you-should-use         # Reminds you of aliases
+# zinit light hlissner/zsh-autopair                      # Auto-close and delete matching delimiters
 
-# Git open - Opens the GitHub page for a repo/branch
-# zinit light paulirish/git-open
+# # Load these plugins as needed (uncomment to activate)
+# # zinit light marlonrichert/zsh-autocomplete           # Real-time completions (can be slower)
+# # zinit light zsh-users/zsh-history-substring-search   # Fish-like history search
+# # zinit light romkatv/powerlevel10k                    # Powerlevel10k theme (alternative to Starship)
 
-# Directory jumping
-# zinit light agkozak/zsh-z
-
-# Fuzzy finder
-# zinit ice from"github" as"command"
-# zinit light junegunn/fzf
-
-# Oh My Zsh plugins (examples)
-# zinit snippet OMZP::git
-# zinit snippet OMZP::kubectl
-# zinit snippet OMZP::docker
-
-# Example plugin configurations
-# -----------------------------------------------
-
-# Configure key bindings for history-substring-search
-# bindkey '^[[A' history-substring-search-up
-# bindkey '^[[B' history-substring-search-down
-
-# Configure autosuggestions
-# ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-# ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#8a8a8a"
-# bindkey '^ ' autosuggest-accept
-
-# To manage plugins:
-# - Uncomment or add plugin lines to this file
-# - Source your ~/.zshrc or restart your shell
-# - Use `zinit update --all` to update plugins
+# # fzf integration (if installed)
+# if command -v fzf >/dev/null 2>&1; then
+#   zinit light Aloxaf/fzf-tab # Replace zsh's default completion with fzf
+#   zinit snippet OMZ::plugins/fzf/fzf.plugin.zsh
+# fi

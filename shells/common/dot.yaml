@@ -1,0 +1,23 @@
+linux|darwin:
+  # No direct links from common directory
+  # This directory contains files that are sourced by shell-specific configurations
+  # To update paths for the bin directory, add to paths.d
+
+  # Installation commands for common shell utilities
+  installs:
+    cmd: |
+      # Install common utilities that all shells can use
+      brew install coreutils wget curl jq fzf bat fd ripgrep exa
+
+      # Make sure shared directories exists
+      mkdir -p "~/.local/.dotfiles/"
+
+      echo "Created ~/.local/.dotfiles/editor.env.sh with editor order preference"
+      bash -c '$DOTFILES_DIR/bin/create_shell_stub "~/.local/.dotfiles/editor.env.sh" << "EOL"
+      # Set up editor preferences based on availability
+      # Get editor options from config or set defaults
+      export __dotfiles_editor_opts="{{ config.variables.shell.EDITOR }}"
+      export __dotfiles_visual_opts="{{ config.variables.shell.VISUAL }}"
+      EOL'
+
+      echo "Common shell utilities and configuration files have been created."

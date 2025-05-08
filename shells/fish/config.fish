@@ -11,15 +11,6 @@ end
 set -U fish_greeting ""
 fish_default_key_bindings
 
-# Set default editor
-if command -v nvim >/dev/null
-    set -gx EDITOR nvim
-else if command -v vim >/dev/null
-    set -gx EDITOR vim
-else
-    set -gx EDITOR nano
-end
-
 # -----------------------------------------------------------------------------
 # Initializers
 
@@ -28,7 +19,12 @@ if test -f ~/.env.sh
     source ~/.env.sh
 end
 
-# Load https://starship.rs/ if not in WarpTerminal
-if test "$TERM_PROGRAM" != WarpTerminal
+# Source common configuration files
+if test -f $DOTFILES_DIR/shells/common/init.fish
+    source $DOTFILES_DIR/shells/common/init.fish
+end
+
+# Load https://starship.rs/ if not in WarpTerminal and if the starship command exists
+if test "$TERM_PROGRAM" != "WarpTerminal" && type -q starship
     starship init fish | source
 end

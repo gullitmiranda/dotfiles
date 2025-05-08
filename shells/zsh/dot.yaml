@@ -8,6 +8,9 @@ linux|darwin:
     # zshrc: ~/.zshrc
 
   installs:
+    depends:
+      - common
+
     cmd: |
       # Install Zsh and Zinit
       brew install zsh zinit

@@ -4,6 +4,8 @@ linux|darwin:
     # We don't directly link .bashrc - we create a stub that sources it
 
   installs:
+    depends:
+      - common
     cmd: |
       # Install Bash and bash-completion
       brew install bash bash-completion

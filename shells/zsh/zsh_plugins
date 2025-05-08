@@ -1,0 +1,49 @@
+# Zinit Plugins Definition File
+# This file is sourced directly by .zshrc after Zinit is initialized
+
+# Example plugins (commented out)
+# -----------------------------------------------
+
+# Fast syntax highlighting
+# zinit light zdharma-continuum/fast-syntax-highlighting
+
+# Fish-like autosuggestions
+# zinit light zsh-users/zsh-autosuggestions
+
+# History substring search
+# zinit light zsh-users/zsh-history-substring-search
+
+# Completions
+# zinit light zsh-users/zsh-completions
+
+# Git open - Opens the GitHub page for a repo/branch
+# zinit light paulirish/git-open
+
+# Directory jumping
+# zinit light agkozak/zsh-z
+
+# Fuzzy finder
+# zinit ice from"github" as"command"
+# zinit light junegunn/fzf
+
+# Oh My Zsh plugins (examples)
+# zinit snippet OMZP::git
+# zinit snippet OMZP::kubectl
+# zinit snippet OMZP::docker
+
+# Example plugin configurations
+# -----------------------------------------------
+
+# Configure key bindings for history-substring-search
+# bindkey '^[[A' history-substring-search-up
+# bindkey '^[[B' history-substring-search-down
+
+# Configure autosuggestions
+# ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+# ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#8a8a8a"
+# bindkey '^ ' autosuggest-accept
+
+# To manage plugins:
+# - Uncomment or add plugin lines to this file
+# - Source your ~/.zshrc or restart your shell
+# - Use `zinit update --all` to update plugins

@@ -55,3 +55,14 @@ elif command -v vim >/dev/null; then
 else
     export EDITOR=nano
 fi
+
+# Check for Zinit plugin manager
+ZINIT_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/zinit/zinit.git"
+if [ -d "$ZINIT_HOME" ]; then
+    source "$ZINIT_HOME/zinit.zsh"
+    if [ -f "$DOTFILES_DIR/shells/zsh/zsh_plugins" ]; then
+        source "$DOTFILES_DIR/shells/zsh/zsh_plugins"
+    fi
+else
+    echo "Zinit is not installed. Run the dotfiles installer to set it up."
+fi

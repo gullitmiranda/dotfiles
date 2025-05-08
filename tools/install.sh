@@ -168,7 +168,7 @@ detect_shell() {
   log "info" "Auto-detected shell: $SHELL_TYPE"
 }
 
-# Install basic shell stubs
+# Install shell stubs
 install_shell_stubs() {
   log "info" "Installing shell configuration stubs"
 
@@ -190,6 +190,14 @@ source \$DOTFILES_DIR/shells/fish/config.fish
 "
 
     create_shell_stub "fish" "$fish_config" "$fish_stub_content"
+
+    # Only link Fisher plugins file here if it exists
+    # (Full linking and installation happens later in the script)
+    if [ -f "$DOTFILES_DIR/shells/fish/fish_plugins" ]; then
+      log "info" "Found Fisher plugins file"
+    else
+      log "warning" "Fisher plugins file not found at $DOTFILES_DIR/shells/fish/fish_plugins"
+    fi
   fi
 
   # ZSH shell stub
@@ -209,6 +217,13 @@ source \$DOTFILES_DIR/shells/zsh/.zshrc
 "
 
     create_shell_stub "zsh" "$zsh_config" "$zsh_stub_content"
+
+    # Check for Zsh plugins file
+    if [ -f "$DOTFILES_DIR/shells/zsh/zsh_plugins" ]; then
+      log "info" "Found Zsh plugins list file"
+    else
+      log "warning" "Zsh plugins list file not found at $DOTFILES_DIR/shells/zsh/zsh_plugins"
+    fi
   fi
 }
 
@@ -249,6 +264,86 @@ alias ...='cd ../..'
   fi
 }
 
+# Install Fisher plugin manager for Fish shell
+install_fisher() {
+  if ! command -v fish &> /dev/null; then
+    log "warning" "Fish shell is not installed. Skipping Fisher installation."
+    return 1
+  fi
+
+  log "info" "Checking for Fisher plugin manager..."
+
+  # Check if Fisher is already installed
+  if fish -c "functions -q fisher" &> /dev/null; then
+    log "info" "Fisher is already installed"
+    return 0
+  fi
+
+  log "info" "Installing Fisher plugin manager..."
+
+  # Create fish config directory if it doesn't exist
+  mkdir -p "$HOME/.config/fish"
+
+  # Install Fisher
+  if [ "$DRY_RUN" = true ]; then
+    log "info" "Would install Fisher with: curl -sL https://git.io/fisher | fish"
+  else
+    curl -sL https://git.io/fisher | fish
+
+    # Verify installation
+    if ! fish -c "functions -q fisher" &> /dev/null; then
+      log "warning" "Fisher installation might have failed. Please install it manually after setup."
+      return 1
+    fi
+
+    log "success" "Fisher installed successfully!"
+  fi
+
+  return 0
+}
+
+# Install Zinit (lightweight plugin manager for Zsh)
+install_zinit() {
+  if ! command -v zsh &> /dev/null; then
+    log "warning" "Zsh shell is not installed. Skipping Zinit installation."
+    return 1
+  fi
+
+  log "info" "Checking for Zinit..."
+
+  # Set Zinit home directory
+  ZINIT_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/zinit/zinit.git"
+
+  # Check if Zinit is already installed
+  if [ -d "$ZINIT_HOME" ]; then
+    log "info" "Zinit is already installed"
+    return 0
+  fi
+
+  log "info" "Installing Zinit plugin manager..."
+
+  # Install Zinit
+  if [ "$DRY_RUN" = true ]; then
+    log "info" "Would install Zinit with: mkdir -p \"$(dirname $ZINIT_HOME)\" && git clone https://github.com/zdharma-continuum/zinit.git \"$ZINIT_HOME\""
+  else
+    # Create parent directory and clone Zinit
+    mkdir -p "$(dirname $ZINIT_HOME)"
+    git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+
+    # Verify installation
+    if [ ! -d "$ZINIT_HOME" ]; then
+      log "warning" "Zinit installation might have failed. Please install it manually after setup."
+      return 1
+    fi
+
+    log "success" "Zinit installed successfully!"
+  fi
+
+  return 0
+}
+
+# No separate install_zsh_plugins function needed as Zinit handles plugin installation when sourced
+
 # Main installation function
 install_dotfiles() {
   log "info" "Starting dotfiles installation (mode: $INSTALL_MODE, shell: $SHELL_TYPE)"
@@ -260,6 +355,14 @@ install_dotfiles() {
       log "error" "Please ensure the dotfiles repository is correctly cloned."
       exit 1
     fi
+
+    # Check for Fish plugins list
+    if [ ! -f "$DOTFILES_DIR/shells/fish/fish_plugins" ]; then
+      log "warning" "Fish plugins list not found: $DOTFILES_DIR/shells/fish/fish_plugins"
+      log "info" "You may want to create this file to manage your Fisher plugins."
+    else
+      log "info" "Found Fish plugins list"
+    fi
   fi
 
   if [ "$SHELL_TYPE" = "zsh" ] || [ "$INSTALL_MODE" = "full" ]; then
@@ -268,15 +371,21 @@ install_dotfiles() {
       log "error" "Please ensure the dotfiles repository is correctly cloned."
       exit 1
     fi
+
+    # Check for Zsh plugins list
+    if [ ! -f "$DOTFILES_DIR/shells/zsh/zsh_plugins" ]; then
+      log "warning" "Zsh plugins list not found: $DOTFILES_DIR/shells/zsh/zsh_plugins"
+      log "info" "You may want to create this file to manage your Zsh plugins."
+    else
+      log "info" "Found Zsh plugins list"
+    fi
   fi
 
-  # TODO: why do we need to create these folders during installation?
   # Create core directory structure if needed
   execute "mkdir -p \"$DOTFILES_DIR/core/aliases.d\""
   execute "mkdir -p \"$DOTFILES_DIR/core/env.d\""
   execute "mkdir -p \"$DOTFILES_DIR/core/functions.d\""
   execute "mkdir -p \"$DOTFILES_DIR/core/paths.d\""
-  execute "mkdir -p \"$DOTFILES_DIR/core/plugins.d\""
 
   # Create basic aliases
   create_basic_aliases
@@ -284,13 +393,80 @@ install_dotfiles() {
   # Install shell stubs
   install_shell_stubs
 
+  # Install Fisher plugin manager for Fish
+  if [ "$SHELL_TYPE" = "fish" ] || [ "$INSTALL_MODE" = "full" ]; then
+    if [ -f "$DOTFILES_DIR/shells/fish/fish_plugins" ]; then
+      # Link fisher plugins file before installing Fisher
+      log "info" "Linking fish_plugins file from dotfiles repository..."
+      mkdir -p "$HOME/.config/fish"
+      ln -sf "$DOTFILES_DIR/shells/fish/fish_plugins" "$HOME/.config/fish/fish_plugins"
+
+      # Install Fisher
+      install_fisher
+
+      # Install plugins with Fisher if it was installed successfully
+      if [ $? -eq 0 ] && [ "$DRY_RUN" = false ]; then
+        log "info" "Installing plugins from fish_plugins list..."
+        fish -c "fisher update"
+        log "success" "Plugins installed successfully!"
+      fi
+    fi
+  fi
+
+  # Install Zinit for Zsh
+  if [ "$SHELL_TYPE" = "zsh" ] || [ "$INSTALL_MODE" = "full" ]; then
+    if [ -f "$DOTFILES_DIR/shells/zsh/zsh_plugins" ]; then
+      # Install Zinit
+      install_zinit
+
+      # Plugins will be loaded automatically from zsh_plugins file when zsh starts
+      if [ $? -eq 0 ] && [ "$DRY_RUN" = false ]; then
+        log "info" "Plugins defined in zsh_plugins will be loaded when you start Zsh"
+      fi
+    fi
+  fi
+
   # Additional setup based on installation mode
   if [ "$INSTALL_MODE" = "full" ] || [ "$INSTALL_MODE" = "interactive" ]; then
     log "info" "Performing full installation"
-    # Additional setup would go here
+    # Additional full installation steps would go here
   fi
 
   log "success" "Dotfiles installation completed successfully!"
+
+  # Fish plugin management instructions
+  if [ "$SHELL_TYPE" = "fish" ] || [ "$INSTALL_MODE" = "full" ]; then
+    if [ -f "$DOTFILES_DIR/shells/fish/fish_plugins" ]; then
+      if fish -c "functions -q fisher" &> /dev/null; then
+        log "info" "Fisher is installed. You can manage plugins with these commands:"
+        log "info" "- To list plugins:   fisher list"
+        log "info" "- To update plugins: fisher update"
+        log "info" "- To add a plugin:   fisher add <plugin-url>"
+        log "info" "- To remove a plugin: fisher remove <plugin-name>"
+        log "info" "- Or edit $DOTFILES_DIR/shells/fish/fish_plugins and run 'fisher update'"
+      else
+        log "warning" "Fisher was not installed. To install it manually, run:"
+        log "info" "curl -sL https://git.io/fisher | fish"
+      fi
+    fi
+  fi
+
+  # Zsh plugin management instructions
+  if [ "$SHELL_TYPE" = "zsh" ] || [ "$INSTALL_MODE" = "full" ]; then
+    if [ -f "$DOTFILES_DIR/shells/zsh/zsh_plugins" ]; then
+      ZINIT_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/zinit/zinit.git"
+      if [ -d "$ZINIT_HOME" ]; then
+        log "info" "Zinit is installed. You can manage plugins with these commands:"
+        log "info" "- Edit plugins in $DOTFILES_DIR/shells/zsh/zsh_plugins"
+        log "info" "- To update plugins: zinit update --all"
+        log "info" "- To add a plugin: add 'zinit light author/repo' to zsh_plugins"
+      else
+        log "warning" "Zinit was not installed. To install it manually, run:"
+        log "info" "mkdir -p \"${XDG_DATA_HOME:-$HOME/.local/share}/zinit\" && \\"
+        log "info" "git clone https://github.com/zdharma-continuum/zinit.git \"${XDG_DATA_HOME:-$HOME/.local/share}/zinit/zinit.git\""
+      fi
+    fi
+  fi
 
   if [ "$SHELL_TYPE" = "fish" ]; then
     log "info" "To apply changes, restart your terminal or run: source ~/.config/fish/config.fish"

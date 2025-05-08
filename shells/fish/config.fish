@@ -45,3 +45,9 @@ else
     set -gx EDITOR nano
 end
 
+# Check for Fisher plugin manager
+if not functions -q fisher
+    echo "Fisher plugin manager not found."
+    echo "Run: curl -sL https://git.io/fisher | fish"
+    echo "Then restart your shell"
+end

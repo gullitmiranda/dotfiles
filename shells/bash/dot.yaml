@@ -1,0 +1,19 @@
+linux|darwin:
+  # Bash shell configuration
+  links:
+    # We don't directly link .bashrc - we create a stub that sources it
+
+  installs:
+    cmd: |
+      # Install Bash and bash-completion
+      brew install bash bash-completion
+
+      export DOTFILES_DIR="{{ config.dotfiles }}"
+
+      # Create stub that sources our dotfiles config
+      bash -c '$DOTFILES_DIR/bin/create_shell_stub "$HOME/.bashrc" << "EOFMARKER"
+      export DOTFILES_DIR="{{ config.dotfiles }}"
+      source $DOTFILES_DIR/shells/bash/.bashrc
+      EOFMARKER'
+
+      echo "Bash shell configuration completed"

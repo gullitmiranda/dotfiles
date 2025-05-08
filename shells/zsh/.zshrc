@@ -7,31 +7,6 @@ if [ -z "$DOTFILES_DIR" ]; then
     exit 1
 fi
 
-# Load core modules
-for file in "$DOTFILES_DIR"/core/env.d/*.sh; do
-    if [ -f "$file" ]; then
-        source "$file"
-    fi
-done
-
-for file in "$DOTFILES_DIR"/core/paths.d/*.sh; do
-    if [ -f "$file" ]; then
-        source "$file"
-    fi
-done
-
-for file in "$DOTFILES_DIR"/core/aliases.d/*.sh; do
-    if [ -f "$file" ]; then
-        source "$file"
-    fi
-done
-
-for file in "$DOTFILES_DIR"/core/functions.d/*.sh; do
-    if [ -f "$file" ]; then
-        source "$file"
-    fi
-done
-
 # Basic shell settings
 HISTFILE=~/.zsh_history
 HISTSIZE=10000
@@ -56,13 +31,24 @@ else
     export EDITOR=nano
 fi
 
+# -----------------------------------------------------------------------------
+# Initializers
+
+# try to load the ~/.env.sh
+[ -f "~/.env.sh" ] && source ~/.env.sh
+
+# Load https://starship.rs/ if not in WarpTerminal
+if [ "$TERM_PROGRAM" != "WarpTerminal" ]; then
+    eval "$(starship init zsh)"
+fi
+
 # Check for Zinit plugin manager
-ZINIT_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/zinit/zinit.git"
-if [ -d "$ZINIT_HOME" ]; then
+ZINIT_HOME="$(brew --prefix zinit)"
+if command -v zinit; then
     source "$ZINIT_HOME/zinit.zsh"
     if [ -f "$DOTFILES_DIR/shells/zsh/zsh_plugins" ]; then
         source "$DOTFILES_DIR/shells/zsh/zsh_plugins"
     fi
 else
-    echo "Zinit is not installed. Run the dotfiles installer to set it up."
+    echo "Zinit is not installed. Run the $DOTFILES_DIR installer to set it up."
 fi

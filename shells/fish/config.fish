@@ -7,31 +7,6 @@ if not set -q DOTFILES_DIR
     exit 1
 end
 
-# Load core modules
-for file in $DOTFILES_DIR/core/env.d/*.fish
-    if test -e $file
-        source $file
-    end
-end
-
-for file in $DOTFILES_DIR/core/paths.d/*.fish
-    if test -e $file
-        source $file
-    end
-end
-
-for file in $DOTFILES_DIR/core/aliases.d/*.fish
-    if test -e $file
-        source $file
-    end
-end
-
-for file in $DOTFILES_DIR/core/functions.d/*.fish
-    if test -e $file
-        source $file
-    end
-end
-
 # Basic shell settings
 set -U fish_greeting ""
 fish_default_key_bindings
@@ -45,9 +20,15 @@ else
     set -gx EDITOR nano
 end
 
-# Check for Fisher plugin manager
-if not functions -q fisher
-    echo "Fisher plugin manager not found."
-    echo "Run: curl -sL https://git.io/fisher | fish"
-    echo "Then restart your shell"
+# -----------------------------------------------------------------------------
+# Initializers
+
+# if the file ~/.env.sh exists, source it
+if test -f ~/.env.sh
+    source ~/.env.sh
+end
+
+# Load https://starship.rs/ if not in WarpTerminal
+if test "$TERM_PROGRAM" != WarpTerminal
+    starship init fish | source
 end

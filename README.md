@@ -19,54 +19,153 @@ This repository contains my personal dotfiles - configuration files for various 
 
 ```
 dotfiles/
-├── core/                 # Shell-agnostic configurations
+├── core/                 # Shell-agnostic configurations (with dot.yaml)
 │   ├── env.d/            # Environment variables
 │   ├── aliases.d/        # Aliases organized by category
 │   ├── functions.d/      # Shared functions
 │   └── paths.d/          # Path additions
 ├── shells/               # Shell-specific configurations
-│   ├── fish/             # Fish shell
-│   └── zsh/              # ZSH shell
-├── config/               # Application configs
-├── home/                 # Files for $HOME directory
+│   ├── fish/             # Fish shell (with its own dot.yaml)
+│   └── zsh/              # ZSH shell (with its own dot.yaml)
+├── editors/              # Editor configurations
+│   ├── vim/              # Vim configuration (with its own dot.yaml)
+│   └── nvim/             # Neovim configuration (with its own dot.yaml)
+├── git/                  # Git configuration (with its own dot.yaml)
 ├── bin/                  # Executable scripts
 ├── tools/                # Installation tools
-└── packages/             # Package management
+│   ├── install/          # Package installation scripts
+│   ├── link/             # Dotfile linking scripts
+│   └── brew/             # Homebrew installation (with its own dot.yaml)
+├── config.yaml           # Central Rotz configuration
+└── dot.yaml              # Root configuration (for bin/ linking)
 ```
 
 Each shell's configuration follows the same minimal pattern, focusing on essential functionality while providing a solid foundation for customization. This makes it easy to switch between shells or maintain both simultaneously.
 
-## Installation
+## Rotz Setup
 
-### Quick Start
+This dotfiles repository uses [Rotz](https://github.com/volllly/rotz) - a powerful, cross-platform dotfile manager and environment bootstrapper written in Rust.
 
-```bash
-# Clone the repository
-git clone https://github.com/gullitmiranda/dotfiles.git ~/.dotfiles
+### Installation
+
+First, install Rotz:
+
+```shell
+# macOS with Homebrew
+brew install volllly/tap/rotz
+```
+
+Then initialize your dotfiles:
+
+```shell
+# If you've already cloned the repository
 cd ~/.dotfiles
+rotz init
 
-# Run the installer
-./tools/install.sh
+# Or clone and initialize in one step
+rotz clone https://github.com/gullitmiranda/dotfiles.git
 ```
 
-### Advanced Installation
+Now you can follow the instructions bellow to setup it in your machine:
 
-For more options:
+## Usage
+
+### Deploying Your Dotfiles
+
+After installing Rotz and initializing your dotfiles, you can setup them:
 
 ```bash
-./tools/install.sh --help    # Show installation options
-./tools/install.sh --minimal # Minimal installation
-./tools/install.sh --shell=fish # Set preferred shell
+# Link and install all applications
+rotz link
+rotz install
+
+# Link and install only specific applications
+rotz link shells/fish editors/*
 ```
+
+### Seting default shell
+
+To make sure that you are using the latest zsh installation as your default shell, run:
+
+```shell
+chsh -s $(which zsh)
+```
+
+Or you can use fish instead. run:
+
+```shell
+chsh -s $(which fish)
+```
+
+### Sensitive Environment Variables
+
+You can set up the [~/.env.sh](~/.env.sh) file for sensitive environment variables with the following command as example:
+
+```bash
+# init a empty file
+touch ~/.env.sh
+
+# or a content
+cat > ~/.env.sh << 'EOF'
+# Sensitive environment variables
+export GITHUB_TOKEN=""
+
+# AI Platforms API Keys
+export ANTHROPIC_API_KEY=""
+export OPENAI_API_KEY=""
+export GOOGLE_AI_API_KEY=""
+export GEMINI_API_KEY=""
+export DEEPSEEK_API_KEY=""
+EOF
+
+chmod 600 ~/.env.sh  # Set permissions to be readable only by you
+```
+
+This creates the file with proper permissions and prepares it for your sensitive data.
+
+### Configuration
+
+Rotz uses a distributed configuration model in this repository:
+
+- **`config.yaml`** - Central configuration file at the repository root that defines:
+  - General settings
+  - Package installation references
+  - References to pre/post installation and linking scripts
+
+- **`dot.yaml`** - Configuration files in each application directory with structure:
+  ```yaml
+  linux|darwin:    # Platform-specific section
+    links:         # Defines source: target file mappings
+      config.file: ~/.config/app/config.file
+
+    installs:      # Optional installation instructions
+      cmd: brew install app
+      depends:
+        - tools/brew
+  ```
+
+- **Root `dot.yaml`** - Simple configuration at the repository root for linking the bin directory
+
+This modular approach allows for better organization and platform-specific configuration.
 
 ## Customization
 
-Add your machine-specific configurations directly to your shell configuration files:
+### Machine-Specific Configurations
 
-- `~/.config/fish/config.fish` for Fish shell (after the line that sources from dotfiles)
-- `~/.zshrc` for ZSH shell (after the line that sources from dotfiles)
+Rotz provides several options for machine-specific configurations:
 
-The installer creates these files with a designated section for your customizations that won't be overwritten when updating the dotfiles repository.
+- **Platform-specific packages** in `config.yaml`
+- **Templates** for files that need slight variations between machines
+- **Separate scripts** that can detect and adapt to different environments
+- Changes are applied with simple `rotz link` and `rotz install` commands
+
+### Local Overrides
+
+For truly machine-specific settings that shouldn't be in the repository:
+
+- Add your customizations to the files after they've been deployed
+- Use separate local configuration files referenced from your main config
+- These changes will be preserved when updating your dotfiles
 
 ## Plugin Management
 
@@ -74,15 +173,17 @@ This repository provides a minimal foundation with plugin management capabilitie
 
 ### Fish Shell
 - Plugin system through [Fisher](https://github.com/jorgebucaran/fisher) - a lightweight plugin manager
-- Plugins can be defined in `shells/fish/fish_plugins` (contains example plugins as comments)
-- Install/update plugins: `fisher update`
+- Plugins can be defined in [shells/fish/fish_plugins](./shells/fish/fish_plugins) (contains example plugins as comments)
 - Add a plugin: Edit `fish_plugins` file or run `fisher add <plugin-url>`
+- Install/update plugins: `fisher update`
+
+> See [Fish for bash users](https://fishshell.com/docs/current/fish_for_bash_users.html) to see the differences between fish and bash shells.
 
 ### Zsh Shell
 - Plugin system through [Zinit](https://github.com/zdharma-continuum/zinit) - a lightweight plugin manager
-- Plugins can be defined in `shells/zsh/zsh_plugins` (contains example plugins as comments)
-- Install/update plugins: `zinit update --all`
+- Plugins can be defined in [shells/zsh/zsh_plugins](./shells/zsh/zsh_plugins) (contains example plugins as comments)
 - Add a plugin: Uncomment or add new plugin lines in the `zsh_plugins` file
+- Install/update plugins: `zinit update --all`
 
 Both plugin managers are automatically installed during setup, and plugin files are kept outside the repository.
 
@@ -112,15 +213,20 @@ This repository includes support for:
 
 ## Updating
 
-To update your dotfiles after making changes:
+### Updating Your Dotfiles
+
+To update your dotfiles after making changes to your dotfiles repository:
 
 ```bash
 # Pull the latest changes from the repository
 cd ~/.dotfiles
 git pull
 
-# Run the installer to apply any new configurations
-./tools/install.sh
+# Apply the updated configuration
+rotz link
+
+# Update software packages
+rotz install
 ```
 
 For plugin updates:
@@ -131,13 +237,14 @@ For plugin updates:
 
 Common issues and solutions:
 
-- **Shell doesn't load configurations**: Ensure `DOTFILES_DIR` is set correctly
+- **Files not linking properly**: Run `rotz link --verbose` to see detailed output
+- **Packages not installing**: Check package names in `config.yaml` and package-specific `dot.yaml` files
 - **Plugins not working**: Run the appropriate update command for your shell
-- **Permission issues**: Ensure the scripts have execute permissions (`chmod +x tools/*.sh`)
+- **Permission issues**: Ensure scripts have execute permissions with `chmod +x $DOTFILES_DIR/bin/*`
 
 ## Further Documentation
 
-See the [RESTRUCTURING-PLAN.md](RESTRUCTURING-PLAN.md) file for details on the repository design and implementation plan.
+See the [RESTRUCTURING-PLAN.md](RESTRUCTURING-PLAN.md) file for details on the repository design and implementation plan. For more information about Rotz and how it's used in this repository, check out [ROTZ.md](ROTZ.md).
 
 ## License
 

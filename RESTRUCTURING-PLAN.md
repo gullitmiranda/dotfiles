@@ -19,27 +19,38 @@ This document outlines the plan for restructuring the dotfiles repository to cre
 
 ```plaintext
 dotfiles/
-├── shells/               # Shell-specific configurations
-│   ├── common/           # Shell-agnostic configurations shared across shells
-│   │   ├── env.d/        # Environment variables
-│   │   ├── aliases.d/    # Aliases organized by category
-│   │   ├── functions.d/  # Shared functions
-│   │   └── paths.d/      # Path additions
-│   ├── fish/             # Fish shell (with its own dot.yaml)
-│   ├── zsh/              # ZSH shell (with its own dot.yaml)
-│   ├── bash/             # Bash shell (with its own dot.yaml)
-│   └── starship/         # Starship prompt configuration
-├── editors/              # Editor configurations
-│   ├── vim/              # Vim configuration (with its own dot.yaml)
-│   └── nvim/             # Neovim configuration (with its own dot.yaml)
 ├── bin/                  # Executable scripts (added to path)
-├── tools/                # Installation tools
-│   ├── link/             # Dotfile linking scripts
-│   └── network/          # Network configuration tools
-└── packages/             # Package management
-    ├── Brewfile.core     # Essential packages
-    ├── Brewfile.dev      # Development tools
-    └── Brewfile.gui      # GUI applications
+├── shells/
+│   ├── zsh/
+│   │   ├── .zshrc
+│   │   ├── completions/
+│   │   └── functions/
+│   ├── bash/
+│   │   ├── .bashrc
+│   │   ├── completions/
+│   │   └── functions/
+│   ├── fish/
+│   │   ├── config.fish
+│   │   ├── completions/
+│   │   ├── conf.d/
+│   │   ├── functions/
+│   │   ├── completions_loader.fish
+│   │   ├── conf_loader.fish
+│   │   └── functions_loader.fish
+│   ├── common/
+│   │   ├── completions/
+│   │   ├── conf.d/  # Place tool files here
+│   │   └── functions/
+│   └── starship/         # Starship prompt configuration
+├── local/                # Local configuration (git-ignored), to easily backup
+│   └── env.sh            # Environment variables
+└── tools/                # Installation tools for
+    ├── editors/          # Editor configurations
+    │   ├── vim/          # Vim configuration (with its own dot.yaml)
+    │   └── nvim/         # Neovim configuration (with its own dot.yaml)
+    ├── dev/              # Development tools
+    ├── git/              # Git configuration
+    └── sre/              # SRE tools
 ```
 
 ## 2. Configuration Approach
@@ -53,16 +64,48 @@ The repository now uses Rotz's distributed configuration model instead of direct
 3. **Platform-Specific Configuration**: Support for different operating systems in the same configuration file
 4. **Template System**: Use templates with placeholders for sensitive data
 5. **Shell Common Files**: Shared shell configurations in `shells/common` directory
+6. **Local Configuration**: Machine-specific settings in `~/.dotfiles/local` directory, to facilitate backup
 
 ### Configuration Files:
 
 #### Rotz Configuration:
 
-Each component has its own `dot.yaml` file which contains all necessary configuration for that component. This distributed approach eliminates the need for a central `config.yaml` file.
+Rotz has two main configuration files:
 
-#### Application-specific Config (`dot.yaml`):
+- `config.yaml`: Rotz settings and global variables
+- `dot.yaml`: Component-specific configuration for each component
+
+#### Rotz Configuration (`config.yaml`):
+
+See [config.yaml](config-sample.yaml) for the example configuration.
+
+#### Application-specific Configuration (`dot.yaml`):
+
+Each component has its own `dot.yaml` file which contains all necessary configuration for that component.
+
+- Global configuration:
 
 ```yaml
+links:
+  # Source files (relative to dot.yaml location) → Target locations
+  config.file: ~/.config/app/config.file
+  directory: ~/.config/app/directory/
+
+installs:
+  cmd: brew install app
+  depends:
+    - tools/brew
+```
+
+- Platform-specific configuration:
+
+```yaml
+global: # Global section
+  links:
+    # Source files (relative to dot.yaml location) → Target locations
+    config.file: ~/.config/app/config.file
+    directory: ~/.config/app/directory/
+
 linux|darwin: # Platform-specific section
   links:
     # Source files (relative to dot.yaml location) → Target locations
@@ -92,7 +135,6 @@ Using Rotz for installation provides a streamlined, cross-platform approach:
 ```bash
 # Install Rotz
 brew install volllly/tap/rotz  # macOS
-cargo install rotz             # Using Rust/Cargo
 
 # Initialize repository
 rotz init                      # In an existing repository
@@ -134,6 +176,7 @@ Place all shared functionality in `shells/common/` directory:
 - Aliases
 - Path management
 - Common functions
+- Completions
 
 ### Plugin Management
 
@@ -150,6 +193,25 @@ Each shell has its own `dot.yaml` file that defines:
 - Installation commands
 - Plugin installation
 - Stub configuration creation
+
+### Shell Completions
+
+To integrate dotfiles custom completions with the completions of each shell, we can follow 2 paths:
+
+1. Create a link to the folder inside dotfiles
+
+2. Configure shell completion so that it also loads the dotfiles files
+
+The ideal would be model 2, since it makes a softer integration, preventing any completion made in the local environment from being replicated inside dotfiles.
+
+#### Shell completions Places
+
+Depending on the shell, we'll have to look up where to place the completion file.
+
+- In bash, if you have `bash-completion` installed, you can place the completion file in `~/.local/share/bash-completion`
+- In zsh, place it anywhere inside a directory in your `$fpath` variable
+- In fish, place it in `~/.config/fish/completions`, which now is a link for `~/.dotfiles/shells/fish/completions`
+- In powershell, source the file in your `$PROFILE`
 
 ### Feature Matrix
 
@@ -177,8 +239,8 @@ linux|darwin:
 
   installs:
     cmd: |
-      echo "Configuring git with {{ config.user_email }}"
-      git config --global user.email "{{ config.user_email }}"
+      echo "Configuring git with {{ config.variables.git.user_email }}"
+      git config --global user.email "{{ config.variables.git.user_email }}"
 ```
 
 ### Environment Variables File:
@@ -220,19 +282,26 @@ linux|darwin:
 ### Multiple Git Account Support:
 
 ```
-git/
-├── gitconfig              # Main config that includes others
-├── gitignore_global       # Global gitignore
-├── accounts/              # Account-specific configurations
-    ├── personal.template  # Template for personal account
-    └── work.template      # Template for work account
+~/.dotfiles/tools/git/
+├── .gitconfig                          # Main config that includes others
+├── .gitignore_global                   # Global gitignore
+├── templates/                          # Account-specific configurations
+    ├── .gitconfig.local.template       # Template for local config that includes the dotfiles .gitconfig and multiple account configs
+    ├── .gitconfig.personal.template    # Template for personal account
+    └── .gitconfig.work.template        # Template for work account
 ```
 
-### Conditional Includes:
+#### Local Gitconfig
+
+The local ~/.gitconfig should be generated during the installation process, and should include the dotfiles .gitconfig and multiple account configs.
+
+Example:
 
 ```
-[includeIf "gitdir:~/work/"]
-  path = ~/.config/git/accounts/work.gitconfig
+[includeIf "gitdir:~/Code/"]
+  path = ~/Code/.gitconfig
+[includeIf "gitdir:~/Code/perk/"]
+  path = ~/Code/work/.gitconfig
 ```
 
 ### 1Password Integration:
@@ -298,28 +367,72 @@ The repository now includes comprehensive documentation:
 - [x] Extract common functionality to shells/common directory
 - [x] Configure shell-specific installations
 
-### Phase 3: Shell Configuration (Completed)
+### Phase 3: Shell Configuration (In Progress)
 
 - [x] Implement Fish shell configuration
 - [x] Implement Zsh shell configuration
 - [x] Add Bash shell support
 - [x] Configure Starship prompt
 - [x] Setup plugin management systems
+- [ ] Integrate dotfiles completions with shells:
+  - [ ] Setup completion directory structure
+  - [ ] Configure shell-specific completion loading
+  - [ ] Add common completions
+- [ ] Move custom local files to .local directory:
+  - [ ] Create ~/.dotfiles/local structure
+  - [ ] Move .env.sh to ~/.dotfiles/local/env.sh
+  - [ ] Update shell configurations to source from new location
+  - [ ] Add documentation for local configuration
 
 ### Phase 4: Additional Components (In Progress)
 
 - [x] Configure editor setups (Vim, Neovim)
 - [x] Setup network tools
-- [ ] Complete Git configuration
+- [ ] Complete Git configuration with:
+  - [ ] Multiple account support using templates
+  - [ ] 1Password integration
+  - [ ] Commit signing setup
+  - [ ] Global gitignore configuration
+  - [ ] Local gitconfig generation
 - [x] Simplify package management with direct Brew installations
+- [ ] Add application-specific configurations for:
+  - [ ] Terminal multiplexers (tmux/screen)
+  - [ ] Development tools (SDKMAN, asdf)
+  - [ ] Cloud tools (AWS, GCP, Azure)
+  - [ ] Container tools (Docker, Podman)
 
 ### Phase 5: Testing and Documentation (In Progress)
 
 - [x] Create basic documentation
 - [x] Document Rotz integration
-- [ ] Create comprehensive test scripts
-- [ ] Add CI testing
+- [ ] Create comprehensive test scripts:
+  - [ ] Shell configuration tests
+  - [ ] Editor configuration tests
+  - [ ] Git configuration tests
+  - [ ] Package installation tests
+- [ ] Add CI testing:
+  - [ ] GitHub Actions workflow for macOS
+  - [ ] GitHub Actions workflow for Linux
+  - [ ] Automated installation tests
+  - [ ] Configuration validation tests
 - [ ] Create migration guides for existing users
+- [ ] Add troubleshooting documentation
+
+### Phase 6: Security and Maintenance (New)
+
+- [ ] Implement secrets management:
+  - [ ] 1Password CLI integration
+  - [ ] GPG key management
+  - [ ] SSH key rotation
+- [ ] Add automated backup system
+- [ ] Create maintenance scripts:
+  - [ ] Package update automation
+  - [ ] Configuration validation
+  - [ ] Health checks
+- [ ] Implement monitoring for:
+  - [ ] Configuration drift
+  - [ ] Package updates
+  - [ ] Security vulnerabilities
 
 ## Migration Strategy
 
@@ -376,8 +489,12 @@ This restructuring plan provides a comprehensive roadmap for transforming the do
 - [x] Adopt Rotz as the dotfile manager
 - [x] Create distributed configuration model
 - [x] Setup shell configurations
-- [ ] Complete editor configurations
-- [ ] Add more application-specific configurations
+- [x] Complete editor configurations
+- [ ] Complete Git configuration with multiple account support
+- [ ] Add application-specific configurations
 - [ ] Create comprehensive tests
 - [ ] Add CI integration
 - [ ] Create specialized installation scripts for complex setups
+- [ ] Implement secrets management system
+- [ ] Add automated maintenance scripts
+- [ ] Create monitoring system for configuration health

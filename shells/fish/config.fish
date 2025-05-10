@@ -24,6 +24,9 @@ fish_default_key_bindings
 # -----------------------------------------------------------------------------
 # Initializers
 
+# Set the CURRENT_SHELL environment variable for starship
+set -gx CURRENT_SHELL fish
+
 # if the file ~/.env.sh exists, source it
 if test -f ~/.env.sh
     source ~/.env.sh

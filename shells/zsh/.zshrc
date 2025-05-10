@@ -54,6 +54,9 @@ bindkey '^[^[[D' backward-word                   # Option+Left - move cursor bac
 # -----------------------------------------------------------------------------
 # Initializers
 
+# Set the CURRENT_SHELL environment variable for starship
+export CURRENT_SHELL=zsh
+
 # Load sensitive environment variables (if file exists and not already loaded)
 [ -f "$HOME/.env.sh" ] && source "$HOME/.env.sh"
 

@@ -1,0 +1,12 @@
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# Starship config documentation
+# https://starship.rs/config/
+
+[character]
+success_symbol = '[❯](bold green) '
+error_symbol = '[✘](bold red) '
+
+# Show the current shell in the prompt
+[env_var.CURRENT_SHELL]

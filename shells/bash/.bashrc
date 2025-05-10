@@ -77,6 +77,9 @@ fi
 # -----------------------------------------------------------------------------
 # Initializers
 
+# Set the CURRENT_SHELL environment variable for starship
+export CURRENT_SHELL=bash
+
 # Try to load the ~/.env.sh
 [ -f "$HOME/.env.sh" ] && source "$HOME/.env.sh"
 

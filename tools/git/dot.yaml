@@ -1,0 +1,12 @@
+global:
+  links:
+    .gitconfig: ~/.gitconfig
+    .gitignore_global: ~/.gitignore_global
+
+darwin:
+  installs:
+    cmd: brew install git
+
+linux:
+  installs:
+    cmd: sudo apt-get update && sudo apt-get install -y git

@@ -1,0 +1,59 @@
+[core]
+    editor = vim
+    excludesfile = ~/.gitignore_global
+    autocrlf = input
+    safecrlf = warn
+
+[init]
+    defaultBranch = main
+
+[color]
+    ui = auto
+    diff = auto
+    status = auto
+    branch = auto
+
+[push]
+    default = simple
+    followTags = true
+
+[pull]
+    rebase = false
+
+[fetch]
+    prune = true
+
+[alias]
+    # Basic shortcuts
+    st = status
+    co = checkout
+    br = branch
+    ci = commit
+    unstage = reset HEAD --
+    last = log -1 HEAD
+    visual = !gitk
+
+    # Logging
+    lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+    type = cat-file -t
+    dump = cat-file -p
+
+    # Branch management
+    branch-name = "!git rev-parse --abbrev-ref HEAD"
+    publish = "!git push -u origin $(git branch-name)"
+    unpublish = "!git push origin :$(git branch-name)"
+
+    # Stashing
+    stash-all = stash save --include-untracked
+    pop-all = stash pop
+
+    # Cleanup
+    cleanup = "!git branch --merged | grep -v '\\*\\|master\\|main\\|develop' | xargs -n 1 git branch -d"
+    cleanup-remote = "!git remote prune origin"
+
+[help]
+    autocorrect = 1
+
+[include]
+    path = ~/.gitconfig.local

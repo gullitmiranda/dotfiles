@@ -17,9 +17,6 @@ Rotz is a powerful, cross-platform dotfile manager and development environment b
 # macOS with Homebrew
 brew install volllly/tap/rotz
 
-# Linux with Cargo (requires Rust)
-cargo install rotz
-
 # Using installation scripts
 curl -fsSL volllly.github.io/rotz/install.sh | sh  # Unix-based systems
 ```

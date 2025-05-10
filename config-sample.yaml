@@ -1,0 +1,23 @@
+# Rotz default configurations
+
+dotfiles: ~/.dotfiles
+
+variables:
+  shell:
+    # Set up editor preferences based on availability, fallback to "nvim vim nano vi" by default
+    ## (string) Order to set $EDITOR env
+    EDITOR: nvim vim nano vi
+    ## (string) Order to set $VISUAL env
+    VISUAL: cursor code zed nvim vim nano vi
+
+  git:
+    user_email: "your.email@example.com"
+    user_name: "Your Name"
+
+    # List of account-specific gitconfig files that should be generated and included in the local gitconfig
+    accountsConfigs:
+      # - template: <target-path>
+      - personal: ~/Code/.gitconfig
+      - work: ~/Code/work/.gitconfig
+
+  # Add other variables as needed

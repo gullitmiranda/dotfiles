@@ -17,7 +17,7 @@ This repository contains my personal dotfiles - configuration files for various 
 
 ## Repository Structure
 
-```
+```plaintext
 dotfiles/
 ├── shells/               # Shell-specific configurations
 │   ├── common/           # Shell-agnostic configurations shared across shells
@@ -71,7 +71,22 @@ rotz init
 rotz clone https://github.com/gullitmiranda/dotfiles.git
 ```
 
-Now you can follow the instructions bellow to setup it in your machine:
+### Configuring Rotz
+
+Now you should update the config file to your needs.
+
+The default config file is `~/Library/Application Support/com.rotz/config.yaml`:
+
+you can use a custom one by:
+
+- running `rotz init --config ~/.dotfiles/config.yaml`
+- Or creating a link `~/.dotfiles/config.yaml` to the custom one after running `rotz init`:
+
+  ```bash
+  ln -s ~/Library/Application\ Support/com.rotz/config.yaml ~/.dotfiles/config.yaml
+  ```
+
+> The `config.yaml` file is this repository's is ignored by git, so you can change it as you want.
 
 ### Deploying Your Dotfiles
 

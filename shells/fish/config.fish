@@ -1,6 +1,16 @@
 # Fish shell configuration
 # Main config file that sources modular components
 
+# Fish Startup Process:
+# 1. /etc/fish/config.fish    - System-wide configuration
+# 2. ~/.config/fish/conf.d/*.fish - User configuration snippets (loaded alphabetically)
+# 3. ~/.config/fish/config.fish - User configuration (this file)
+# 4. ~/.config/fish/functions/*.fish - User functions (autoloaded on demand)
+#
+# Note: Unlike Bash, Fish doesn't distinguish between login and non-login shells.
+# All interactive fish instances load config.fish files.
+# Fish doesn't require explicit checks for interactive mode for key bindings.
+
 # Ensure DOTFILES_DIR is set
 if not set -q DOTFILES_DIR
     echo "Error: DOTFILES_DIR environment variable is not set. Please set it to the path of your dotfiles repository."

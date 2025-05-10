@@ -1,6 +1,19 @@
 # Main Zsh Configuration File
 # This is sourced by ~/.zshrc which is created by the installer
 
+# Zsh Startup Process:
+# 1. /etc/zshenv    - Always run for every zsh session
+# 2. ~/.zshenv      - Usually run for every zsh session
+# 3. /etc/zprofile  - Run for login shells
+# 4. ~/.zprofile    - Run for login shells
+# 5. /etc/zshrc     - Run for interactive shells
+# 6. ~/.zshrc       - Run for interactive shells (this file)
+# 7. /etc/zlogin    - Run for login shells (after zshrc)
+# 8. ~/.zlogin      - Run for login shells (after zshrc)
+#
+# Note: This file (~/.zshrc) is ONLY loaded in interactive shells.
+# Key bindings and other interactive features can be set here without checks.
+
 # Set dotfiles directory if not already set
 [ -z "$DOTFILES_DIR" ] && export DOTFILES_DIR="$HOME/.dotfiles"
 
@@ -8,11 +21,11 @@
 HISTSIZE=10000
 SAVEHIST=10000
 HISTFILE=~/.zsh_history
-setopt SHARE_HISTORY        # Share history between all sessions
-setopt HIST_IGNORE_DUPS     # Don't record an entry that was just recorded again
-setopt HIST_IGNORE_SPACE    # Don't record entries starting with a space
-setopt HIST_REDUCE_BLANKS   # Remove superfluous blanks from history
-setopt HIST_VERIFY          # Don't execute immediately upon history expansion
+setopt SHARE_HISTORY      # Share history between all sessions
+setopt HIST_IGNORE_DUPS   # Don't record an entry that was just recorded again
+setopt HIST_IGNORE_SPACE  # Don't record entries starting with a space
+setopt HIST_REDUCE_BLANKS # Remove superfluous blanks from history
+setopt HIST_VERIFY        # Don't execute immediately upon history expansion
 
 # Basic zsh options
 setopt AUTO_CD              # `dir` instead of `cd dir`
@@ -29,14 +42,14 @@ zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' # Case-insensitive matching
 
 # Key bindings
-bindkey -e                              # Emacs key bindings
-bindkey '^[[A' history-beginning-search-backward
-bindkey '^[[B' history-beginning-search-forward
-bindkey '^[[H' beginning-of-line
-bindkey '^[[F' end-of-line
-bindkey '^[[3~' delete-char
-bindkey '^[[1;5C' forward-word
-bindkey '^[[1;5D' backward-word
+bindkey -e                                       # Enable Emacs key bindings mode (Ctrl+A for beginning of line, Ctrl+E for end of line, etc.)
+bindkey '^[[A' history-beginning-search-backward # Up arrow - search history backwards matching current input
+bindkey '^[[B' history-beginning-search-forward  # Down arrow - search history forwards matching current input
+bindkey '^[[H' beginning-of-line                 # Home key - move cursor to beginning of line
+bindkey '^[[F' end-of-line                       # End key - move cursor to end of line
+bindkey '^[[3~' delete-char                      # Delete key - delete character under cursor
+bindkey '^[^[[C' forward-word                    # Option+Right - move cursor forward one word
+bindkey '^[^[[D' backward-word                   # Option+Left - move cursor backward one word
 
 # -----------------------------------------------------------------------------
 # Initializers
@@ -45,11 +58,11 @@ bindkey '^[[1;5D' backward-word
 [ -f "$HOME/.env.sh" ] && source "$HOME/.env.sh"
 
 # Source common configuration
-[ -f "$DOTFILES_DIR/shells/common/init.sh" ]; then source "$DOTFILES_DIR/shells/common/init.sh"
+[ -f "$DOTFILES_DIR/shells/common/init.zsh" ] && source "$DOTFILES_DIR/shells/common/init.zsh"
 
 # Check for Zinit plugin manager
 ZINIT_HOME="$(brew --prefix zinit)"
-if command -v zinit; then
+if [ -f "$ZINIT_HOME/zinit.zsh" ]; then
   source "$ZINIT_HOME/zinit.zsh"
   if [ -f "$DOTFILES_DIR/shells/zsh/zsh_plugins" ]; then
     source "$DOTFILES_DIR/shells/zsh/zsh_plugins"

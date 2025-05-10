@@ -9,22 +9,18 @@ end
 set -q __dotfiles_editor_opts; or set -gx __dotfiles_editor_opts "nvim vim nano vi"
 set -q __dotfiles_visual_opts; or set -gx __dotfiles_visual_opts "nvim vim nano vi"
 
-# Convert space-separated strings to arrays
-set editor_arr (string split " " $__dotfiles_editor_opts)
-set visual_arr (string split " " $__dotfiles_visual_opts)
-
-# Find first available editor
-for editor in $editor_arr
-    if command -v $editor >/dev/null 2>&1
-        set -gx EDITOR $editor
-        break
+# Function to find first available command from a list of options
+function find_first_available_cmd
+    set options (string split " " $argv[1])
+    for cmd in $options
+        if command -v $cmd >/dev/null 2>&1
+            echo $cmd
+            return 0
+        end
     end
+    return 1
 end
 
-# Find first available visual editor
-for visual in $visual_arr
-    if command -v $visual >/dev/null 2>&1
-        set -gx VISUAL $visual
-        break
-    end
-end
+# Set EDITOR and VISUAL to first available editor
+set -gx EDITOR (find_first_available_cmd "$__dotfiles_editor_opts")
+set -gx VISUAL (find_first_available_cmd "$__dotfiles_visual_opts")

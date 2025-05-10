@@ -1,0 +1,9 @@
+darwin:
+  installs:
+    cmd: |
+      brew install --quiet telnet
+
+linux:
+  installs:
+    cmd: |
+      apt-get install -y telnet

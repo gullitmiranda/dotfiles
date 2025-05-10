@@ -1,13 +1,12 @@
 linux|darwin:
-  # No direct links from common directory
-  # This directory contains files that are sourced by shell-specific configurations
-  # To update paths for the bin directory, add to paths.d
+  links:
+    ripgrep/.ripgreprc: "~/.ripgreprc"
 
   # Installation commands for common shell utilities
   installs:
     cmd: |
       # Install common utilities that all shells can use
-      brew install --quiet coreutils wget curl jq fzf bat fd ripgrep exa
+      brew install --quiet coreutils wget curl jq fzf bat fd ripgrep eza
 
       # Make sure shared directories exists
       mkdir -p "~/.local/.dotfiles/"

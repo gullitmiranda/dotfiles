@@ -6,11 +6,11 @@ linux|darwin:
   installs:
     cmd: |
       # Install Starship prompt
-      brew install starship
+      brew install --quiet starship
 
       # Install recommended fonts for best experience
       brew tap homebrew/cask-fonts
-      brew install --cask \
+      brew install --quiet --cask \
         font-fira-code \
         font-fira-code-nerd-font \
         font-fira-mono \

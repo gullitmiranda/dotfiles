@@ -7,7 +7,7 @@ linux|darwin:
   installs:
     cmd: |
       # Install common utilities that all shells can use
-      brew install coreutils wget curl jq fzf bat fd ripgrep exa
+      brew install --quiet coreutils wget curl jq fzf bat fd ripgrep exa
 
       # Make sure shared directories exists
       mkdir -p "~/.local/.dotfiles/"

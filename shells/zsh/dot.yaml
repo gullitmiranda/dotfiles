@@ -13,7 +13,7 @@ linux|darwin:
 
     cmd: |
       # Install Zsh and Zinit
-      brew install zsh zinit
+      brew install --quiet zsh zinit
 
       export DOTFILES_DIR="{{ config.dotfiles }}"
 

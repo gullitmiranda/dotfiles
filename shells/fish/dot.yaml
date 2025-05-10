@@ -14,7 +14,7 @@ linux|darwin:
       - common
     cmd: |
       # Install Fish shell and Fisher
-      brew install fish fisher
+      brew install --quiet fish fisher
 
       export DOTFILES_DIR="{{ config.dotfiles }}"
 

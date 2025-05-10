@@ -28,6 +28,7 @@ Each shell configuration in this directory **requires** the `DOTFILES_DIR` envir
 ## Customization
 
 Add your machine-specific customizations directly to your shell configuration file in your home directory:
+
 - For Fish: `~/.config/fish/config.fish`
 - For Zsh: `~/.zshrc`
 
@@ -48,12 +49,14 @@ This dotfiles repository uses a simple and consistent approach to plugin managem
 
 ### Fish Shell Plugins
 
-1. **Plugin List:** 
+1. **Plugin List:**
+
    - Plugin examples are provided in `fish/fish_plugins` (as comments)
    - Uncomment or add plugin URLs when you want to use them
    - Each plugin is listed on a separate line with its GitHub repository URL
 
 2. **Installation:**
+
    - Fisher is automatically installed during dotfiles setup
    - The `fish_plugins` file is symlinked to `~/.config/fish/fish_plugins`
    - Plugins will be installed when you uncomment or add them and run `fisher update`
@@ -67,12 +70,14 @@ This dotfiles repository uses a simple and consistent approach to plugin managem
 
 ### Zsh Shell Plugins
 
-1. **Plugin List:** 
+1. **Plugin List:**
+
    - Plugin examples are provided in `zsh/zsh_plugins` (as comments)
    - Uncomment or add plugins when you want to use them
    - Each plugin is defined with a Zinit command (e.g., `zinit light author/repo`)
 
 2. **Installation:**
+
    - Zinit is automatically installed during dotfiles setup
    - Uncomment plugins in the format that Zinit understands
    - When the shell starts, Zinit will load any active plugins from `zsh_plugins`
@@ -80,7 +85,7 @@ This dotfiles repository uses a simple and consistent approach to plugin managem
 
 3. **Management:**
    - To update Zinit plugins: `zinit update --all`
-   - To add a plugin: add its URL to `zsh_plugins` 
+   - To add a plugin: add its URL to `zsh_plugins`
    - Plugins are automatically loaded when you start your shell
 
 ## Shell-Specific Notes

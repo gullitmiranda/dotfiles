@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD026 -->
+
 # Dotfiles Repository Restructuring Plan
 
 ## Overview
@@ -15,7 +17,7 @@ This document outlines the plan for restructuring the dotfiles repository to cre
 
 ## 1. Repository Structure
 
-```
+```plaintext
 dotfiles/
 ├── shells/               # Shell-specific configurations
 │   ├── common/           # Shell-agnostic configurations shared across shells
@@ -55,11 +57,13 @@ The repository now uses Rotz's distributed configuration model instead of direct
 ### Configuration Files:
 
 #### Rotz Configuration:
+
 Each component has its own `dot.yaml` file which contains all necessary configuration for that component. This distributed approach eliminates the need for a central `config.yaml` file.
 
 #### Application-specific Config (`dot.yaml`):
+
 ```yaml
-linux|darwin:  # Platform-specific section
+linux|darwin: # Platform-specific section
   links:
     # Source files (relative to dot.yaml location) → Target locations
     config.file: ~/.config/app/config.file
@@ -72,6 +76,7 @@ linux|darwin:  # Platform-specific section
 ```
 
 #### Shell Stub Example (created by install scripts):
+
 ```bash
 # ~/.zshrc (minimal stub installed by script)
 export DOTFILES_DIR=/path/to/your/dotfiles
@@ -114,45 +119,56 @@ rotz install shells/fish       # Install specific components
 ## 4. Shell Parity Features
 
 ### Supported Shells
+
 The repository now supports three shell environments:
+
 - Fish (modern, user-friendly shell)
 - Zsh (powerful, extensible shell)
 - Bash (legacy support)
 
 ### Shared Logic
+
 Place all shared functionality in `shells/common/` directory:
+
 - Environment variables
 - Aliases
 - Path management
 - Common functions
 
 ### Plugin Management
+
 Each shell includes its own plugin management system:
+
 - Fish: [Fisher](https://github.com/jorgebucaran/fisher)
 - Zsh: [Zinit](https://github.com/zdharma-continuum/zinit)
 
 ### Shell Specific Configuration
+
 Each shell has its own `dot.yaml` file that defines:
+
 - Files to link
 - Installation commands
 - Plugin installation
 - Stub configuration creation
 
 ### Feature Matrix
+
 Features implemented across different shells:
 
-| Feature              | Fish Implementation             | ZSH Implementation             | Bash Implementation         |
-|----------------------|---------------------------------|---------------------------------|-----------------------------|
-| Environment Variables| `set -gx VAR value`            | `export VAR=value`             | `export VAR=value`          |
-| Path Addition        | `fish_add_path /usr/local/bin` | `export PATH=/usr/local/bin:$PATH` | `export PATH=/usr/local/bin:$PATH` |
-| Aliases              | `alias g="git"`                | `alias g="git"`                | `alias g="git"`             |
-| Plugin Management    | Fisher                         | Zinit                          | (minimal)                   |
-| Prompt Customization | Starship                       | Starship                       | Starship                    |
+| Feature               | Fish Implementation            | ZSH Implementation                 | Bash Implementation                |
+| --------------------- | ------------------------------ | ---------------------------------- | ---------------------------------- |
+| Environment Variables | `set -gx VAR value`            | `export VAR=value`                 | `export VAR=value`                 |
+| Path Addition         | `fish_add_path /usr/local/bin` | `export PATH=/usr/local/bin:$PATH` | `export PATH=/usr/local/bin:$PATH` |
+| Aliases               | `alias g="git"`                | `alias g="git"`                    | `alias g="git"`                    |
+| Plugin Management     | Fisher                         | Zinit                              | (minimal)                          |
+| Prompt Customization  | Starship                       | Starship                           | Starship                           |
 
 ## 5. Security Improvements
 
 ### Rotz Template System:
+
 Rotz supports variable substitution in configuration files:
+
 ```yaml
 # Example dot.yaml with templating
 linux|darwin:
@@ -166,6 +182,7 @@ linux|darwin:
 ```
 
 ### Environment Variables File:
+
 ```bash
 # ~/.env.sh (git-ignored)
 # Sensitive environment variables
@@ -174,7 +191,9 @@ export API_KEY="your-key"
 ```
 
 ### Local Configuration
+
 Machine-specific configurations are stored in local user files that are not part of the repository:
+
 - API keys in `~/.env.sh`
 - Work-specific configurations in shell-specific local files
 - Personal preferences in application-specific configuration files
@@ -182,6 +201,7 @@ Machine-specific configurations are stored in local user files that are not part
 ## 6. Version Control Integration
 
 ### Git Configuration with Rotz:
+
 ```yaml
 # Example git/dot.yaml
 linux|darwin:
@@ -198,6 +218,7 @@ linux|darwin:
 ```
 
 ### Multiple Git Account Support:
+
 ```
 git/
 ├── gitconfig              # Main config that includes others
@@ -208,12 +229,14 @@ git/
 ```
 
 ### Conditional Includes:
+
 ```
 [includeIf "gitdir:~/work/"]
   path = ~/.config/git/accounts/work.gitconfig
 ```
 
 ### 1Password Integration:
+
 - SSH key management
 - Git credential helper
 - Commit signing
@@ -221,6 +244,7 @@ git/
 ## 7. Testing System
 
 ### Validation Commands:
+
 ```bash
 # Dry run to preview changes
 rotz --dry-run link
@@ -233,12 +257,14 @@ rotz --verbose link shells/fish
 ```
 
 ### CI Integration:
+
 ```yaml
 # .github/workflows/test-install.yml
 # Test installation on Ubuntu and macOS
 ```
 
 ### Test Scenarios:
+
 1. Fresh installation
 2. Upgrade from previous version
 3. Different OS environments (macOS, Linux)
@@ -258,6 +284,7 @@ The repository now includes comprehensive documentation:
 ## Implementation Strategy
 
 ### Phase 1: Repository Restructuring (Completed)
+
 - [x] Create new directory structure
 - [x] Move existing files to appropriate locations
 - [x] Create initial README with new structure documentation
@@ -265,12 +292,14 @@ The repository now includes comprehensive documentation:
 - [x] Move common shell files to shells/common directory
 
 ### Phase 2: Core Configuration System (Completed)
+
 - [x] Implement distributed configuration approach with Rotz
 - [x] Create dot.yaml files for each component
 - [x] Extract common functionality to shells/common directory
 - [x] Configure shell-specific installations
 
 ### Phase 3: Shell Configuration (Completed)
+
 - [x] Implement Fish shell configuration
 - [x] Implement Zsh shell configuration
 - [x] Add Bash shell support
@@ -278,12 +307,14 @@ The repository now includes comprehensive documentation:
 - [x] Setup plugin management systems
 
 ### Phase 4: Additional Components (In Progress)
+
 - [x] Configure editor setups (Vim, Neovim)
 - [x] Setup network tools
 - [ ] Complete Git configuration
 - [x] Simplify package management with direct Brew installations
 
 ### Phase 5: Testing and Documentation (In Progress)
+
 - [x] Create basic documentation
 - [x] Document Rotz integration
 - [ ] Create comprehensive test scripts
@@ -293,6 +324,7 @@ The repository now includes comprehensive documentation:
 ## Migration Strategy
 
 ### Backup System
+
 ```bash
 # Rotz automatically creates backups
 rotz link  # Will backup existing files before linking
@@ -302,6 +334,7 @@ rotz restore
 ```
 
 ### Migration from Legacy Structure
+
 ```bash
 # Initialize Rotz in existing repository
 cd ~/.dotfiles
@@ -312,6 +345,7 @@ rotz link install
 ```
 
 ### Compatibility Considerations
+
 - Rotz allows for gradual migration by component
 - Shell configurations maintain compatibility with existing tools
 - Core functionality remains consistent across both structures

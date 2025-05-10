@@ -27,7 +27,7 @@ curl -fsSL volllly.github.io/rotz/install.sh | sh  # Unix-based systems
 ### Setup Repository
 
 ```bash
-# Clone the repository 
+# Clone the repository
 git clone https://github.com/YOUR_USERNAME/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 
@@ -66,12 +66,12 @@ install_scripts:
 Each application directory contains its own `dot.yaml` file that follows this structure:
 
 ```yaml
-linux|darwin:  # Platform-specific section
+linux|darwin: # Platform-specific section
   links:
     # Source files (relative to dot.yaml location) → Target locations
     config.file: ~/.config/app/config.file
     directory: ~/.config/app/directory/
-  
+
   installs:
     cmd: brew install app
     depends:
@@ -147,7 +147,7 @@ rotz pull link
 
 ## Adding New Dotfiles
 
-1. Place your dotfile in the appropriate application directory 
+1. Place your dotfile in the appropriate application directory
 2. Update that directory's `dot.yaml` file to include the new link
 
 Example for adding a Fish shell configuration file:
@@ -168,16 +168,18 @@ To add a new application category:
 
 1. Create a directory for your application: `mkdir dotfiles/new-app`
 2. Create a `dot.yaml` file within that directory:
+
    ```yaml
    linux|darwin:
      links:
        config: ~/.config/new-app/config
-       
+
      installs:
        cmd: brew install new-app
        depends:
          - tools/brew
    ```
+
 3. Add your configuration files to this directory
 4. Run `rotz link` to deploy
 
@@ -201,7 +203,7 @@ Applications can depend on each other using the `depends` directive in their ins
 installs:
   cmd: brew install app
   depends:
-    - tools/brew  # This ensures Homebrew is installed first
+    - tools/brew # This ensures Homebrew is installed first
 ```
 
 ## Platform-Specific Configuration
@@ -230,11 +232,13 @@ linux:
 Common issues and solutions:
 
 - **Files not linking properly**:
+
   - Check paths in dot.yaml files
   - Use `rotz --verbose link` to see details
   - Run `rotz --dry-run link` to preview changes
 
 - **Package installation issues**:
+
   - Check package names for your platform
   - Verify the `depends` paths are correct
   - Manually run the install commands to debug

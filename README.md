@@ -56,9 +56,6 @@ First, install Rotz:
 # macOS with Homebrew
 brew install volllly/tap/rotz
 
-# Linux with Cargo (requires Rust)
-cargo install rotz
-
 # Using installation scripts
 curl -fsSL volllly.github.io/rotz/install.sh | sh  # Unix-based systems
 ```
@@ -75,8 +72,6 @@ rotz clone https://github.com/gullitmiranda/dotfiles.git
 ```
 
 Now you can follow the instructions bellow to setup it in your machine:
-
-## Usage
 
 ### Deploying Your Dotfiles
 
@@ -136,12 +131,13 @@ This creates the file with proper permissions and prepares it for your sensitive
 Rotz uses a distributed configuration model in this repository:
 
 - **`dot.yaml`** - Configuration files in each application directory with structure:
+
   ```yaml
-  linux|darwin:    # Platform-specific section
-    links:         # Defines source: target file mappings
+  linux|darwin: # Platform-specific section
+    links: # Defines source: target file mappings
       config.file: ~/.config/app/config.file
 
-    installs:      # Optional installation instructions
+    installs: # Optional installation instructions
       cmd: brew install app
   ```
 
@@ -176,6 +172,7 @@ This repository provides a minimal foundation with plugin management capabilitie
 ### Shell Configurations
 
 #### Fish Shell
+
 - Plugin system through [Fisher](https://github.com/jorgebucaran/fisher) - a lightweight plugin manager
 - Plugins can be defined in [shells/fish/fish_plugins](./shells/fish/fish_plugins) (contains example plugins as comments)
 - Add a plugin: Edit `fish_plugins` file or run `fisher add <plugin-url>`
@@ -184,17 +181,20 @@ This repository provides a minimal foundation with plugin management capabilitie
 > See [Fish for bash users](https://fishshell.com/docs/current/fish_for_bash_users.html) to see the differences between fish and bash shells.
 
 #### Zsh Shell
+
 - Plugin system through [Zinit](https://github.com/zdharma-continuum/zinit) - a lightweight plugin manager
 - Plugins can be defined in [shells/zsh/zsh_plugins](./shells/zsh/zsh_plugins) (contains example plugins as comments)
 - Add a plugin: Uncomment or add new plugin lines in the `zsh_plugins` file
 - Install/update plugins: `zinit update --all`
 
 #### Bash Shell
+
 - Basic configuration with modern defaults
 - Compatible with the same shared functionality as Fish and Zsh
 - Perfect for servers or environments where Bash is preferred
 
 #### Starship Prompt
+
 - Cross-shell prompt customization using [Starship](https://starship.rs/)
 - Consistent look and feel across all shells
 
@@ -272,6 +272,7 @@ rotz restore
 ```
 
 For plugin updates:
+
 - Fish: `fisher update`
 - Zsh: `zinit update --all`
 
@@ -301,6 +302,7 @@ This configuration supports two approaches for Homebrew package management:
 2. **Brewfiles** - Better for organizing larger groups of packages by category (core, development, GUI apps)
 
 The choice depends on your specific needs:
+
 - Use direct `brew install` commands for simplicity and immediate installation
 - Use Brewfiles for better organization and documentation of package groups
 

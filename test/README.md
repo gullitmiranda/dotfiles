@@ -9,6 +9,7 @@ This directory contains tests for the dotfiles utilities and scripts.
 Tests the `create_shell_stub` utility which creates or updates shell configuration files with tagged content blocks.
 
 **Features tested:**
+
 - Creating new files with default and custom tags
 - Updating existing files
 - Preserving content outside of tagged blocks
@@ -16,11 +17,13 @@ Tests the `create_shell_stub` utility which creates or updates shell configurati
 - Handling multiline content
 
 **Usage:**
+
 ```bash
 ./test/create_shell_stub_test.sh [OPTIONS]
 ```
 
 **Options:**
+
 - `--keep-logs`: Keep test logs after running (useful for debugging)
 
 ## Running All Tests

@@ -30,8 +30,8 @@
 # # zinit light zsh-users/zsh-history-substring-search   # Fish-like history search
 # # zinit light romkatv/powerlevel10k                    # Powerlevel10k theme (alternative to Starship)
 
-# # fzf integration (if installed)
-# if command -v fzf >/dev/null 2>&1; then
-#   zinit light Aloxaf/fzf-tab # Replace zsh's default completion with fzf
-#   zinit snippet OMZ::plugins/fzf/fzf.plugin.zsh
-# fi
+# fzf integration (if installed)
+if command -v fzf >/dev/null 2>&1; then
+  zinit light Aloxaf/fzf-tab # Replace zsh's default completion with fzf
+  zinit snippet OMZ::plugins/fzf/fzf.plugin.zsh
+fi

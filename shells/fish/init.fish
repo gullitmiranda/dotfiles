@@ -4,7 +4,7 @@
 # Fish Startup Process:
 # 1. /etc/fish/config.fish    - System-wide configuration
 # 2. ~/.config/fish/conf.d/*.fish - User configuration snippets (loaded alphabetically)
-# 3. ~/.config/fish/conf.d/dotfiles.fish - Dotfiles configuration, that loads this file
+# 3. ~/.config/fish/conf.d/zzz_dotfiles.fish - Dotfiles configuration, that loads this file (alphabetically last)
 # 4. ~/.dotfiles/shells/fish/init.fish - This file, that loads the following files:
 # 5.    - ~/.dotfiles/shells/share/conf.d/*.fish - Shared configuration snippets
 # 6.    - ~/.dotfiles/shells/tools/**/*.fish - Tools configuration snippets

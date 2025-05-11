@@ -9,25 +9,11 @@ linux|darwin:
 
   installs:
     depends:
-      - common
+      - tools
 
     cmd: |
       # Install Zsh and Zinit
       brew install --quiet zsh zinit
 
       export DOTFILES_DIR="{{ config.dotfiles }}"
-
-      # Create stub that sources our dotfiles config
-      bash -c '$DOTFILES_DIR/bin/create_shell_stub "$HOME/.zshrc" << "EOFMARKER"
-      export DOTFILES_DIR="{{ config.dotfiles }}"
-      source $DOTFILES_DIR/shells/zsh/.zshrc
-      EOFMARKER'
-
-      echo "Zsh shell configuration completed. If you want to make it your default shell, run:"
-      echo "  chsh -s $(which zsh)"
-
-      # Display Zinit plugin management instructions
-      echo "Zinit is installed and autoloaded by zsh. You can manage plugins with these commands:"
-      echo "- Edit plugins in $DOTFILES_DIR/shells/zsh/zsh_plugins"
-      echo "- To update plugins: zinit update --all"
-      echo "- To add a plugin: add 'zinit light author/repo' to zsh_plugins"
+      {{ config.dotfiles }}/shells/zsh/install.zsh

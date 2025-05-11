@@ -12,6 +12,23 @@ shells/
 ├── zsh/             # Zsh shell configuration
 │   ├── .zshrc       # Main zsh configuration
 │   └── zsh_plugins  # Zinit plugins list
+├── bash/            # Bash shell configuration
+│   ├── .bashrc      # Main bash configuration
+│   ├── functions/   # Bash functions
+│   ├── conf.d/      # Bash configuration snippets
+│   └── completions/ # Bash completions
+├── share/           # Shared configurations
+│   ├── completion/  # Shared completions
+│   ├── functions/   # Shared functions
+│   └── conf.d/      # Shared configuration snippets
+├── tools/           # Tools and utilities
+│   ├── starship/    # Starship prompt configuration
+│   ├── editors/     # Editor configurations
+│   ├── ripgrep/     # Ripgrep configurations
+│   ├── bat/         # Bat configurations
+│   ├── eza/         # Eza configurations
+│   ├── fd/          # FD configurations
+│   └── fzf/         # FZF configurations
 └── README.md        # This file
 ```
 
@@ -113,3 +130,15 @@ The minimal Zsh configuration includes:
 - Modular loading of environment, paths, aliases, and functions
 
 Additional features can be added in your local configuration or by enabling plugins.
+
+## Bash Shell Configuration
+
+The `bash/` directory contains the main configuration file `.bashrc`, along with directories for functions, configuration snippets, and completions. This setup allows for modular and organized Bash configurations.
+
+## Shared Configurations
+
+The `share/` directory is used for shared configurations, including completions, functions, and configuration snippets that can be utilized across different shells.
+
+## Tools and Utilities
+
+The `tools/` directory contains configurations for various tools and utilities, such as the Starship prompt, editors, and command-line tools like Ripgrep and FZF. These configurations enhance the functionality and usability of the shell environment.

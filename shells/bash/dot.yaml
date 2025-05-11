@@ -5,17 +5,10 @@ linux|darwin:
 
   installs:
     depends:
-      - common
+      - tools
     cmd: |
       # Install Bash and bash-completion
       brew install --quiet bash bash-completion
 
       export DOTFILES_DIR="{{ config.dotfiles }}"
-
-      # Create stub that sources our dotfiles config
-      bash -c '$DOTFILES_DIR/bin/create_shell_stub "$HOME/.bashrc" << "EOFMARKER"
-      export DOTFILES_DIR="{{ config.dotfiles }}"
-      source $DOTFILES_DIR/shells/bash/.bashrc
-      EOFMARKER'
-
-      echo "Bash shell configuration completed"
+      {{ config.dotfiles }}/shells/bash/install.bash

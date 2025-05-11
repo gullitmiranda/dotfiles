@@ -33,10 +33,11 @@ setopt AUTO_PUSHD           # Push the old directory onto the stack on cd
 setopt PUSHD_IGNORE_DUPS    # Do not store duplicates in the stack
 setopt PUSHD_SILENT         # Do not print directory stack after pushd/popd
 setopt EXTENDED_GLOB        # Use extended globbing
+setopt NULL_GLOB            # Enable nullglob so that non-matching globs expand to an empty string
 setopt CORRECT              # Spelling correction
 setopt INTERACTIVE_COMMENTS # Allow comments in interactive shells
 
-# Completion
+# Enable completion
 autoload -Uz compinit && compinit
 zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' # Case-insensitive matching
@@ -58,10 +59,7 @@ bindkey '^[^[[D' backward-word                   # Option+Left - move cursor bac
 export CURRENT_SHELL=zsh
 
 # Load sensitive environment variables (if file exists and not already loaded)
-[ -f "$HOME/.env.sh" ] && source "$HOME/.env.sh"
-
-# Source common configuration
-[ -f "$DOTFILES_DIR/shells/common/init.zsh" ] && source "$DOTFILES_DIR/shells/common/init.zsh"
+[ -f "$DOTFILES_DIR/local/env.sh" ] && source "$DOTFILES_DIR/local/env.sh"
 
 # Check for Zinit plugin manager
 ZINIT_HOME="$(brew --prefix zinit)"
@@ -74,7 +72,8 @@ else
   echo "Zinit is not installed. Run the $DOTFILES_DIR installer to set it up."
 fi
 
-# Initialize Starship prompt if available and not in Warp Terminal
-if [ "$TERM_PROGRAM" != "WarpTerminal" ] && command -v starship >/dev/null 2>&1; then
-  eval "$(starship init zsh)"
-fi
+# Source configuration files
+for config_file in "$DOTFILES_DIR"/shells/tools/**/*.{sh,zsh} \
+  "$DOTFILES_DIR"/shells/{share,zsh}/{conf.d,functions,completions}/*.{sh,zsh}; do
+  source "$config_file"
+done

@@ -17,14 +17,17 @@ if [ -z "$DOTFILES_DIR" ]; then
   exit 1
 fi
 
-# Basic shell settings
+# History configuration
 HISTCONTROL=ignoreboth:erasedups
 HISTSIZE=10000
 HISTFILESIZE=20000
 HISTFILE=~/.bash_history
 shopt -s histappend
+
+# Basic shell options
 shopt -s checkwinsize
 shopt -s globstar 2>/dev/null  # Pattern ** used in pathname expansion
+shopt -s nullglob 2>/dev/null  # Enable nullglob so that non-matching globs expand to an empty string
 shopt -s autocd 2>/dev/null    # Change directory just by typing the name
 shopt -s dirspell 2>/dev/null  # Correct minor spelling errors in cd commands
 shopt -s cdspell 2>/dev/null   # Correct minor spelling errors in cd commands
@@ -67,9 +70,10 @@ fi
 
 # Enable basic completion
 if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
+  # shellcheck source=/dev/null
+  if [[ -f /usr/share/bash-completion/bash_completion ]]; then
     . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
+  elif [[ -f /etc/bash_completion ]]; then
     . /etc/bash_completion
   fi
 fi
@@ -80,15 +84,11 @@ fi
 # Set the CURRENT_SHELL environment variable for starship
 export CURRENT_SHELL=bash
 
-# Try to load the ~/.env.sh
-[ -f "$HOME/.env.sh" ] && source "$HOME/.env.sh"
+# Load sensitive environment variables
+[ -f "$DOTFILES_DIR/local/env.sh" ] && source "$DOTFILES_DIR/local/env.sh"
 
-# Source common configuration
-[ -f "$DOTFILES_DIR/shells/common/init.bash" ] && source "$DOTFILES_DIR/shells/common/init.bash"
-
-# Load https://starship.rs/ if not in WarpTerminal
-if [ "$TERM_PROGRAM" != "WarpTerminal" ]; then
-  if command -v starship >/dev/null; then
-    eval "$(starship init bash)"
-  fi
-fi
+# Source configuration files
+for config_file in "$DOTFILES_DIR"/shells/tools/**/*.{sh,bash} \
+  "$DOTFILES_DIR"/shells/{share,bash}/{conf.d,functions,completions}/*.{sh,bash}; do
+  source "$config_file"
+done

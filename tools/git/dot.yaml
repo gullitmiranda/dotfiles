@@ -5,7 +5,7 @@ global:
 
 darwin:
   installs:
-    cmd: brew install git
+    cmd: brew install --quiet git
 
 linux:
   installs:

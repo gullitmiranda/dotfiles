@@ -1,0 +1,11 @@
+linux|darwin:
+  links:
+    ripgrep/.ripgreprc: "~/.ripgreprc"
+
+  # Installation commands for common shell utilities
+  installs:
+    depends:
+      - tools/starship
+    cmd: |
+      # Install common utilities that all shells can use
+      brew install --quiet coreutils wget curl jq fzf bat fd ripgrep eza

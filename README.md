@@ -98,7 +98,7 @@ rotz link
 rotz install
 
 # Link and install only specific applications
-rotz link shells/fish editors/*
+rotz link shells/tools/* shells/fish
 ```
 
 ### Seting default shell

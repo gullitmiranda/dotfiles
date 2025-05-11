@@ -1,44 +1,15 @@
 linux|darwin:
   # Fish shell configuration
   links:
-    # Only link these files directly
-    completions: ~/.config/fish/completions/
-    conf.d: ~/.config/fish/conf.d/
+    # NOTE: We don't directly link the folders since we want to autoload them
     fish_plugins: ~/.config/fish/fish_plugins
-    functions: ~/.config/fish/functions/
-    # # We don't directly link config.fish - we create a stub that sources it
-    # config.fish: ~/.config/fish/config.fish
 
   installs:
     depends:
-      - common
+      - tools
     cmd: |
       # Install Fish shell and Fisher
       brew install --quiet fish fisher
 
       export DOTFILES_DIR="{{ config.dotfiles }}"
-
-      # Create stub that sources our dotfiles config
-      bash -c '$DOTFILES_DIR/bin/create_shell_stub "$HOME/.config/fish/config.fish" << "EOFMARKER"
-      set -gx DOTFILES_DIR "{{ config.dotfiles }}"
-      source "$DOTFILES_DIR/shells/fish/config.fish"
-      EOFMARKER'
-
-      # Install Fisher plugins
-      if [ -f "$DOTFILES_DIR/shells/fish/fish_plugins" ]; then
-        echo "Installing Fisher plugins from $DOTFILES_DIR/shells/fish/fish_plugins"
-        fish -c "fisher update"
-      else
-        echo "warn: Fisher plugins file not found at $DOTFILES_DIR/shells/fish/fish_plugins, skipping installation"
-      fi
-
-      echo "Fish shell configuration completed. If you want to make fish your default shell, run:"
-      echo "  chsh -s $(which fish)"
-
-      # Display Fisher plugin management instructions
-      echo "Fisher is installed. You can manage plugins with these commands:"
-      echo "- To list plugins:   fisher list"
-      echo "- To update plugins: fisher update"
-      echo "- To add a plugin:   fisher add <plugin-url>"
-      echo "- To remove a plugin: fisher remove <plugin-name>"
-      echo "- Or edit $DOTFILES_DIR/shells/fish/fish_plugins and run 'fisher update'"
+      {{ config.dotfiles }}/shells/fish/install.fish

@@ -1,0 +1,13 @@
+#!/usr/bin/env fish
+
+# Reference: https://stackoverflow.com/a/63320336/5121523
+
+set current_date (date +"%FT%T%z")
+
+set filename tmp/fish.$current_date.profile
+set sorted_file tmp/fish.$current_date.sorted.profile
+
+fish --profile-startup $filename -i -c exit
+sort -nk1 $filename >>$sorted_file
+
+echo "Profile written to $sorted_file"

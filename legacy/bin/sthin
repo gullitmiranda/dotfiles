@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+echo "Publish static direcotory"
+
+# Getting the path of the project
+if [ ! -z "${BASH_ARGV[0]}" ] && [ -e "${BASH_ARGV[0]}" ] ; then
+  __FILE__="${BASH_ARGV[0]}"
+else
+  __FILE__="${0}"
+fi
+
+export SCRIPTS_PATH=`cd \`dirname $(readlink ${__FILE__} || echo ${__FILE__} )\`/..; pwd`
+export DEFAULT_HOST="0.0.0.0"
+
+if [ "$1" = "" ]; then
+  HOST="$DEFAULT_HOST:3000"
+else
+  HOST="$1"
+fi
+             
+PORT=$(echo $HOST | awk -F ':' '{print $2}')
+
+if [ "$PORT" = "" ]; then
+  PORT=$(echo $HOST | awk -F ':' '{print $1}')
+  HOST=$DEFAULT_HOST
+else
+  HOST=$(echo $HOST | awk -F ':' '{print $1}')
+fi
+ 
+export RBENV_VERSION="2.0.0-p0"
+thin --rackup $SCRIPTS_PATH/lib/static.ru --address $HOST --port $PORT start

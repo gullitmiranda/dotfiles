@@ -1,0 +1,68 @@
+# Prompt - https://starship.rs/config/#prompt
+# Wait 10 milliseconds for starship to check files under the current directory.
+scan_timeout = 10
+command_timeout = 2_000
+
+# Command Duration - https://starship.rs/config/#command-duration
+[cmd_duration]
+min_time = 0
+format = "[$duration](bold yellow)"
+
+# [custom.fishcognito]
+# command = """ echo 👻 """
+# description = "Show 👻 when in fishcognito"
+# # FIXME: this is very slow in fish without option to disable config files
+# #   - https://github.com/fish-shell/fish-shell/issues/1256
+# #   - https://github.com/fish-shell/fish-shell/pull/7921
+# # shell = ["bash", "--noprofile", "--norc"]
+# # FIXED by https://github.com/fish-shell/fish-shell/pull/7921
+# shell = ["fish", "--no-config"]
+# format = "[$symbol$output]($style) "
+# when = """ test "$fishcognito_active" = "true" """
+
+[directory]
+truncate_to_repo = false
+
+[kubernetes]
+# disabled = false
+# Google Cloud - https://starship.rs/config/#gcloud
+[gcloud]
+symbol = "️🇬️ "
+format = "\non [$symbol$account(\\($region\\))]($style) "
+
+[gcloud.region_aliases]
+asia-east1 = "ae1"
+asia-east2 = "ae2"
+asia-northeast1 = "an1"
+asia-northeast2 = "an2"
+asia-northeast3 = "an3"
+asia-south1 = "as1"
+asia-southeast1 = "as1"
+asia-southeast2 = "as2"
+australia-southeast1 = "as1"
+europe-north1 = "en1"
+europe-west1 = "ew1"
+europe-west2 = "ew2"
+europe-west3 = "ew3"
+europe-west4 = "ew4"
+europe-west6 = "ew6"
+northamerica-northeast1 = "nn1"
+# SP
+southamerica-east1 = "se1"
+us-central1 = "uc1"
+us-east1 = "ue1"
+us-east4 = "ue4"
+us-west1 = "uw1"
+us-west2 = "uw2"
+us-west3 = "uw3"
+us-west4 = "uw4"
+
+[elixir]
+symbol = "🔮 "
+
+# # https://starship.rs/config/#environment-variable
+# [env_var]
+# variable = "ENV_NAME"
+# default = ""
+# style = "bold dimmed"
+# format = "\\([$env_value]($style) env\\) "

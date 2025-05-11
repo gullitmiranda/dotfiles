@@ -1,0 +1,3 @@
+rm -Rf  ~/Library/Application\ Support/com.fournova.Tower2 \
+        ~/Library/Saved\ Application\ State/com.fournova.Tower2.savedState \
+        ~/Caches/com.fournova.Tower2

@@ -1,0 +1,28 @@
+#!/bin/bash
+
+set -e
+
+# Define the base directory for the search
+base_dir="${1}"
+
+# the base directory is required
+if [ -z "$base_dir" ]; then
+  echo "Usage: $0 <base_dir>"
+  exit 1
+fi
+
+cd $base_dir
+
+echo "Cleaning build files in $base_dir"
+
+# Remove node_modules directories
+echo "---> Removing node_modules directories"
+find . -type d -name "node_modules" -print -exec rm -rf {} +
+
+# Remove Elixir build directories and deps directories
+echo ""
+echo "---> Removing Elixir directories: .elixir_ls, _build, deps"
+find . -type f -name "mix.exs" -print -execdir rm -rf deps .elixir_ls _build \; -prune
+
+echo -e "\n"
+echo "✔ All unwanted files removed"

@@ -1,0 +1,33 @@
+# zsh or dotfiles
+.zdirs
+.zsh_history
+.zsh_history-new
+.DOTFILES
+
+# fish
+fish_history
+
+# sensitive data
+customs/*
+!customs/README.md
+!customs/home
+customs/home/*
+!customs/home/.gitkeep
+!customs/git
+customs/git/*
+!customs/git/.gitkeep
+
+# project files
+*.code-workspace
+.vscode/*.log
+
+# temp files
+*.log
+.DS_Store
+.iex_history
+.config/fish/fishd.*
+.config/fish/fish_variables
+.config/nvim/plugged
+.deps
+.devkit
+/tmp

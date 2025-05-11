@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# ---
+# Add your own commands, functions, and variables here.  Define defaults first,
+# then `dk use:` the desired devkit modules, and then define any overrides to
+# the devkit defaults.
+# ---
+
+# Available modules (uncomment to use):
+
+# -- Shell/Generic Modules --
+# dk use: bash-kit          # enable `with-bash` command to use different bash versions
+# dk use: cram              # run tests using the "cram" functional test tool
+# dk use: shell-console     # make the "console" command enter a subshell
+
+# -- Watch Modules --
+# dk use: entr-watch        # watch files and re-run tests or other commands
+# dk use: modd-watch        # watch multiple patterns and run different commands on them
+# dk use: reflex-watch      # watch multiple patterns and run different commands on them
+
+# -- Language-Specific Modules --
+# dk use: composer          # utilities for accessing composer-based dev tools
+# dk use: golang            # Auto-install go on request, select versions w/gimme
+# dk use: peridot           # run tests using peridot-php
+# dk use: psysh-console     # make the "console" command run the Psysh PHP REPL
+# dk use: shellcheck        # support running shellcheck (via docker if not installed)
+# dk use: virtualenv        # enable creation and use of Python virtualenvs
+
+# Define overrides, new commands, functions, etc. here:

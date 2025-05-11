@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -e
+
+ICLOUD_ROOT="$HOME/Library/Mobile Documents/com~apple~CloudDocs"
+path=$1
+
+if [[ ! -e "${path}" ]]; then
+  echo "not found: ${path}"
+  exit 1
+fi
+
+current_path=$(realpath "${path}")
+new_path=$(realpath "${ICLOUD_ROOT}/${path}")
+new_dir_path=$(dirname "${new_path}")
+
+set -x
+
+mkdir -p "${new_dir_path}"
+mv "${current_path}" "${new_dir_path}/"
+ln -s "${new_path}" "${current_path}"

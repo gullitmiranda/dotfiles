@@ -1,0 +1,7 @@
+{
+  "files.associations": {
+    "**/.gitconfig": "ini",
+    "**/.git/config": "ini",
+    ".gitconfig.*": "ini",
+  },
+}

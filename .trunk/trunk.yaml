@@ -27,6 +27,21 @@ lint:
     - taplo@0.9.3
     - trufflehog@3.88.29
     - yamllint@1.37.1
+  # Add ignore configuration to exclude paths from all linters
+  ignore:
+    - linters: [ALL]
+      paths:
+        # Add paths to ignore for all linters
+        - .trunk/**
+        - .vscode/**
+        - .rules/**
+        - legacy/**
+        # You can add more paths to ignore here
+        # - another/path/to/ignore/**
+        # - specific/file.ext
+
+        # To negate an ignore pattern, prefix with !
+        # - !.trunk/configs/*.yaml  # Don't ignore yaml files in .trunk/configs
 actions:
   disabled:
     - trunk-announce

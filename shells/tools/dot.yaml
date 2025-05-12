@@ -1,11 +1,24 @@
-linux|darwin:
+global:
   links:
     ripgrep/.ripgreprc: "~/.ripgreprc"
 
+darwin:
   # Installation commands for common shell utilities
   installs:
     depends:
       - tools/starship
     cmd: |
-      # Install common utilities that all shells can use
-      brew install --quiet coreutils wget curl jq fzf bat fd ripgrep eza
+      # Install common utilities that dotfiles uses (or requires)
+      brew install --quiet fzf bat fd ripgrep eza jq yq
+
+      # Other common utilities
+      brew install --quiet coreutils wget curl telnet
+
+linux:
+  installs:
+    cmd: |
+      # Install common utilities that dotfiles uses (or requires)
+      apt-get install -y jq yq fzf bat fd ripgrep eza
+
+      # Other common utilities
+      apt-get install -y coreutils wget curl telnet

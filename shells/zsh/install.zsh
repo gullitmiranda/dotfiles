@@ -1,8 +1,5 @@
 #!/usr/bin/env zsh
 
-# Install Zsh and Zinit
-brew install --quiet zsh zinit
-
 # Set DOTFILES_DIR if not already set
 if [[ -z "$DOTFILES_DIR" ]]; then
   export DOTFILES_DIR="$HOME/.dotfiles"

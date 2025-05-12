@@ -5,8 +5,16 @@ global:
 
 darwin:
   installs:
-    cmd: brew install --quiet git
+    depends:
+      - git/git-op-setup
+    cmd: |
+      brew install --quiet git gh
+
+      brew install --quiet --cask 1password-cli
 
 linux:
   installs:
-    cmd: sudo apt-get update && sudo apt-get install -y git
+    depends:
+      - git/git-op-setup
+    cmd: |
+      sudo apt-get update && sudo apt-get install -y git

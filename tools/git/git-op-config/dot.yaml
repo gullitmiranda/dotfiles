@@ -1,0 +1,6 @@
+linux|darwin:
+  installs:
+    cmd: |
+      # write config.yaml git variables to a file
+      echo '{{ json_to_str config.variables.git }}' \
+        > "{{ config.dotfiles }}/local/gitconfig.json"

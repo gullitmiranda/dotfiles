@@ -16,4 +16,4 @@ linux|darwin:
       brew install --quiet zsh zinit
 
       export DOTFILES_DIR="{{ config.dotfiles }}"
-      {{ config.dotfiles }}/shells/zsh/install.zsh
+      {{ config.dotfiles }}/{{ name }}/install.zsh

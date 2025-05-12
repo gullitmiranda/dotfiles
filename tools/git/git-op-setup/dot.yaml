@@ -1,0 +1,7 @@
+linux|darwin:
+  installs:
+    depends:
+      - git-op-config
+    cmd: |
+      # run the setup.fish script to configure git and the 1Password SSH agent
+      {{ config.dotfiles }}/{{ name }}/setup.fish

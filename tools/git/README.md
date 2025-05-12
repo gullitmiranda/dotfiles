@@ -27,7 +27,84 @@ The `rotz install` command will:
 - Create the `~/.dotfiles/local/gitconfig.json` file with the git config variables from `config.yaml`
 - Run the `tools/git/config.fish` script to configure git and the 1Password SSH agent
 
-## Manual Steps to Integrate 1Password SSH Agent
+> [!WARNING]
+> Only SSH Keys from the `Personal`, `Private`, or `Employee` vaults are available in the SSH Agent by default.
+> If you need to use a different vault, see [Configure 1Password Agent](#configure-1password-agent) section.
+
+### Optional Steps
+
+Most of the steps below are already done by the `rotz install` command, but you can follow them to understand the process and make any changes you need.
+
+#### Configure 1Password Agent
+
+If you want to use the 1Password agent for other purposes like SSH and need to configure the agent to use the SSH keys (other than the default ones: [Personal](https://support.1password.com/1password-glossary/#personal-vault), [Private](https://support.1password.com/1password-glossary/#private-vault), or [Employee](https://support.1password.com/1password-glossary/#employee-vault)), you can create or edit the `~/.config/1Password/ssh/agent.toml` file to configure the 1Password agent:
+
+```toml
+[[ssh-keys]]
+vault = "Personal"
+account = "my.1password.com"
+
+[[ssh-keys]]
+vault = "Another Vault"
+account = "my.1password.com"
+
+[[ssh-keys]]
+vault = "Employee"
+account = "work.1password.com"
+```
+
+> See [1Password SSH Agent Configuration](https://developer.1password.com/docs/ssh/agent/config) for more information.
+
+#### Configure Your SSH Client
+
+Edit your `~/.ssh/config` file to use the 1Password SSH agent and specify custom commands for different keys:
+
+```ssh-config
+Host *
+	IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+
+# Include 1Password SSH Bookmarks ssh config
+# - https://developer.1password.com/docs/ssh/bookmarks
+Include ~/.ssh/1Password/config
+
+# Personal GitHub
+Host github.com
+	HostName github.com
+	User git
+	IdentityFile ~/.ssh/op_personal_github.pub
+	IdentitiesOnly yes
+
+# Work GitHub
+Host github.cloudwalk.network
+	HostName github.com
+	User git
+	IdentityFile ~/.ssh/op_cloudwalk_github.pub
+	IdentitiesOnly yes
+```
+
+- `IdentityAgent` points to the 1Password SSH agent socket.
+- `IdentityFile` specifies the key to use for each host.
+
+#### Link 1Password files
+
+For standard purposes, link the 1Password SSH agent and config files to `~/.1password`:
+
+```bash
+mkdir -p ~/.1password
+ln -s ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock ~/.1password/agent.sock
+ln -s ~/.config/1Password/ssh/agent.toml ~/.1password/agent.toml
+```
+
+#### Link gitconfig to local folder
+
+Having all links to these files in the local folder makes maintenance easier.
+
+```bash
+ln -s ~/Code/.gitconfig "$DOTFILES_DIR"/local/personal.gitconfig
+ln -s ~/Code/CloudWalk/.gitconfig "$DOTFILES_DIR"/local/cloudwalk.gitconfig
+```
+
+## Manual Setup
 
 > [!NOTE]
 > You do not need to perform these steps if you have already run the installation script.
@@ -129,74 +206,3 @@ This command lists the keys that the SSH agent is currently managing.
 > If your keys are not listed, ensure that the `SSH_AUTH_SOCK` environment variable is set correctly. This environment variable is crucial because it allows command-line tools like `ssh-add` to locate the SSH agent socket.
 > While the `IdentityAgent` directive in your SSH configuration file is used for SSH connections, `SSH_AUTH_SOCK` ensures that all tools and applications that use SSH can find the agent socket consistently.
 > This project already sets it in your shell configuration files, see [../shells/tools/op](../shells/tools/op) folder.
-
-## Optional Steps
-
-### Link 1Password files
-
-For standard purposes, link the 1Password SSH agent and config files to `~/.1password`:
-
-```bash
-mkdir -p ~/.1password
-ln -s ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock ~/.1password/agent.sock
-ln -s ~/.config/1Password/ssh/agent.toml ~/.1password/agent.toml
-```
-
-### Link gitconfig to local folder
-
-Having all links to these files in the local folder makes maintenance easier.
-
-```bash
-ln -s ~/Code/.gitconfig "$DOTFILES_DIR"/local/personal.gitconfig
-ln -s ~/Code/CloudWalk/.gitconfig "$DOTFILES_DIR"/local/cloudwalk.gitconfig
-```
-
-### Configure 1Password Agent
-
-If you want to use the 1Password agent for other purposes like SSH and need to configure the agent to use the SSH keys (other than the default ones: [Personal](https://support.1password.com/1password-glossary/#personal-vault), [Private](https://support.1password.com/1password-glossary/#private-vault), or [Employee](https://support.1password.com/1password-glossary/#employee-vault)), you can create or edit the `~/.config/1Password/ssh/agent.toml` file to configure the 1Password agent:
-
-```toml
-[[ssh-keys]]
-vault = "Personal"
-account = "my.1password.com"
-
-[[ssh-keys]]
-vault = "Another Vault"
-account = "my.1password.com"
-
-[[ssh-keys]]
-vault = "Employee"
-account = "work.1password.com"
-```
-
-> See [1Password SSH Agent Configuration](https://developer.1password.com/docs/ssh/agent/config) for more information.
-
-### Configure Your SSH Client
-
-Edit your `~/.ssh/config` file to use the 1Password SSH agent and specify custom commands for different keys:
-
-```ssh-config
-Host *
-	IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
-
-# Include 1Password SSH Bookmarks ssh config
-# - https://developer.1password.com/docs/ssh/bookmarks
-Include ~/.ssh/1Password/config
-
-# Personal GitHub
-Host github.com
-	HostName github.com
-	User git
-	IdentityFile ~/.ssh/op_personal_github.pub
-	IdentitiesOnly yes
-
-# Work GitHub
-Host github.cloudwalk.network
-	HostName github.com
-	User git
-	IdentityFile ~/.ssh/op_cloudwalk_github.pub
-	IdentitiesOnly yes
-```
-
-- `IdentityAgent` points to the 1Password SSH agent socket.
-- `IdentityFile` specifies the key to use for each host.

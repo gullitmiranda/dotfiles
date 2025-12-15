@@ -72,7 +72,7 @@ else
   echo "Zinit is not installed. Run the $DOTFILES_DIR installer to set it up."
 fi
 
-# Source configuration files
+# Source configuration files, including completions files
 for config_file in "$DOTFILES_DIR"/shells/tools/**/*.{sh,zsh} \
   "$DOTFILES_DIR"/shells/{share,zsh}/{conf.d,functions,completions}/*.{sh,zsh}; do
   source "$config_file"

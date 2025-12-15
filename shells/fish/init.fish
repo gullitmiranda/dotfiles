@@ -41,18 +41,25 @@ if test -f $DOTFILES_DIR/local/env.sh
 end
 
 # append functions to fish autoload path
-set -l function_path $DOTFILES_DIR/shells/{share,fish}/functions
+set -l function_path $DOTFILES_DIR/shells/{tools/**,share,fish}/functions
 set fish_function_path $fish_function_path $function_path
+
+# Add fish/completions folder to fish_complete_path
+set -l completion_path $DOTFILES_DIR/shells/{tools/**,share,fish}/completions
+set fish_complete_path $fish_complete_path $completion_path
+
+emit perf:timer:start "Loading conf.d files"
 
 # autoload conf.d files
 for file in \
     $DOTFILES_DIR/shells/tools/**/*.fish \
     $DOTFILES_DIR/shells/{share,fish}/conf.d/*.fish
-    source $file
+
+    # don't load completions files
+    if not string match -q '*completions/*.fish' $file
+        source $file
+    end
 end
 
-# Add fish/completions folder to fish_complete_path
-set -l completion_path $DOTFILES_DIR/shells/fish/completions
-set fish_complete_path $fish_complete_path $completion_path
-
+emit perf:timer:finish "Loading conf.d files"
 emit perf:timer:finish "Dotfiles initialisation"

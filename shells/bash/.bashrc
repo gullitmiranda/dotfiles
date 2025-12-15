@@ -87,7 +87,7 @@ export CURRENT_SHELL=bash
 # Load sensitive environment variables
 [ -f "$DOTFILES_DIR/local/env.sh" ] && source "$DOTFILES_DIR/local/env.sh"
 
-# Source configuration files
+# Source configuration files, including completions files
 for config_file in "$DOTFILES_DIR"/shells/tools/**/*.{sh,bash} \
   "$DOTFILES_DIR"/shells/{share,bash}/{conf.d,functions,completions}/*.{sh,bash}; do
   source "$config_file"

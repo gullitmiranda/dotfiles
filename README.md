@@ -25,10 +25,11 @@ dotfiles/
 │   │   ├── aliases.d/    # Aliases organized by category
 │   │   ├── functions.d/  # Shared functions
 │   │   └── paths.d/      # Path additions
-│   ├── fish/             # Fish shell (with its own dot.yaml)
-│   ├── zsh/              # ZSH shell (with its own dot.yaml)
-│   ├── bash/             # Bash shell (with its own dot.yaml)
-│   └── starship/         # Starship prompt configuration
+│   ├── fish/             # Fish shell configuration (with its own dot.yaml)
+│   ├── zsh/              # Zsh shell configuration (with its own dot.yaml)
+│   ├── bash/             # Bash shell configuration (with its own dot.yaml)
+│   ├── share/            # Shared configurations (completions, functions, snippets)
+│   └── tools/            # Tool-specific shell integrations (starship, fzf, etc.)
 ├── editors/              # Editor configurations
 │   ├── vim/              # Vim configuration (with its own dot.yaml)
 │   └── nvim/             # Neovim configuration (with its own dot.yaml)
@@ -156,7 +157,7 @@ Rotz uses a distributed configuration model in this repository:
       cmd: brew install app
   ```
 
-Each component has its own independent configuration, eliminating the need for a central configuration file. Common shell configurations are shared through the `shells/common` directory.
+Each component has its own independent configuration, eliminating the need for a central configuration file. Shared shell configurations are shared through the `shells/share` directory.
 
 This modular approach allows for better organization and platform-specific configuration.
 

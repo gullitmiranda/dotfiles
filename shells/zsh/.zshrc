@@ -37,11 +37,6 @@ setopt NULL_GLOB            # Enable nullglob so that non-matching globs expand 
 setopt CORRECT              # Spelling correction
 setopt INTERACTIVE_COMMENTS # Allow comments in interactive shells
 
-# Enable completion
-autoload -Uz compinit && compinit
-zstyle ':completion:*' menu select
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' # Case-insensitive matching
-
 # Key bindings
 bindkey -e                                       # Enable Emacs key bindings mode (Ctrl+A for beginning of line, Ctrl+E for end of line, etc.)
 bindkey '^[[A' history-beginning-search-backward # Up arrow - search history backwards matching current input
@@ -74,6 +69,11 @@ if [ -f "$ZINIT_HOME/zinit.zsh" ]; then
 else
   echo "Zinit is not installed. Run the $DOTFILES_DIR installer to set it up."
 fi
+
+# Enable completion
+autoload -Uz compinit && compinit
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' # Case-insensitive matching
 
 # Source configuration files, including completions files
 for config_file in "$DOTFILES_DIR"/shells/tools/**/*.{sh,zsh} \

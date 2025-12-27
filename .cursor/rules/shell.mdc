@@ -1,0 +1,17 @@
+---
+description: Shell script conventions and compatibility
+globs:
+  - "**/*.sh"
+  - "**/*.bash"
+  - "**/*.zsh"
+  - "**/*.fish"
+alwaysApply: false
+---
+
+# Shell Scripts
+
+- Prefer heredoc over multiple echo/print statements
+- Ensure compatibility with both bash/zsh and fish shells
+- Prevent trailing whitespace in generated files
+- Use POSIX syntax in `.sh` files (`!` not `not`, `$?` not `$status`)
+- Use Fish syntax only in `.fish` files

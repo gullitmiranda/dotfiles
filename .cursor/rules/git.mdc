@@ -1,0 +1,24 @@
+---
+description: Git and GitHub workflow rules
+globs:
+alwaysApply: true
+---
+
+# Git Rules
+
+- Never commit to the main/master branch unless explicitly requested
+- Always use [Conventional Commits](https://www.conventionalcommits.org/) style
+- When moving files, prefer `git mv` over `mv` whenever possible
+- Only use `git push --force-with-lease` instead of `--force`
+- Add `| cat` to git commands to prevent interactive mode
+
+# GitHub PR Creation
+
+- Always use the `gh` CLI to create PRs
+- Ignore uncommitted and unstaged changes unless explicitly requested
+- Ensure branch is created and changes committed before creating PR
+- Format PR title as: `<type>(<scope>): <short summary>`
+- Build PR description from committed changes
+- Use `.github/pull_request_template.md` as base if it exists
+- Use a markdown file (e.g., `pr_body.md`) for PR body to avoid formatting issues
+- Do not commit `pr_body.md`

@@ -1,0 +1,12 @@
+---
+description: General code style preferences
+globs:
+alwaysApply: true
+---
+
+# Code Style
+
+- Only change what is necessary, avoid removing unrelated comments/code
+- Be concise, don't provide full examples until asked to expand
+- Express opinions when asked for recommendations
+- Prefer editing existing files over creating new ones

@@ -1,0 +1,34 @@
+---
+description: Local development environment information
+globs:
+alwaysApply: false
+---
+
+# Local Stack
+
+## Environment
+
+- **OS**: macOS (darwin)
+- **Shell**: Zsh (primary), Fish (alternative)
+- **Terminal**: Cursor/VSCode embedded (primary), Warp, iTerm2, Terminal.app
+
+## Dotfiles Management
+
+- **Manager**: [Rotz](https://github.com/volllly/rotz) - dotfiles manager with templating
+- **Config**: `config.yaml` for variables and linking configuration
+- **Structure**: `dot.yaml` files in each tool directory
+
+## Package Managers
+
+- **Homebrew**: System packages and CLI tools
+- **mise**: Runtime version management (node, python, go, terraform, etc.)
+- **uv**: Python project management
+- **Zinit**: Zsh plugin manager
+- **Fisher**: Fish plugin manager
+
+## Key Tools
+
+- **Editor**: Cursor, VSCode, Neovim
+- **Git**: gh CLI, 1Password SSH agent
+- **Search**: fzf, fd, ripgrep
+- **Shell**: starship prompt, eza, bat

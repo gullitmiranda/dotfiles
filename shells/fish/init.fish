@@ -32,8 +32,11 @@ fish_default_key_bindings
 # -----------------------------------------------------------------------------
 # Initializers
 
-# Set the CURRENT_SHELL environment variable for starship
-set -gx CURRENT_SHELL fish
+# Enforce correct shell for when changing between shells
+set -gx SHELL (which fish)
+
+# Set the SHELL_TYPE environment variable for starship
+set -gx SHELL_TYPE fish
 
 # Load sensitive environment variables (if file exists and not already loaded)
 if test -f $DOTFILES_DIR/local/env.sh

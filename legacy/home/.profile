@@ -27,21 +27,6 @@
 ### ----------------
 
 
-SHELL_DEBUG_FILE=$HOME/.shell.debug
-now=$(date +%Y-%m-%dT%H:%M:%S%z)
-echo -e "\n\n" >>$SHELL_DEBUG_FILE
-echo ".profile $now" >>$SHELL_DEBUG_FILE
-
-echo "env:" >>$SHELL_DEBUG_FILE
-env >>$SHELL_DEBUG_FILE
-echo -e "----\n" >>$SHELL_DEBUG_FILE
-
-# echo "_=$_" >>$SHELL_DEBUG_FILE
-# echo "PATH=$PATH" >>$SHELL_DEBUG_FILE
-# echo "TERM_PROGRAM=$TERM_PROGRAM" >>$SHELL_DEBUG_FILE
-# echo "mise env:" >>$SHELL_DEBUG_FILE
-# echo $(mise env) >>$SHELL_DEBUG_FILE
-
 ## This file will be loaded by bash (.bashrc) and zsh (.zshrc)
 #########
 
@@ -56,11 +41,6 @@ echo -e "----\n" >>$SHELL_DEBUG_FILE
 # https://dev.to/onpointvn/installing-erlang-elixir-on-m1-macs-1b8g
 # https://cpufun.substack.com/p/setting-up-the-apple-m1-for-native
 
-# disable homebrew auto update
-export HOMEBREW_NO_AUTO_UPDATE=1
-
-export PATH="/opt/homebrew/sbin:$PATH"
-export PATH="/opt/homebrew/bin:$PATH"
 export PATH="$HOME/dotfiles/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 

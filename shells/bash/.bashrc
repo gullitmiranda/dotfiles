@@ -81,8 +81,11 @@ fi
 # -----------------------------------------------------------------------------
 # Initializers
 
-# Set the CURRENT_SHELL environment variable for starship
-export CURRENT_SHELL=bash
+# Enforce correct shell for when changing between shells
+export SHELL=$(which bash)
+
+# Set the SHELL_TYPE environment variable for starship
+export SHELL_TYPE=bash
 
 # Load sensitive environment variables
 [ -f "$DOTFILES_DIR/local/env.sh" ] && source "$DOTFILES_DIR/local/env.sh"

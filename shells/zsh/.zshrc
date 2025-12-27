@@ -55,8 +55,11 @@ bindkey '^[^[[D' backward-word                   # Option+Left - move cursor bac
 # -----------------------------------------------------------------------------
 # Initializers
 
-# Set the CURRENT_SHELL environment variable for starship
-export CURRENT_SHELL=zsh
+# Enforce correct shell for when changing between shells
+export SHELL=$(which zsh)
+
+# Set the SHELL_TYPE environment variable for starship
+export SHELL_TYPE=zsh
 
 # Load sensitive environment variables (if file exists and not already loaded)
 [ -f "$DOTFILES_DIR/local/env.sh" ] && source "$DOTFILES_DIR/local/env.sh"

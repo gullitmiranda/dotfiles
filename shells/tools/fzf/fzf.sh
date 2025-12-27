@@ -1,13 +1,27 @@
 # Setup fzf
 
-if not command -v fzf >/dev/null 2>&1; then
-	echo "fzf not found"
+if ! command -v fzf >/dev/null 2>&1; then
 	return 0
 fi
 
 # Set up fzf key bindings and fuzzy completion
 # shellcheck disable=SC2312
 eval "$(fzf --"${SHELL_TYPE}" || echo "failed to set up \`fzf --${SHELL_TYPE}\`")"
+
+# macOS: Alt+C requires terminal configuration to work
+# - iTerm2: Preferences > Profiles > Keys > Left Option key: set to "Esc+"
+# - Terminal.app: Preferences > Profiles > Keyboard > "Use Option as Meta key"
+#
+# Alternative: Ctrl+G for directory search (works without configuration)
+if [[ -n "${ZSH_VERSION}" ]]; then
+	# Bind Ctrl+G to fzf-cd-widget (same as Alt+C)
+	bindkey '^G' fzf-cd-widget
+elif [[ -n "${BASH_VERSION}" ]]; then
+	# Bind Ctrl+G to fzf directory search in bash
+	bind -m emacs-standard '"\C-g": " \C-b\C-k \C-u`__fzf_cd__`\e\C-e\er\C-m\C-y\C-h\e \C-y\ey\C-x\C-x\C-d"'
+	bind -m vi-command '"\C-g": "\C-z\C-g\C-z"'
+	bind -m vi-insert '"\C-g": "\C-z\C-g\C-z"'
+fi
 
 # FZF customization
 # ----------------

@@ -35,11 +35,11 @@
 # # # zinit light marlonrichert/zsh-autocomplete           # Real-time completions (can be slower)
 # # # zinit light zsh-users/zsh-history-substring-search   # Fish-like history search. Should be loaded after zsh-users/zsh-syntax-highlighting
 
-# # fzf integration (if installed)
-# if command -v fzf >/dev/null 2>&1; then
-#   zinit light Aloxaf/fzf-tab # Replace zsh's default completion with fzf
-#   zinit snippet OMZ::plugins/fzf/fzf.plugin.zsh
-# fi
+# fzf integration (if installed)
+if command -v fzf >/dev/null 2>&1; then
+  zinit light Aloxaf/fzf-tab # Replace zsh's default completion with fzf
+  # zinit snippet OMZ::plugins/fzf/fzf.plugin.zsh
+fi
 
 # # Add docker completion using zinit
 # zinit ice as"completion"

@@ -1,7 +1,8 @@
 # Setup eza (modern ls replacement)
 # ----------
 
-if command -v eza >/dev/null 2>&1; then
+# Only set up aliases in interactive shells
+if [[ -o interactive ]] && command -v eza >/dev/null 2>&1; then
 	# Replace ls with eza
 	alias ls='eza'
 	alias ll='eza -l'

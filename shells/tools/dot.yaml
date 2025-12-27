@@ -12,7 +12,14 @@ darwin:
       brew install --quiet fzf bat fd ripgrep eza jq yq
 
       # Other common utilities
-      brew install --quiet coreutils wget curl telnet
+      brew install --quiet coreutils wget curl telnet httpie
+
+      # Install and Setup tldr - A very fast implementation of tldr (man pages in your terminal) in Rust.
+      brew install --quiet tealdeer
+      tldr --update
+
+      # Install and Setup navi - An interactive cheatsheet tool for the command-line.
+      brew install --quiet navi
 
 linux:
   installs:
@@ -22,3 +29,7 @@ linux:
 
       # Other common utilities
       apt-get install -y coreutils wget curl telnet
+
+      # Install and Setup tldr - A very fast implementation of tldr (man pages in your terminal) in Rust.
+      apt-get install -y tealdeer
+      tldr --update

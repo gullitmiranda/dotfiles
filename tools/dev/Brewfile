@@ -1,0 +1,5 @@
+# mise is a tool for managing multiple go projects - https://mise.jdx.dev/
+brew "mise"
+
+# uv is a tool for managing python projects - https://docs.astral.sh/uv/
+brew "uv"

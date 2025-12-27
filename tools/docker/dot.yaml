@@ -1,0 +1,11 @@
+darwin:
+  installs:
+    cmd: |
+      brew install \
+        docker docker-buildx docker-compose \
+        qemu colima
+
+linux:
+  installs:
+    cmd: |
+      sudo apt-get install -y docker.io

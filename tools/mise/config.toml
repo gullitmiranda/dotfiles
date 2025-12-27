@@ -1,0 +1,13 @@
+[tools]
+gcloud = "latest"
+helm = "latest"
+kustomize = "latest"
+node = "22"
+opentofu = "latest"
+oras = "latest"
+python = "3.12"
+terraform = "latest"
+
+[settings]
+idiomatic_version_file_enable_tools = ["python", "go"]
+experimental = true

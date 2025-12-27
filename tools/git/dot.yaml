@@ -17,4 +17,4 @@ linux:
     depends:
       - git/git-op-setup
     cmd: |
-      sudo apt-get update && sudo apt-get install -y git
+      sudo apt-get update && sudo apt-get install -y git gh 1password-cli

@@ -68,6 +68,9 @@ end
 #   fzf_configure_bindings --help
 
 if functions -q fzf_configure_bindings >/dev/null 2>&1
-    # \e is the escape character in fish
+    # \e represents the escape character in fish shell.
+    # NOTE:
+    # For macOS users with iTerm: To enable the `alt` key functionality, configure the terminal to send `Esc+` when `alt` is pressed.
+    #   - Navigate to Preferences > Profiles > Keyboard > Modifier Keys and set Alt to Esc+.
     fzf_configure_bindings --directory=\ef --git_log=\el --git_status=\es --processes=\ep --history=\eh --variables=\ev
 end

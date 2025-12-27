@@ -1,0 +1,7 @@
+darwin:
+  links:
+    - ~/.config/mise/config.toml: config.toml
+
+linux:
+  links:
+    - ~/.config/mise/config.toml: config.toml

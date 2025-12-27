@@ -13,6 +13,10 @@
 #
 # Note: This file (~/.zshrc) is ONLY loaded in interactive shells.
 # Key bindings and other interactive features can be set here without checks.
+# For more information, see:
+# - https://github.com/sorin-ionescu/prezto/tree/master/runcoms#readme
+# - https://zsh.sourceforge.io/Doc/Release/zsh_toc.html
+# - https://zsh.sourceforge.io/Doc/Release/Files.html#Files
 
 # Set dotfiles directory if not already set
 [ -z "$DOTFILES_DIR" ] && export DOTFILES_DIR="$HOME/.dotfiles"

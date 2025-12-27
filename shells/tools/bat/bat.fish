@@ -1,6 +1,18 @@
 # Setup bat
 # -----------
+# For Ubuntu and Debian-based `bat` packages
+# the `bat` program is named `batcat` on these systems
+if command -v batcat >/dev/null 2>&1
+    alias bat batcat
+end
+
 if command -v bat >/dev/null 2>&1
+    # Save the original cat command
+    function rcat
+        /bin/cat $argv
+    end
+    complete -c rcat -w /bin/cat
+
     # Set the BAT_THEME environment variable
     set -gx BAT_THEME "Monokai Extended"
 

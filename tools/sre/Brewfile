@@ -1,0 +1,13 @@
+# Networking
+brew "telnet"
+
+# Kubernetes
+brew "k9s"
+brew "kubectx"  # includes kubens
+brew "krew"
+
+# GitOps
+brew "argocd"
+
+# Cloud
+brew "google-cloud-sdk"

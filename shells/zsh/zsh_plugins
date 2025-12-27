@@ -1,37 +1,46 @@
-# # Zsh plugins using Zinit
-# # This file is sourced by the main .zshrc file
+# Zsh plugins using Zinit
+# This file is sourced by the main .zshrc file
 
 # # Core plugins
 # zinit light zsh-users/zsh-autosuggestions     # Fish-like autosuggestions
 # zinit light zsh-users/zsh-syntax-highlighting # Syntax highlighting for commands
 # zinit light zsh-users/zsh-completions         # Additional completion definitions
 
-# # Oh-My-Zsh libraries and plugins
-# zinit snippet OMZ::lib/completion.zsh
-# zinit snippet OMZ::lib/history.zsh
-# zinit snippet OMZ::lib/key-bindings.zsh
+# # # Oh-My-Zsh libraries and plugins
+# # zinit snippet OMZ::lib/completion.zsh
+# # zinit snippet OMZ::lib/history.zsh
+# # zinit snippet OMZ::lib/key-bindings.zsh
 # zinit snippet OMZ::plugins/git/git.plugin.zsh
-# zinit snippet OMZ::plugins/sudo/sudo.plugin.zsh
-# zinit snippet OMZ::plugins/command-not-found/command-not-found.plugin.zsh
+# # zinit snippet OMZ::plugins/sudo/sudo.plugin.zsh
+# # zinit snippet OMZ::plugins/command-not-found/command-not-found.plugin.zsh
+
+# # # Prezto plugins
+# zinit snippet PZT::modules/helper/init.zsh
+# # or load multiple files from a module
+# zinit ice svn
+# zinit snippet PZT::modules/docker
 
 # # Enhanced cd command
 # zinit light agkozak/zsh-z # Jump quickly to directories you visit frequently
 
-# # Improved command line navigation
-# zinit light jeffreytse/zsh-vi-mode # vi mode for zsh (comment out if you prefer emacs bindings)
+# # # Improved command line navigation
+# # zinit light jeffreytse/zsh-vi-mode # vi mode for zsh (comment out if you prefer emacs bindings)
 
 # # Utilities
-# zinit light zdharma-continuum/fast-syntax-highlighting # Improved syntax highlighting
-# zinit light MichaelAquilina/zsh-you-should-use         # Reminds you of aliases
-# zinit light hlissner/zsh-autopair                      # Auto-close and delete matching delimiters
+# # zinit light zdharma-continuum/fast-syntax-highlighting # Improved syntax highlighting
+# # zinit light MichaelAquilina/zsh-you-should-use         # Reminds you of aliases
+# # zinit light hlissner/zsh-autopair                      # Auto-close and delete matching delimiters
 
-# # Load these plugins as needed (uncomment to activate)
-# # zinit light marlonrichert/zsh-autocomplete           # Real-time completions (can be slower)
-# # zinit light zsh-users/zsh-history-substring-search   # Fish-like history search
-# # zinit light romkatv/powerlevel10k                    # Powerlevel10k theme (alternative to Starship)
+# # # Load these plugins as needed (uncomment to activate)
+# # # zinit light marlonrichert/zsh-autocomplete           # Real-time completions (can be slower)
+# # # zinit light zsh-users/zsh-history-substring-search   # Fish-like history search. Should be loaded after zsh-users/zsh-syntax-highlighting
 
-# fzf integration (if installed)
-if command -v fzf >/dev/null 2>&1; then
-  zinit light Aloxaf/fzf-tab # Replace zsh's default completion with fzf
-  zinit snippet OMZ::plugins/fzf/fzf.plugin.zsh
-fi
+# # fzf integration (if installed)
+# if command -v fzf >/dev/null 2>&1; then
+#   zinit light Aloxaf/fzf-tab # Replace zsh's default completion with fzf
+#   zinit snippet OMZ::plugins/fzf/fzf.plugin.zsh
+# fi
+
+# # Add docker completion using zinit
+# zinit ice as"completion"
+# zinit snippet https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker

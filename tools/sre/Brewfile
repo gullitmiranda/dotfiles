@@ -3,7 +3,7 @@ brew "telnet"
 
 # Kubernetes
 brew "k9s"
-brew "kubectx"  # includes kubens
+brew "kubectx"  # includes kubens, with shell completions
 brew "krew"
 
 # GitOps

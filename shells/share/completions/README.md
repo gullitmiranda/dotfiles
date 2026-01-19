@@ -1,70 +1,27 @@
-# Shell Completions
+# Shared Shell Completions
 
-This directory contains completion configurations for various tools and aliases.
+This directory contains completion scripts that are shared across all shells (bash, zsh, fish).
 
-## Git Aliases Completion
+## Structure
 
-Git completion is configured in `shells/tools/git/completion/git.sh` and works with the aliases defined in `shells/tools/git/aliases.sh`.
+Tool-specific completions should be placed in their respective tool directories under `shells/tools/<tool>/completions/`. This directory is for completions that don't belong to a specific tool.
 
-### How it works
+## Current Completions
 
-1. **Function-based aliases**: The git aliases are defined as functions in `shells/tools/git/aliases.sh`
-2. **Completion registration**: Completion is registered in `shells/tools/git/completion/git.sh` using `compdef`
-3. **Co-located configuration**: Aliases and completion are in the same directory for better organization
-4. **Automatic loading**: Both files are automatically sourced by the main zsh configuration
+### gcloud.sh
 
-### Available completions
+Google Cloud SDK completion loader. Automatically sources gcloud completions when:
+- `mise` is available
+- gcloud is installed via mise
 
-- `g` → `_git` (alias for general git completion)
-- `ga` → `_git add` (git add completion)
-- `gb` → `_git branch` (git branch completion)
-- `gc` → `_git commit` (git commit completion)
-- `gco` → `_git checkout` (git checkout completion)
-- `gd` → `_git diff` (git diff completion)
-- `gfap` → `_git fetch` (git fetch completion)
-- `gfp` → `_git fetch` (git fetch completion)
-- `gl` → `_git pull` (git pull completion)
-- `gp` → `_git push` (git push completion)
-- `gs` → `_git status` (git status completion)
+## Adding New Completions
 
-### Usage
+1. For tool-specific completions: add to `shells/tools/<tool>/completions/`
+2. For shared/generic completions: add to this directory
 
-After the configuration is loaded, you can use tab completion with any of the git aliases:
+Use POSIX-compatible syntax (`.sh` extension) for cross-shell compatibility, or create shell-specific files (`.bash`, `.zsh`, `.fish`).
 
-```bash
-# Example: Type 'gc' and press Tab to see commit options
-gc <Tab>
+## Loading Behavior
 
-# Example: Type 'gb' and press Tab to see branch options
-gb <Tab>
-
-# Example: Type 'gco' and press Tab to see checkout options
-gco <Tab>
-
-# Example: Type 'g' and press Tab to see general git options
-g <Tab>
-```
-
-### Troubleshooting
-
-If completion doesn't work:
-
-1. Ensure both files are being sourced (check `shells/zsh/.zshrc`)
-2. Verify that git completion is available (`which _git`)
-3. Restart your shell or run `source ~/.zshrc`
-4. Check that the functions are properly defined (`type ga`)
-
-### Adding new git aliases
-
-To add a new git alias with completion:
-
-1. Add the function to `shells/tools/git/aliases.sh`
-2. Add the completion registration to `shells/tools/git/completion/git.sh`
-3. Test the function definition
-
-### Technical notes
-
-- **Why functions instead of aliases?** The `compdef` command only works with functions, not aliases
-- **Co-located configuration**: Aliases and completion are in the same directory for better organization
-- **Completion registration**: Each function is mapped to its corresponding git completion function for precise completion
-- **Safe registration**: Completion is only registered if `compdef` is available (zsh context)
+- **Zsh/Bash**: Files are sourced at shell startup
+- **Fish**: Completions are autoloaded via `$fish_complete_path`

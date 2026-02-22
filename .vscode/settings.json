@@ -4,4 +4,8 @@
     "**/.git/config": "ini",
     ".gitconfig.*": "ini",
   },
+  "debug.javascript.defaultRuntimeExecutable": {
+    "pwa-node": "${workspaceFolder}/.vscode/mise-tools/node"
+  },
+  "python.defaultInterpreterPath": "${workspaceFolder}/.vscode/mise-tools/python",
 }

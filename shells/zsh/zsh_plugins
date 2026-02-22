@@ -6,11 +6,14 @@
 # zinit light zsh-users/zsh-syntax-highlighting # Syntax highlighting for commands
 # zinit light zsh-users/zsh-completions         # Additional completion definitions
 
-# # # Oh-My-Zsh libraries and plugins
+# Oh-My-Zsh plugins
+# Note: OMZ git plugin provides aliases AND completions that work properly
+zinit snippet OMZ::plugins/git/git.plugin.zsh
+
+# # Other OMZ plugins (uncomment as needed)
 # # zinit snippet OMZ::lib/completion.zsh
 # # zinit snippet OMZ::lib/history.zsh
 # # zinit snippet OMZ::lib/key-bindings.zsh
-# zinit snippet OMZ::plugins/git/git.plugin.zsh
 # # zinit snippet OMZ::plugins/sudo/sudo.plugin.zsh
 # # zinit snippet OMZ::plugins/command-not-found/command-not-found.plugin.zsh
 

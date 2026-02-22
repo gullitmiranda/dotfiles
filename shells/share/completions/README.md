@@ -11,6 +11,7 @@ Tool-specific completions should be placed in their respective tool directories 
 ### gcloud.sh
 
 Google Cloud SDK completion loader. Automatically sources gcloud completions when:
+
 - `mise` is available
 - gcloud is installed via mise
 

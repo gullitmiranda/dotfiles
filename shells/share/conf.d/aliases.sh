@@ -39,3 +39,6 @@ alias nowdate='date +"%d-%m-%Y"'
 
 # Devops
 alias g=gcloud
+
+# Fork Git client
+alias f=fork

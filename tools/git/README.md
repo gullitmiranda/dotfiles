@@ -187,18 +187,59 @@ gh auth login --hostname github.com --git-protocol https --web
 3. Route the correct `gh` account per directory using [mise](https://mise.jdx.dev/) `[env]`:
 
 ```toml
-# ~/Code/.mise.toml (personal, default)
+# ~/.config/mise/config.toml (global default — personal account)
 [env]
-GH_TOKEN = "{{ exec(command='gh auth token --user gullitmiranda') }}"
+GH_TOKEN = "{{ exec(command='gh auth token --user <personal-user>') }}"
 ```
 
 ```toml
-# ~/Code/Work/.mise.toml (work account)
+# ~/Code/Work/.mise.toml (work account override)
 [env]
-GH_TOKEN = "{{ exec(command='gh auth token --user gullit-work') }}"
+GH_TOKEN = "{{ exec(command='gh auth token --user <work-user>') }}"
 ```
 
-mise resolves config hierarchically, so any subdirectory inherits the closest parent's `GH_TOKEN`. This affects all `gh` commands (`gh pr create`, `gh issue list`, etc.), not just git push/pull.
+mise resolves config hierarchically, so any subdirectory inherits the closest parent's `GH_TOKEN`. The global config covers `/tmp`, `~`, `~/.dotfiles`, etc. The work override only applies inside the work directory. This affects all `gh` commands (`gh pr create`, `gh issue list`, etc.), not just git push/pull.
+
+#### Commit signing with local SSH keys
+
+Uses the same SSH key pair from 1Password, exported once to disk, so `ssh-keygen` can sign commits without requiring 1Password unlock.
+
+1. Export private keys from 1Password (one-time):
+
+```bash
+op read "op://<vault>/<item-name>/private key" \
+  --account "<account>.1password.com" --out-file ~/.ssh/signing_work
+op read "op://<vault>/<item-name>/private key" \
+  --account "<account>.1password.com" --out-file ~/.ssh/signing_personal
+chmod 600 ~/.ssh/signing_work ~/.ssh/signing_personal
+```
+
+> [!NOTE]
+> 1Password exports ed25519 keys in PKCS#8 format. If `ssh-keygen -y -f` fails with "invalid format", convert to OpenSSH format using `python3` with the `cryptography` library.
+
+2. Point `user.signingkey` to the local key file in each gitconfig:
+
+```gitconfig
+# ~/Code/Work/.gitconfig (work)
+[user]
+	signingkey = ~/.ssh/signing_work
+[commit]
+	gpgsign = true
+[gpg]
+	format = ssh
+```
+
+```gitconfig
+# ~/Code/.gitconfig (personal)
+[user]
+	signingkey = ~/.ssh/signing_personal
+[commit]
+	gpgsign = true
+[gpg]
+	format = ssh
+```
+
+No `gpg.ssh.program` is needed — git defaults to `ssh-keygen`, which reads the key file directly. The public keys registered on GitHub remain the same, so commit verification continues to work.
 
 #### SSH with 1Password (legacy)
 

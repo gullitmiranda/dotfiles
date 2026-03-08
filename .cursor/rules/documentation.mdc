@@ -1,0 +1,11 @@
+---
+description: Documentation standards for dotfiles repository
+globs: "**/*.md"
+alwaysApply: false
+---
+
+# Documentation Standards
+
+- Use generic terms (work/personal) instead of specific company names (MyCompany, etc.) in documentation and examples
+- Keep examples reusable: use placeholders like `work-account`, `personal-account` instead of real usernames
+- Company-specific values belong in config files, not in docs

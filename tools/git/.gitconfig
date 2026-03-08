@@ -56,11 +56,13 @@
 [help]
     autocorrect = 1
 
-[include]
-    path = ~/.gitconfig.local
 [credential "https://github.com"]
 	helper = 
 	helper = !/opt/homebrew/bin/gh auth git-credential
 [credential "https://gist.github.com"]
 	helper = 
 	helper = !/opt/homebrew/bin/gh auth git-credential
+
+; MUST be last so per-directory credential helpers (via includeIf) override the defaults above
+[include]
+    path = ~/.gitconfig.local

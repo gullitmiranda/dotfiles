@@ -11,7 +11,7 @@
 #         autoload -Uz _git
 #         echo "Git completion loaded via autoload"
 #     fi
-    
+
 #     # Check if our functions are defined before registering completion
 #     if type ga >/dev/null 2>&1; then
 #         # Register completion for each git alias function
@@ -26,9 +26,9 @@
 #         compdef '_git push' gp
 #         compdef '_git status' gs
 #         compdef '_git' g
-        
+
 #         echo "Git completion registered successfully for aliases"
-        
+
 #         # Debug: show what was registered
 #         echo "Registered completions:"
 #         echo "  gco -> ${_comps[gco]}"

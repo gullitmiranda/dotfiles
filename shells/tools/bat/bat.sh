@@ -12,12 +12,12 @@ if command -v bat >/dev/null 2>&1; then
 	rcat() { /bin/cat "$@"; }
 
 	# Bash completions
-	if [[ -n "${BASH_VERSION}" ]]; then
+	if [[ -n ${BASH_VERSION} ]]; then
 		complete -F _cat rcat
 	fi
 
 	# Zsh completions
-	if [[ -n "${ZSH_VERSION}" ]]; then
+	if [[ -n ${ZSH_VERSION} ]]; then
 		autoload -Uz compinit
 		compinit
 

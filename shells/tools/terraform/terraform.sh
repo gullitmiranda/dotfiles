@@ -13,22 +13,22 @@ _tf_run() {
 
 	# Parse arguments, extract --log or -l flag
 	for arg in "$@"; do
-		case "$arg" in
+		case "${arg}" in
 		--log | -l) log_flag=true ;;
-		*) args+=("$arg") ;;
+		*) args+=("${arg}") ;;
 		esac
 	done
 
-	if [[ $log_flag == true ]]; then
+	if [[ ${log_flag} == true ]]; then
 		local timestamp=$(date +%Y-%m-%d-%H%M%S)
 		local log_dir="./logs"
 		local log_file="${log_dir}/${cmd}-${subcmd}-${timestamp}.log"
 
-		mkdir -p "$log_dir"
-		echo "Logging to: $log_file"
-		"$cmd" "$subcmd" "${args[@]}" 2>&1 | tee "$log_file"
+		mkdir -p "${log_dir}"
+		echo "Logging to: ${log_file}"
+		"${cmd}" "${subcmd}" "${args[@]}" 2>&1 | tee "${log_file}"
 	else
-		"$cmd" "$subcmd" "${args[@]}"
+		"${cmd}" "${subcmd}" "${args[@]}"
 	fi
 }
 

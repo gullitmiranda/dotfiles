@@ -248,9 +248,9 @@ brew bundle --file=packages/Brewfile.gui
 
 This repository includes support for:
 
-- Multiple Git accounts (work, personal)
-- 1Password SSH integration
-- Git credential helpers
+- Multiple Git accounts (work, personal) with per-directory routing via `mise`
+- HTTPS authentication via `gh` CLI (recommended, no 1Password dependency)
+- 1Password SSH integration (legacy fallback)
 - Commit signing
 
 ## Updating

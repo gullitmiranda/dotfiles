@@ -1,6 +1,6 @@
-# Integrating 1Password SSH Agent for Multiple Git Accounts
+# Git Authentication for Multiple Accounts
 
-This guide provides instructions on how to integrate the 1Password SSH agent into your terminal and use custom SSH commands to select which SSH key to use for different Git accounts, without changing repository URLs.
+This guide covers git authentication with multiple GitHub accounts. The recommended approach uses **HTTPS with `gh` CLI tokens** routed per directory via `mise`, which works independently of 1Password lock state. The legacy SSH-based approach using 1Password agent is documented as a fallback.
 
 ## Prerequisites
 
@@ -95,14 +95,11 @@ ln -s ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock ~/.1pass
 ln -s ~/.config/1Password/ssh/agent.toml ~/.1password/agent.toml
 ```
 
-#### Link gitconfig to local folder
+#### Git config location (originals, not symlinks)
 
-Having all links to these files in the local folder makes maintenance easier.
-
-```bash
-ln -s ~/Code/.gitconfig "$DOTFILES_DIR"/local/personal.gitconfig
-ln -s ~/Code/CloudWalk/.gitconfig "$DOTFILES_DIR"/local/cloudwalk.gitconfig
-```
+- `includeIf` in `local/.gitconfig.local` points to the original config files: `~/Code/.gitconfig` (personal) and `~/Code/CloudWalk/.gitconfig` (work).
+- Repos outside `~/Code/` (e.g. `~/.dotfiles`) use the personal config from `~/Code/.gitconfig` as fallback.
+- The symlinks under `local/` (e.g. `local/.gitconfig.personal` → `~/Code/.gitconfig`) are optional, only to open those files from the repo in the IDE.
 
 ## Manual Setup
 
@@ -166,6 +163,48 @@ Hi gullit-work! You've successfully authenticated, but GitHub does not provide s
 
 ### Configure Git
 
+#### HTTPS with `gh` credential helper (recommended)
+
+Uses HTTPS for all GitHub operations, authenticated via `gh` CLI tokens stored in the system keyring. This avoids dependency on the 1Password SSH agent, which can lock on a timer (e.g. every 5 minutes with corporate policies) and block AI agents and automation.
+
+1. Authenticate with `gh` for each account:
+
+```bash
+gh auth login --hostname github.com --git-protocol https --web
+# repeat and login with the other account when prompted
+```
+
+2. Force HTTPS for GitHub in `~/.gitconfig.local`:
+
+```gitconfig
+; Force HTTPS for GitHub to avoid dependency on 1Password SSH agent,
+; which locks every 5 min (corporate policy) and blocks AI agents.
+; Auth is handled by `gh auth git-credential` configured in ~/.gitconfig.
+[url "https://github.com/"]
+	insteadOf = git@github.com:
+```
+
+3. Route the correct `gh` account per directory using [mise](https://mise.jdx.dev/) `[env]`:
+
+```toml
+# ~/Code/.mise.toml (personal, default)
+[env]
+GH_TOKEN = "{{ exec(command='gh auth token --user gullitmiranda') }}"
+```
+
+```toml
+# ~/Code/Work/.mise.toml (work account)
+[env]
+GH_TOKEN = "{{ exec(command='gh auth token --user gullit-work') }}"
+```
+
+mise resolves config hierarchically, so any subdirectory inherits the closest parent's `GH_TOKEN`. This affects all `gh` commands (`gh pr create`, `gh issue list`, etc.), not just git push/pull.
+
+#### SSH with 1Password (legacy)
+
+<details>
+<summary>Previous approach using 1Password SSH agent for git authentication</summary>
+
 1. Configure Git to rewrite the repository URLs to use the SSH protocol:
 
 ```bash
@@ -189,7 +228,7 @@ git config --file ~/Code/CloudWalk/.gitconfig \
 > [!NOTE]
 > You will need the `includeIf` directive in your `.gitconfig` already configured to use split config files for different projects.
 
-By following these steps, you can integrate the 1Password SSH agent into your terminal and use custom SSH commands to select which SSH key to use for different hosts, without changing repository URLs in your Git configuration.
+</details>
 
 ## Troubleshooting
 

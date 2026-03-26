@@ -13,7 +13,14 @@ EOFMARKER
 
 if test -f "$DOTFILES_DIR/shells/zsh/zsh_plugins"; then
   echo "Installing Zinit plugins from $DOTFILES_DIR/shells/zsh/zsh_plugins"
-  zinit update --all
+  # Source zinit before using it (it's a plugin, not a standalone binary)
+  local zinit_home="${ZINIT_HOME:-/opt/homebrew/opt/zinit}"
+  if [[ -f "$zinit_home/zinit.zsh" ]]; then
+    source "$zinit_home/zinit.zsh"
+    zinit update --all
+  else
+    echo "⚠️  zinit not found at $zinit_home — skipping plugin install"
+  fi
 
   echo ""
   echo "✅ Zinit plugins installed. You can manage plugins with these commands:"

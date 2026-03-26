@@ -1,5 +1,6 @@
 [tools]
 gcloud = "latest"
+go = "latest"
 helm = "latest"
 kubectl = "latest"
 kustomize = "latest"

@@ -1,7 +1,7 @@
 darwin:
   installs:
     cmd: |
-      brew bundle --file=Brewfile
+      brew bundle --file="{{ config.dotfiles }}/tools/dev/Brewfile"
 
 linux:
   installs:

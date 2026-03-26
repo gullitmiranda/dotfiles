@@ -1,6 +1,7 @@
 [tools]
 gcloud = "latest"
 helm = "latest"
+kubectl = "latest"
 kustomize = "latest"
 node = "22"
 opentofu = "latest"

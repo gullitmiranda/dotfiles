@@ -3,6 +3,5 @@ linux|darwin:
     depends:
       - git-op-config
     cmd: |
-      # run the setup script to configure git (and optionally 1Password SSH agent)
       export DOTFILES_DIR="{{ config.dotfiles }}"
       bash {{ config.dotfiles }}/{{ name }}/setup.sh

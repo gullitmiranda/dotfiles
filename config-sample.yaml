@@ -11,13 +11,43 @@ variables:
     VISUAL: cursor code zed nvim vim nano vi
 
   git:
-    user_email: "your.email@example.com"
-    user_name: "Your Name"
+    # Global git config (used as fallback for repos outside any account gitdir)
+    config:
+      user.name: "Your Name"
+      user.email: "your@email.com"
 
-    # List of account-specific gitconfig files that should be generated and included in the local gitconfig
-    accountsConfigs:
-      # - template: <target-path>
-      - personal: ~/Code/.gitconfig
-      - work: ~/Code/work/.gitconfig
+    accounts:
+      - name: personal
+        gh_user: your-github-username
+        # All gitdirs that map to this account (creates one includeIf per entry)
+        gitdirs:
+          - ~/Code/Gullit/
+          - ~/Code/SSO/
+        # The gitconfig file for this account (created/updated by setup)
+        file: ~/Code/Gullit/.gitconfig
+        config:
+          user.name: "Your Name"
+          user.email: "your@personal.email"
+        # op:                              # Optional — only if using 1Password SSH
+        #   account: my.1password.com
+        #   vault: Personal
+        #   item: GitHub SSH Key Personal
+        #   field: public key
+        #   output: ~/.ssh/op_personal_github.pub
+
+      - name: work
+        gh_user: your-work-github-username
+        gitdirs:
+          - ~/Code/cw/
+        file: ~/Code/cw/.gitconfig
+        config:
+          user.name: "Your Name"
+          user.email: "your@work.email"
+        # op:
+        #   account: work.1password.com
+        #   vault: Employee
+        #   item: GitHub SSH Key Work
+        #   field: public key
+        #   output: ~/.ssh/op_work_github.pub
 
   # Add other variables as needed

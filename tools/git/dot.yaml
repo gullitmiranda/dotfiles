@@ -7,14 +7,14 @@ darwin:
   installs:
     depends:
       - git/git-op-setup
+      - git/git-mise-setup
     cmd: |
-      brew install --quiet git gh
-
-      brew install --quiet --cask 1password-cli
+      brew install --quiet git gh jq
 
 linux:
   installs:
     depends:
       - git/git-op-setup
+      - git/git-mise-setup
     cmd: |
-      sudo apt-get update && sudo apt-get install -y git gh 1password-cli
+      sudo apt-get update && sudo apt-get install -y git gh jq

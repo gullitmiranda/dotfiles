@@ -1,0 +1,24 @@
+darwin:
+  installs:
+    cmd: |
+      # Install Cursor if not present
+      if ! command -v cursor >/dev/null 2>&1; then
+        brew install --cask --quiet cursor
+      fi
+
+      # Pillow is needed for icon badge generation
+      python3 -m pip install --quiet Pillow 2>/dev/null || true
+
+      CURSOR_DIR="{{ config.dotfiles }}/tools/cursor"
+
+      # Make scripts executable
+      chmod +x "${CURSOR_DIR}/bin/cursor-setup"
+      chmod +x "${CURSOR_DIR}/bin/cursor-work"
+      chmod +x "${CURSOR_DIR}/bin/cursor-personal"
+
+      # Run setup (creates .app bundles, user-data-dirs, symlinks shared config)
+      "${CURSOR_DIR}/bin/cursor-setup"
+
+  links:
+    bin/cursor-work: ~/.local/bin/cursor-work
+    bin/cursor-personal: ~/.local/bin/cursor-personal

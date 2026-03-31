@@ -1,0 +1,4 @@
+{
+  "window.title": "Cursor [Work] ${separator} ${activeEditorShort}${separator}${rootName}",
+  "git.defaultCloneDirectory": "~/code/cw"
+}

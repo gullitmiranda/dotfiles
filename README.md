@@ -65,10 +65,10 @@ Then initialize your dotfiles:
 
 ```shell
 # If you've already cloned the repository
-cd ~/.dotfiles
+cd $DOTFILES_DIR
 rotz init
 
-# Or clone and initialize in one step
+# Or clone and initialize in one step (clones to ~/.dotfiles by default)
 rotz clone https://github.com/gullitmiranda/dotfiles.git
 ```
 
@@ -80,14 +80,14 @@ The default config file is `~/Library/Application Support/com.rotz/config.yaml`:
 
 you can use a custom one by:
 
-- running `rotz init --config ~/.dotfiles/config.yaml`
-- Or creating a link `~/.dotfiles/config.yaml` to the custom one after running `rotz init`:
+- running `rotz init --config $DOTFILES_DIR/config.yaml`
+- Or linking the repository's config to the rotz config location:
 
   ```bash
-  ln -s ~/Library/Application\ Support/com.rotz/config.yaml ~/.dotfiles/config.yaml
+  ln -s $DOTFILES_DIR/config.yaml ~/Library/Application\ Support/com.rotz/config.yaml
   ```
 
-> The `config.yaml` file is this repository's is ignored by git, so you can change it as you want.
+> Make sure the `dotfiles` path in `config.yaml` matches your actual repository location.
 
 ### Deploying Your Dotfiles
 
@@ -126,18 +126,19 @@ touch ~/.env.sh
 
 # or a content
 cat > ~/.env.sh << 'EOF'
-# Sensitive environment variables
-export GITHUB_TOKEN=""
-
 # AI Platforms API Keys
 export ANTHROPIC_API_KEY=""
 export OPENAI_API_KEY=""
 export GOOGLE_AI_API_KEY=""
-export GEMINI_API_KEY=""
+export GEMINI_API_KEY="$GOOGLE_AI_API_KEY"
 export DEEPSEEK_API_KEY=""
 EOF
 
-chmod 600 ~/.env.sh  # Set permissions to be readable only by you
+# Set permissions to be readable only by you
+chmod 600 ~/.env.sh
+
+# link env file to local folder for easy access
+ln -s ~/.env.sh local/
 ```
 
 This creates the file with proper permissions and prepares it for your sensitive data.
@@ -261,7 +262,7 @@ To update your dotfiles after making changes to your dotfiles repository:
 
 ```bash
 # Pull the latest changes from the repository
-cd ~/.dotfiles
+cd $DOTFILES_DIR
 git pull
 
 # Apply the updated configuration and install packages

@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Launch Cursor with the work user-data-dir
+exec /Applications/CursorWork.app/Contents/MacOS/CursorWork "$@"

@@ -1,0 +1,265 @@
+#!/usr/bin/env bash
+# cursor-setup — Create Cursor .app bundles per profile with isolated user-data-dirs
+# and symlink shared config (settings, keybindings, snippets) across all instances.
+#
+# Creates 3 instances:
+#   - Cursor.app (default)  → ~/Library/Application Support/Cursor (untouched, shared symlinks only)
+#   - CursorWork.app        → ~/Library/Application Support/Cursor-work
+#   - CursorPersonal.app    → ~/Library/Application Support/Cursor-personal
+#
+# Usage: cursor-setup [--force]
+
+set -euo pipefail
+
+# --- macOS guard ---
+if [[ "$(uname)" != "Darwin" ]]; then
+  echo "cursor-setup is macOS-only, skipping."
+  exit 0
+fi
+
+# --- Config ---
+CURSOR_APP="/Applications/Cursor.app"
+PROFILES=(work personal)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CURSOR_TOOL_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
+SHARED_DIR="${CURSOR_TOOL_DIR}/shared"
+APP_SUPPORT_DIR="${HOME}/Library/Application Support"
+
+# Shared items symlinked into each user-data-dir/User/ (settings.json excluded — merged per instance)
+SHARED_ITEMS=(keybindings.json snippets)
+
+# Badge colors per profile
+declare -A BADGE_COLORS=(
+  [work]="#0066CC"
+  [personal]="#CC6600"
+)
+
+# --- Colors ---
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+RESET='\033[0m'
+
+log()  { echo -e "${BLUE}[cursor-setup]${RESET} $*"; }
+ok()   { echo -e "${GREEN}[cursor-setup]${RESET} $*"; }
+warn() { echo -e "${YELLOW}[cursor-setup]${RESET} $*"; }
+err()  { echo -e "${RED}[cursor-setup]${RESET} $*" >&2; }
+
+FORCE=false
+[[ "${1:-}" == "--force" ]] && FORCE=true
+
+# --- Validation ---
+if [[ ! -d "${CURSOR_APP}" ]]; then
+  err "Cursor.app not found at ${CURSOR_APP}"
+  err "Install it first: brew install --cask cursor"
+  exit 1
+fi
+
+# --- Icon generation ---
+find_cursor_icns() {
+  for name in Cursor AppIcon; do
+    local path="${CURSOR_APP}/Contents/Resources/${name}.icns"
+    if [[ -f "${path}" ]]; then
+      echo "${path}"
+      return 0
+    fi
+  done
+  return 1
+}
+
+generate_icon() {
+  local profile="$1"
+  local output_icns="$2"
+  local source_icns
+  source_icns=$(find_cursor_icns) || {
+    warn "Cannot find Cursor icon, skipping icon generation for ${profile}"
+    return 1
+  }
+
+  local tint_color="${BADGE_COLORS[${profile}]:-#666666}"
+  local tmpdir
+  tmpdir=$(mktemp -d)
+
+  log "Generating icon for profile '${profile}'..."
+
+  # Convert icns -> iconset
+  if ! iconutil -c iconset -o "${tmpdir}/icon.iconset" "${source_icns}" 2>/dev/null; then
+    warn "iconutil failed to convert icns, skipping icon for ${profile}"
+    rm -rf "${tmpdir}"
+    return 1
+  fi
+
+  # Apply badge via generate-icon.py (requires Pillow)
+  local has_pillow=false
+  if command -v python3 >/dev/null 2>&1 && python3 -c "from PIL import Image" 2>/dev/null; then
+    has_pillow=true
+  fi
+
+  if [[ "${has_pillow}" == true ]]; then
+    for png in "${tmpdir}"/icon.iconset/*.png; do
+      [[ -f "${png}" ]] || continue
+      python3 "${SCRIPT_DIR}/generate-icon.py" "${png}" "${tint_color}"
+    done
+  else
+    warn "Pillow not installed — icons will use the original Cursor icon without badge"
+  fi
+
+  # Convert iconset -> icns
+  iconutil -c icns -o "${output_icns}" "${tmpdir}/icon.iconset" 2>/dev/null
+
+  rm -rf "${tmpdir}"
+  ok "Icon generated: ${output_icns}"
+}
+
+# --- App bundle creation ---
+create_app_bundle() {
+  local profile="$1"
+  local profile_capitalized
+  profile_capitalized="$(tr '[:lower:]' '[:upper:]' <<< "${profile:0:1}")${profile:1}"
+  local app_name="Cursor${profile_capitalized}"
+  local app_path="/Applications/${app_name}.app"
+  local user_data_dir="${APP_SUPPORT_DIR}/Cursor-${profile}"
+
+  if [[ -d "${app_path}" ]] && [[ "${FORCE}" != true ]]; then
+    warn "${app_path} already exists (use --force to overwrite)"
+    return 0
+  fi
+
+  log "Creating ${app_path}..."
+
+  mkdir -p "${app_path}/Contents/MacOS"
+  mkdir -p "${app_path}/Contents/Resources"
+
+  # Generate icon with badge
+  local icon_path="${app_path}/Contents/Resources/AppIcon.icns"
+  generate_icon "${profile}" "${icon_path}" || {
+    # Fallback: copy original icon
+    local original_icns
+    original_icns=$(find_cursor_icns) && cp "${original_icns}" "${icon_path}" 2>/dev/null || true
+  }
+
+  # Info.plist
+  local bundle_id="com.cursor.${profile}"
+  cat > "${app_path}/Contents/Info.plist" <<PLIST
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleExecutable</key>
+    <string>${app_name}</string>
+    <key>CFBundleIdentifier</key>
+    <string>${bundle_id}</string>
+    <key>CFBundleName</key>
+    <string>${app_name}</string>
+    <key>CFBundleDisplayName</key>
+    <string>Cursor (${profile_capitalized})</string>
+    <key>CFBundleVersion</key>
+    <string>1.0</string>
+    <key>CFBundleIconFile</key>
+    <string>AppIcon</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>LSMinimumSystemVersion</key>
+    <string>10.15</string>
+</dict>
+</plist>
+PLIST
+
+  # Launcher script
+  cat > "${app_path}/Contents/MacOS/${app_name}" <<LAUNCHER
+#!/usr/bin/env bash
+exec "${CURSOR_APP}/Contents/MacOS/Cursor" --user-data-dir "${user_data_dir}" "\$@"
+LAUNCHER
+  chmod +x "${app_path}/Contents/MacOS/${app_name}"
+
+  ok "Created ${app_path}"
+}
+
+# --- Symlink shared config into a user-data-dir ---
+setup_shared_symlinks() {
+  local label="$1"
+  local user_dir="$2"
+
+  log "Setting up shared symlinks: ${user_dir}"
+  mkdir -p "${user_dir}"
+
+  for item in "${SHARED_ITEMS[@]}"; do
+    local source="${SHARED_DIR}/${item}"
+    local target="${user_dir}/${item}"
+
+    if [[ ! -e "${source}" ]]; then
+      warn "Shared item not found: ${source}, skipping"
+      continue
+    fi
+
+    if [[ -L "${target}" ]]; then
+      rm "${target}"
+    elif [[ -e "${target}" ]]; then
+      if [[ "${FORCE}" == true ]]; then
+        rm -rf "${target}"
+      else
+        warn "${target} exists and is not a symlink (use --force to overwrite)"
+        continue
+      fi
+    fi
+
+    ln -s "${source}" "${target}"
+    ok "Linked ${target} -> ${source}"
+  done
+}
+
+# --- Merge shared + instance settings.json ---
+merge_settings() {
+  local instance="$1"
+  local user_dir="$2"
+  local base="${SHARED_DIR}/settings.json"
+  local override="${CURSOR_TOOL_DIR}/${instance}/settings.json"
+  local target="${user_dir}/settings.json"
+
+  mkdir -p "${user_dir}"
+
+  if [[ ! -f "${base}" ]]; then
+    warn "Shared settings.json not found, skipping merge for ${instance}"
+    return 0
+  fi
+
+  # Remove existing symlink (from previous setup versions)
+  [[ -L "${target}" ]] && rm "${target}"
+
+  if [[ -f "${override}" ]]; then
+    log "Merging settings: shared + ${instance} -> ${target}"
+    jq -s '.[0] * .[1]' "${base}" "${override}" > "${target}"
+  else
+    log "Copying shared settings -> ${target}"
+    cp "${base}" "${target}"
+  fi
+
+  ok "Settings applied for ${instance}"
+}
+
+# --- Main ---
+log "Starting Cursor multi-profile setup..."
+echo
+
+# 1. Default profile — shared symlinks + merged settings
+log "━━━ Default profile (Cursor.app) ━━━"
+setup_shared_symlinks "default" "${APP_SUPPORT_DIR}/Cursor/User"
+merge_settings "default" "${APP_SUPPORT_DIR}/Cursor/User"
+echo
+
+# 2. Work and Personal profiles — .app bundles + shared symlinks + merged settings
+for profile in "${PROFILES[@]}"; do
+  log "━━━ Profile: ${profile} ━━━"
+  create_app_bundle "${profile}"
+  setup_shared_symlinks "${profile}" "${APP_SUPPORT_DIR}/Cursor-${profile}/User"
+  merge_settings "${profile}" "${APP_SUPPORT_DIR}/Cursor-${profile}/User"
+  echo
+done
+
+ok "Done! Available Cursor instances:"
+echo "  - Cursor (Default)  — /Applications/Cursor.app"
+for profile in "${PROFILES[@]}"; do
+  profile_capitalized="$(tr '[:lower:]' '[:upper:]' <<< "${profile:0:1}")${profile:1}"
+  echo "  - Cursor (${profile_capitalized}) — /Applications/Cursor${profile_capitalized}.app"
+done

@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Launch Cursor with the personal user-data-dir
+exec /Applications/CursorPersonal.app/Contents/MacOS/CursorPersonal "$@"

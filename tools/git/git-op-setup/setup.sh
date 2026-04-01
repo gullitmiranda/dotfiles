@@ -151,40 +151,73 @@ configure_git_account() {
 
   create_link "$real_account_git_file" "$dotfiles_local_dir/.gitconfig.$account_name"
 
-  # Optional: 1Password SSH key (only if op section is present and op CLI is available)
+  # Optional: 1Password SSH keys (only if op section is present and op CLI is available)
   local has_op
   has_op="$(echo "$account" | jq 'has("op")')"
   if [[ "$has_op" == "true" ]]; then
     if ! command -v op &>/dev/null; then
       log warn "op (1Password CLI) not found — skipping SSH key download for $account_name"
     else
-      download_1password_pub_ssh_key "$account"
+      download_1password_keys "$account"
     fi
   fi
 }
 
-download_1password_pub_ssh_key() {
+download_1password_keys() {
   local account="$1"
-  local op_account op_item op_field output_file op_vault secret_ref
+  local op_account op_item op_vault
   op_account="$(echo "$account" | jq -r '.op.account')"
-  op_item="$(echo "$account"    | jq -r '.op.item')"
-  op_field="$(echo "$account"   | jq -r '.op.field')"
-  output_file="$(expand_tilde "$(echo "$account" | jq -r '.op.output')")"
   op_vault="$(echo "$account"   | jq -r '.op.vault')"
-  secret_ref="op://$op_vault/$op_item/$op_field"
+  op_item="$(echo "$account"    | jq -r '.op.item')"
 
-  log info "Downloading public key \"$secret_ref\" to \"$output_file\" from $op_account"
+  # Support both old format (single field+output) and new format (keys array)
+  local has_keys
+  has_keys="$(echo "$account" | jq '.op | has("keys")')"
+
+  if [[ "$has_keys" == "true" ]]; then
+    local key_count
+    key_count="$(echo "$account" | jq '.op.keys | length')"
+    for i in $(seq 0 $((key_count - 1))); do
+      local field output_file secret_ref
+      field="$(echo "$account" | jq -r ".op.keys[$i].field")"
+      output_file="$(expand_tilde "$(echo "$account" | jq -r ".op.keys[$i].output")")"
+      secret_ref="op://$op_vault/$op_item/$field"
+      download_1password_secret "$op_account" "$secret_ref" "$output_file"
+    done
+  else
+    # Legacy single field+output format
+    local field output_file secret_ref
+    field="$(echo "$account" | jq -r '.op.field')"
+    output_file="$(expand_tilde "$(echo "$account" | jq -r '.op.output')")"
+    secret_ref="op://$op_vault/$op_item/$field"
+    download_1password_secret "$op_account" "$secret_ref" "$output_file"
+  fi
+}
+
+download_1password_secret() {
+  local op_account="$1"
+  local secret_ref="$2"
+  local output_file="$3"
+
+  log info "Downloading \"$secret_ref\" to \"$output_file\" from $op_account"
 
   if [[ -f "$output_file" && "$force_mode" != "true" ]]; then
     log warn "File already exists: $output_file"
     return 0
   fi
 
+  mkdir -p "$(dirname "$output_file")"
+
   local force_flag=""
   [[ "$force_mode" == "true" ]] && force_flag="--force"
 
+  # Append ssh-format=openssh for private key fields (op CLI defaults to PKCS#8)
+  if [[ "$secret_ref" == *"private key"* ]]; then
+    secret_ref="${secret_ref}?ssh-format=openssh"
+  fi
+
   if ! op read $force_flag --account "$op_account" "$secret_ref" --out-file "$output_file"; then
-    log error "Failed to download public key from 1Password ($op_account): \"$secret_ref\""
+    log error "Failed to download from 1Password ($op_account): \"$secret_ref\""
     return 1
   fi
 
@@ -211,6 +244,54 @@ check_1password_ssh_agent() {
   log warn "1Password SSH agent not detected in SSH_AUTH_SOCK or ~/.ssh/config. Skipping agent check."
 }
 
+### Allowed signers
+
+generate_allowed_signers() {
+  local data="$1"
+  local allowed_signers_file="$HOME/.ssh/allowed_signers"
+  local count
+  count="$(echo "$data" | jq '.accounts | length')"
+  local entries=()
+
+  for i in $(seq 0 $((count - 1))); do
+    local account
+    account="$(echo "$data" | jq -c ".accounts[$i]")"
+    local email pub_key_file
+    email="$(echo "$account" | jq -r '.config["user.email"]')"
+    pub_key_file="$(expand_tilde "$(echo "$account" | jq -r '.config["user.signingkey"]')")"
+
+    # Try .pub file first, fall back to signingkey path itself
+    if [[ -f "${pub_key_file}.pub" ]]; then
+      pub_key_file="${pub_key_file}.pub"
+    elif [[ ! -f "$pub_key_file" ]]; then
+      log warn "No public key found for $email, skipping allowed_signers entry"
+      continue
+    fi
+
+    local pub_key
+    pub_key="$(cat "$pub_key_file")"
+    local entry="${email} ${pub_key}"
+
+    # Avoid duplicates (oss and personal share the same key)
+    local is_dup=false
+    for existing in "${entries[@]+"${entries[@]}"}"; do
+      [[ "$existing" == "$entry" ]] && is_dup=true && break
+    done
+    [[ "$is_dup" == true ]] && continue
+
+    entries+=("$entry")
+  done
+
+  if [[ ${#entries[@]} -eq 0 ]]; then
+    warn "No signing keys found, skipping allowed_signers generation"
+    return 0
+  fi
+
+  printf '%s\n' "${entries[@]}" > "$allowed_signers_file"
+  chmod 644 "$allowed_signers_file"
+  log info "Generated $allowed_signers_file with ${#entries[@]} entries"
+}
+
 ### Prerequisites
 
 check_cmd jq "jq is not installed. You can install it using 'brew install jq'"
@@ -232,14 +313,21 @@ setup_git_local_main_configs "$gitconfig_data"
 log info "Configuring accounts..."
 configure_accounts "$gitconfig_data"
 
-# Optional: 1Password agent linking (only if any account has op config)
-has_any_op="$(echo "$gitconfig_data" | jq '[.accounts[] | has("op")] | any')"
-if [[ "$has_any_op" == "true" ]]; then
+log info "Generating allowed_signers file..."
+generate_allowed_signers "$gitconfig_data"
+
+# Optional: 1Password SSH agent linking
+# Disabled by default — Git auth uses HTTPS via `gh`, signing uses local pub keys.
+# To opt-in, set git.op_link_agent: true in config.yaml
+op_link_agent="$(echo "$gitconfig_data" | jq -r '.op_link_agent // false')"
+if [[ "$op_link_agent" == "true" ]]; then
   log info "Linking 1Password SSH agent files..."
   link_1password_ssh_agent_files
 
   log info "Checking 1Password SSH agent..."
   check_1password_ssh_agent
+else
+  log info "Skipping 1Password agent linking (OP_LINK_AGENT not set)"
 fi
 
 log info "Done."

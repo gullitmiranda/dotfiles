@@ -53,6 +53,9 @@
     cleanup = "!git branch --merged | grep -v '\\*\\|master\\|main\\|develop' | xargs -n 1 git branch -d"
     cleanup-remote = "!git remote prune origin"
 
+[gpg "ssh"]
+    allowedSignersFile = ~/.ssh/allowed_signers
+
 [help]
     autocorrect = 1
 

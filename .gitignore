@@ -2,3 +2,6 @@ local/*
 !local/.gitkeep
 
 config.yaml
+
+# Cursor backups (may contain secrets)
+tools/cursor/backup/

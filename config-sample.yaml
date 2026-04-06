@@ -22,7 +22,7 @@ variables:
         # All gitdirs that map to this account (creates one includeIf per entry)
         gitdirs:
           - ~/Code/Gullit/
-          - ~/Code/SSO/
+          - ~/code/oss/
         # The gitconfig file for this account (created/updated by setup)
         file: ~/Code/Gullit/.gitconfig
         config:

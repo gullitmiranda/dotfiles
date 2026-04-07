@@ -139,3 +139,5 @@ pr_body.md
 # PI (pi-claude-code) - local only, do not commit
 .pi/
 .pi-*/
+
+.factory/settings.json

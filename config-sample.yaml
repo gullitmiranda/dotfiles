@@ -50,4 +50,12 @@ variables:
         #   field: public key
         #   output: ~/.ssh/op_work_github.pub
 
+  iterm:
+    ## Sync strategy for iTerm2 preferences (local plist vs iCloud)
+    ## Options:
+    ##   newest - use whichever is more recent (default)
+    ##   local  - backup iCloud prefs and push local to iCloud
+    ##   icloud - prefer iCloud prefs if they exist
+    sync_strategy: newest
+
   # Add other variables as needed

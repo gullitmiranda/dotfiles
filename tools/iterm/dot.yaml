@@ -1,0 +1,9 @@
+darwin:
+  installs:
+    cmd: |
+      if ! brew list --cask iterm2 &>/dev/null; then
+        brew install --cask --quiet iterm2
+      fi
+
+      export ITERM_CONFIG_STRATEGY="{{ config.variables.iterm.sync_strategy }}"
+      bash {{ config.dotfiles }}/{{ name }}/setup.sh

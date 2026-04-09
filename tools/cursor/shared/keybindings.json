@@ -28,5 +28,21 @@
   {
     "key": "alt+cmd+,",
     "command": "workbench.action.openSettingsJson"
+  },
+  {
+    "key": "ctrl+cmd+j",
+    "command": "workbench.action.toggleMaximizedPanel"
+  },
+  {
+    "key": "ctrl+cmd+b",
+    "command": "workbench.action.toggleEditorWidths"
+  },
+  {
+    "key": "ctrl+shift+d",
+    "command": "editor.action.duplicateSelection"
+  },
+  {
+    "key": "ctrl+alt+e",
+    "command": "workbench.files.action.showActiveFileInExplorer"
   }
 ]

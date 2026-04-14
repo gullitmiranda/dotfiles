@@ -141,3 +141,10 @@ pr_body.md
 .pi-*/
 
 .factory/settings.json
+
+
+## Tools
+############
+
+### Trunk in single player mode
+/.trunk/

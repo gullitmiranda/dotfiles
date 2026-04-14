@@ -17,7 +17,7 @@ Profiles are defined in [`config.yaml`](../../config.yaml) under `variables.curs
 cursor:
   userSettingsLinks:
     keybindings.json: shared/keybindings.json
-    settings.json: profiles/{name}/settings.json
+    settings.json: shared/settings.json
     snippets: shared/snippets
 
   profiles:
@@ -38,8 +38,8 @@ a custom `.app` bundle and an isolated user data directory (`~/Library/.../Curso
 user data directory. The key is the filename inside `User/`, the value is the source path
 relative to `tools/cursor/`.
 
-- **`shared/`** — files symlinked identically across all profiles
-- **`profiles/{Name}/`** — files specific to each profile
+- **`shared/`** — files symlinked identically across all profiles (the default)
+- **`profiles/{Name}/`** — files specific to each profile (opt-in via override)
 
 `{name}` in source paths is replaced with the profile name at runtime.
 
@@ -48,8 +48,9 @@ A profile can override or disable individual links:
 ```yaml
 - name: Personal
   userSettingsLinks:
+    settings.json: profiles/Personal/settings.json # profile-specific settings
     keybindings.json: profiles/Personal/keybindings.json # profile-specific keybindings
-    settings.json: false # don't manage settings for this profile
+    snippets: false # don't manage snippets for this profile
 ```
 
 ### Auto-import
@@ -65,12 +66,11 @@ is created. This is how you migrate an existing Cursor installation into the dot
 ```
 tools/cursor/
   profiles/
-    Work/
-      settings.json       ← full settings for the Work profile (symlinked into user data dir)
+    Work/                 ← profile-specific overrides (when userSettingsLinks is overridden)
     Personal/
-      settings.json       ← full settings for the Personal profile
+      settings.json       ← example: Personal uses its own settings instead of shared
   shared/
-    settings.json         ← used as base when bootstrapping a new profile
+    settings.json         ← symlinked into all profiles by default
     keybindings.json      ← symlinked into all profiles
     snippets/             ← symlinked into all profiles
   bin/

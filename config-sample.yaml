@@ -64,7 +64,7 @@ variables:
     # Set a key to false in a profile's userSettingsLinks to disable that specific link.
     userSettingsLinks:
       keybindings.json: shared/keybindings.json
-      settings.json: profiles/{name}/settings.json
+      settings.json: shared/settings.json
       snippets: shared/snippets
 
     profiles:
@@ -76,7 +76,8 @@ variables:
 
       - name: Personal
         badge_color: "#CC6600"
-        # userSettingsLinks:          # Per-profile override — merges with cursor.userSettingsLinks.
-        #   settings.json: false      # false disables a specific link for this profile.
+        # userSettingsLinks:                                      # Per-profile override — merges with cursor.userSettingsLinks.
+        #   settings.json: profiles/Personal/settings.json        # use a profile-specific file instead of shared
+        #   settings.json: false                                   # false disables a specific link for this profile
 
   # Add other variables as needed

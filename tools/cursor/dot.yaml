@@ -16,6 +16,9 @@ darwin:
 
       CURSOR_DIR="{{ config.dotfiles }}/tools/cursor"
 
+      # Install cursor-sync extension
+      cursor --install-extension MarceloBarella.cursor-sync 2>/dev/null || true
+
       # Make scripts executable
       chmod +x "${CURSOR_DIR}/bin/cursor-setup"
       chmod +x "${CURSOR_DIR}/bin/cursor-profile"

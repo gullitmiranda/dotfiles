@@ -1,4 +1,14 @@
 {
+  // ── cursor-sync ────────────────────────────────────────────────────────────
+  // Backup & sync via private GitHub Gist. See tools/cursor/README.md for setup.
+  // Only syncs the default (Work) profile. GitHub token is configured separately
+  // via "Cursor Sync: Configure GitHub" in the Command Palette.
+  "cursorSync.schedule.enabled": true,
+  "cursorSync.schedule.intervalMin": 30,
+  "cursorSync.safeMode": true,
+  "cursorSync.syncExtensions.autoInstall": true,
+  "cursorSync.syncExtensions.autoUninstall": false,
+  // ──────────────────────────────────────────────────────────────────────────
   "editor.fontFamily": "JetBrains Mono, Menlo, Monaco, 'Courier New', monospace",
   "editor.fontSize": 13,
   "editor.lineHeight": 1.6,

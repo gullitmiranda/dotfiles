@@ -1,8 +1,3 @@
 #!/usr/bin/env bash
-# Launch Cursor (Personal)
-CURSOR_APP="/Applications/Cursor.app"
-CLI="$CURSOR_APP/Contents/Resources/app/out/cli.js"
-ELECTRON="$CURSOR_APP/Contents/MacOS/Cursor"
-USER_DATA_DIR="$HOME/Library/Application Support/Cursor-personal"
-
-ELECTRON_RUN_AS_NODE=1 "$ELECTRON" "$CLI" --user-data-dir "$USER_DATA_DIR" "$@"
+# cursor-personal — Open Cursor with the 'Personal' profile
+exec cursor-profile open Personal "$@"

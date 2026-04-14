@@ -5,7 +5,9 @@
   "editor.tabSize": 2,
   "editor.insertSpaces": true,
   "editor.formatOnSave": true,
-  "editor.rulers": [100],
+  "editor.rulers": [
+    100
+  ],
   "editor.minimap.enabled": false,
   "editor.wordWrap": "off",
   "editor.cursorBlinking": "smooth",
@@ -14,7 +16,6 @@
   "editor.guides.bracketPairs": true,
   "files.trimTrailingWhitespace": true,
   "files.insertFinalNewline": true,
-  "files.autoSave": "onFocusChange",
   "terminal.integrated.fontFamily": "JetBrains Mono, MesloLGS NF, monospace",
   "terminal.integrated.fontSize": 13,
   "workbench.startupEditor": "none",
@@ -22,5 +23,66 @@
   "explorer.confirmDelete": false,
   "explorer.confirmDragAndDrop": false,
   "git.autofetch": true,
-  "git.confirmSync": false
+  "git.confirmSync": false,
+  // "window.title": "Cursor [Work] ${separator} ${activeEditorShort}${separator}${rootName}",
+  "git.defaultCloneDirectory": "~/code/",
+  "cursor.cpp.enablePartialAccepts": true,
+  "cursor.composer.usageSummaryDisplay": "always",
+  "application.shellEnvironmentResolutionTimeout": 20,
+  "cursor.cpp.disabledLanguages": [],
+  "workbench.activityBar.orientation": "vertical",
+  "workbench.colorTheme": "Catppuccin Frappé",
+  "terminal.integrated.scrollback": 10000,
+  "files.exclude": {
+    "**/.trunk/*actions/": true,
+    "**/.trunk/*logs/": true,
+    "**/.trunk/*notifications/": true,
+    "**/.trunk/*out/": true,
+    "**/.trunk/*plugins/": true
+  },
+  "files.watcherExclude": {
+    "*.hcl": true,
+    "**/.trunk/*actions/": true,
+    "**/.trunk/*logs/": true,
+    "**/.trunk/*notifications/": true,
+    "**/.trunk/*out/": true,
+    "**/.trunk/*plugins/": true
+  },
+  "editor.defaultFormatter": "trunk.io",
+  "redhat.telemetry.enabled": false,
+  "files.associations": {
+    "keybindings.json": "jsonc",
+    "keybindings.*.json": "jsonc",
+    "settings.json": "jsonc",
+    "settings.*.json": "jsonc",
+    "**/templates/**/*.yaml": "helm",
+    "**/templates/**/*.tpl": "helm",
+    ".prettierignore": "ignore",
+    ".eslintignore": "ignore",
+    ".npmignore": "ignore"
+  },
+  "[helm]": {
+    "editor.formatOnSave": false
+  },
+  "editor.formatOnSaveMode": "modificationsIfAvailable",
+  "extensions.autoUpdate": "onlyEnabledExtensions",
+  "trunk.autoInit": false,
+  "git.openRepositoryInParentFolders": "never",
+  "gitlens.views.scm.grouped.hiddenViews": {
+    "commits": false,
+    "worktrees": true,
+    "branches": false,
+    "remotes": false,
+    "stashes": false,
+    "tags": false,
+    "contributors": false,
+    "repositories": true,
+    "fileHistory": false,
+    "launchpad": false,
+    "searchAndCompare": false
+  },
+  "vs-kubernetes": {
+    "vs-kubernetes.crd-code-completion": "disabled"
+  },
+  "terraform.languageServer.enable": true
 }

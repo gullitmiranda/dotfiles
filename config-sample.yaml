@@ -58,4 +58,26 @@ variables:
     ##   icloud - prefer iCloud prefs if they exist
     sync_strategy: newest
 
+  cursor:
+    # Default symlinks applied to all profiles (target: source, relative to tools/cursor/).
+    # {name} is replaced with the profile name at runtime.
+    # Set a key to false in a profile's userSettingsLinks to disable that specific link.
+    userSettingsLinks:
+      keybindings.json: shared/keybindings.json
+      settings.json: shared/settings.json
+      snippets: shared/snippets
+
+    profiles:
+      - name: Work
+        default: true # Uses native Cursor.app (~/Library/.../Cursor). Only one profile can be default.
+        badge_color: "#0066CC" # Badge color on the .app icon. Omit for a deterministic color derived from the name.
+        # display_name: Work   # Override display name in .app bundle title. Defaults to name as-is.
+        # user_data_dir: ~/Library/Application Support/CursorWork  # Override data dir. Defaults to Cursor{Name}.
+
+      - name: Personal
+        badge_color: "#CC6600"
+        # userSettingsLinks:                                      # Per-profile override — merges with cursor.userSettingsLinks.
+        #   settings.json: profiles/Personal/settings.json        # use a profile-specific file instead of shared
+        #   settings.json: false                                   # false disables a specific link for this profile
+
   # Add other variables as needed

@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-# Launch Cursor (Work)
-CURSOR_APP="/Applications/Cursor.app"
-CLI="$CURSOR_APP/Contents/Resources/app/out/cli.js"
-ELECTRON="$CURSOR_APP/Contents/MacOS/Cursor"
-USER_DATA_DIR="$HOME/Library/Application Support/Cursor-work"
-
-ELECTRON_RUN_AS_NODE=1 "$ELECTRON" "$CLI" --user-data-dir "$USER_DATA_DIR" "$@"

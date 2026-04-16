@@ -1,6 +1,9 @@
 enable=all
 source-path=SCRIPTDIR
 disable=SC2154,SC2148
+# SC2310: functions used as boolean checks in if/&&/|| conditions is intentional
+# SC2312: command substitutions masking return values is handled explicitly
+disable=SC2310,SC2312
 
 # If you're having issues with shellcheck following source, disable the errors via:
 # disable=SC1090

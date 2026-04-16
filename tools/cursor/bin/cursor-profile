@@ -1,0 +1,712 @@
+#!/usr/bin/env bash
+# cursor-profile — Manage Cursor editor profiles
+#
+# Usage: cursor-profile <subcommand> [args]
+#
+# Subcommands:
+#   list                                     List all configured profiles
+#   setup   [<name>|--all] [--force]         Create .app bundles + symlinks (idempotent)
+#   bootstrap [<name>|--all] [--force]       Merge shared+profile settings.json, then symlink
+#   add     <name> [--default] [--color=<hex>]
+#   rm      <name> [--keep-data]             Remove profile
+#   open    <name> [cursor args...]          Open Cursor with profile
+
+set -euo pipefail
+
+# ── macOS guard ────────────────────────────────────────────────────────────────
+_os=$(uname)
+if [[ ${_os} != "Darwin" ]]; then
+	echo "cursor-profile is macOS-only, skipping."
+	exit 0
+fi
+
+# ── Paths ──────────────────────────────────────────────────────────────────────
+CURSOR_APP="/Applications/Cursor.app"
+
+# Resolve the real script location, following symlinks.
+# Needed so paths stay correct when called via ~/.local/bin symlinks.
+_resolve_script_dir() {
+	local src="${BASH_SOURCE[0]}"
+	local dir
+	while [[ -L ${src} ]]; do
+		dir="$(cd -P "$(dirname "${src}")" && pwd)"
+		src="$(readlink "${src}")"
+		[[ ${src} != /* ]] && src="${dir}/${src}"
+	done
+	cd -P "$(dirname "${src}")" && pwd
+}
+SCRIPT_DIR="$(_resolve_script_dir)"
+CURSOR_TOOL_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
+PROFILES_DIR="${CURSOR_TOOL_DIR}/profiles"
+SHARED_DIR="${CURSOR_TOOL_DIR}/shared"
+DOTFILES_DIR="$(cd "${CURSOR_TOOL_DIR}/../.." && pwd)"
+CONFIG_FILE="${DOTFILES_DIR}/config.yaml"
+APP_SUPPORT_DIR="${HOME}/Library/Application Support"
+
+# ── Colors ─────────────────────────────────────────────────────────────────────
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+CYAN='\033[0;36m'
+BOLD='\033[1m'
+RESET='\033[0m'
+
+log() { echo -e "${BLUE}[cursor-profile]${RESET} $*"; }
+ok() { echo -e "${GREEN}[cursor-profile]${RESET} $*"; }
+warn() { echo -e "${YELLOW}[cursor-profile]${RESET} $*"; }
+err() { echo -e "${RED}[cursor-profile]${RESET} $*" >&2; }
+die() {
+	err "$*"
+	exit 1
+}
+step() { echo -e "${CYAN}${BOLD}━━━ $* ━━━${RESET}"; }
+
+# ── Guards ─────────────────────────────────────────────────────────────────────
+_require_cursor_app() {
+	[[ -d ${CURSOR_APP} ]] || die "Cursor.app not found at ${CURSOR_APP}. Install: brew install --cask cursor"
+}
+
+_require_yq() {
+	command -v yq >/dev/null 2>&1 || die "'yq' is required but not found. Install: brew install yq"
+}
+
+_require_jq() {
+	command -v jq >/dev/null 2>&1 || die "'jq' is required but not found. Install: brew install jq"
+}
+
+# ── Config helpers ─────────────────────────────────────────────────────────────
+
+# List all profile names from config.yaml
+_profile_names() {
+	yq '.variables.cursor.profiles[].name' "${CONFIG_FILE}"
+}
+
+# Get a specific field from a profile entry. Returns default if missing/null.
+_profile_field() {
+	local name="$1" field="$2" default="${3-}"
+	local val
+	val=$(yq ".variables.cursor.profiles[] | select(.name == \"${name}\") | .${field}" "${CONFIG_FILE}" 2>/dev/null)
+	if [[ -z ${val} ]] || [[ ${val} == "null" ]]; then
+		echo "${default}"
+	else
+		echo "${val}"
+	fi
+}
+
+# Returns 0 (true) if the profile has default: true
+_profile_is_default() {
+	local name="$1"
+	local val
+	val=$(yq ".variables.cursor.profiles[] | select(.name == \"${name}\") | .default" "${CONFIG_FILE}" 2>/dev/null)
+	[[ ${val} == "true" ]]
+}
+
+# Returns 0 (true) if the profile exists in config.yaml
+_profile_exists() {
+	local name="$1"
+	local found
+	found=$(yq ".variables.cursor.profiles[] | select(.name == \"${name}\") | .name" "${CONFIG_FILE}" 2>/dev/null)
+	[[ -n ${found} ]] && [[ ${found} != "null" ]]
+}
+
+# Lowercase slug — used for launcher command names (Work → cursor-work)
+_profile_slug() {
+	local name="$1"
+	echo "${name,,}"
+}
+
+# Resolves the user-data-dir for a profile:
+#   custom user_data_dir if set in config
+#   ~/Library/.../Cursor            if default: true  (native Cursor dir)
+#   ~/Library/.../Cursor{Name}      otherwise (e.g. CursorPersonal — no hyphen)
+_profile_user_data_dir() {
+	local name="$1"
+	local custom
+	custom=$(_profile_field "${name}" "user_data_dir")
+	if [[ -n ${custom} ]]; then
+		echo "${custom/#\~/${HOME}}"
+	elif _profile_is_default "${name}"; then
+		echo "${APP_SUPPORT_DIR}/Cursor"
+	else
+		echo "${APP_SUPPORT_DIR}/Cursor${name}"
+	fi
+}
+
+# Resolves the .app bundle path.
+# Default profile → native Cursor.app (no custom bundle created).
+_profile_app_path() {
+	local name="$1"
+	if _profile_is_default "${name}"; then
+		echo "${CURSOR_APP}"
+	else
+		echo "/Applications/Cursor${name}.app"
+	fi
+}
+
+# Badge color from config, or a deterministic color derived from the name.
+_profile_badge_color() {
+	local name="$1"
+	local color
+	color=$(_profile_field "${name}" "badge_color")
+	if [[ -n ${color} ]]; then
+		echo "${color}"
+	else
+		python3 -c "import hashlib; h=hashlib.md5('${name}'.encode()).hexdigest()[:6]; print(f'#{h.upper()}')"
+	fi
+}
+
+# Reads cursor.userSettingsLinks (global defaults) and merges with the profile's
+# own userSettingsLinks (if any). Profile keys override global ones; a value of
+# "false" removes that link entirely.
+# {name} in source paths is replaced with the profile name at runtime.
+# Outputs tab-separated pairs:  target<TAB>source
+_get_effective_links() {
+	local name="$1"
+	_require_jq
+
+	declare -A links
+
+	# Global defaults from cursor.userSettingsLinks
+	local global_json
+	global_json=$(yq -o=json '.variables.cursor.userSettingsLinks // {}' "${CONFIG_FILE}" 2>/dev/null) || global_json='{}'
+	if [[ ${global_json} != "null" ]] && [[ ${global_json} != "{}" ]]; then
+		while IFS=$'\t' read -r key val; do
+			[[ -n ${key} ]] && links["${key}"]="${val}"
+		done < <(echo "${global_json}" | jq -r 'to_entries[] | "\(.key)\t\(.value)"')
+	fi
+
+	# Per-profile overrides — merge on top of global (false removes an entry)
+	local profile_json
+	profile_json=$(yq -o=json ".variables.cursor.profiles[] | select(.name == \"${name}\") | .userSettingsLinks // {}" "${CONFIG_FILE}" 2>/dev/null) || profile_json='{}'
+	if [[ ${profile_json} != "null" ]] && [[ ${profile_json} != "{}" ]]; then
+		while IFS=$'\t' read -r key val; do
+			[[ -z ${key} ]] && continue
+			if [[ ${val} == "false" ]]; then
+				unset "links[${key}]"
+			else
+				links["${key}"]="${val}"
+			fi
+		done < <(echo "${profile_json}" | jq -r 'to_entries[] | "\(.key)\t\(.value | tostring)"')
+	fi
+
+	# Output with {name} resolved
+	for key in "${!links[@]}"; do
+		local source="${links[${key}]}"
+		source="${source//\{name\}/${name}}"
+		printf '%s\t%s\n' "${key}" "${source}"
+	done
+}
+
+# ── Icon generation ────────────────────────────────────────────────────────────
+_find_cursor_icns() {
+	for iname in Cursor AppIcon; do
+		local path="${CURSOR_APP}/Contents/Resources/${iname}.icns"
+		[[ -f ${path} ]] && echo "${path}" && return 0
+	done
+	return 1
+}
+
+_generate_icon() {
+	local profile="$1"
+	local output_icns="$2"
+	local tint_color="$3"
+
+	local source_icns
+	source_icns=$(_find_cursor_icns) || {
+		warn "Cannot find Cursor icon — skipping icon generation for '${profile}'"
+		return 1
+	}
+
+	local tmpdir
+	tmpdir=$(mktemp -d)
+	# shellcheck disable=SC2064
+	trap "rm -rf ${tmpdir}" RETURN
+
+	log "Generating icon for '${profile}'..."
+
+	if ! iconutil -c iconset -o "${tmpdir}/icon.iconset" "${source_icns}" 2>/dev/null; then
+		warn "iconutil failed — skipping icon for '${profile}'"
+		return 1
+	fi
+
+	if python3 -c "from PIL import Image" 2>/dev/null; then
+		for png in "${tmpdir}"/icon.iconset/*.png; do
+			[[ -f ${png} ]] || continue
+			python3 "${SCRIPT_DIR}/generate-icon.py" "${png}" "${tint_color}"
+		done
+	else
+		warn "Pillow not installed — icon will use default Cursor icon without badge"
+	fi
+
+	iconutil -c icns -o "${output_icns}" "${tmpdir}/icon.iconset" 2>/dev/null
+	ok "Icon generated: ${output_icns}"
+}
+
+# ── App bundle ─────────────────────────────────────────────────────────────────
+_create_app_bundle() {
+	local name="$1"
+	local force="${2:-false}"
+
+	# Default profile uses the native Cursor.app — no custom bundle needed.
+	if _profile_is_default "${name}"; then
+		log "Profile '${name}' is default — using native ${CURSOR_APP}"
+		return 0
+	fi
+
+	local app_path
+	app_path=$(_profile_app_path "${name}")
+
+	if [[ -d ${app_path} ]] && [[ ${force} != "true" ]]; then
+		warn "${app_path} already exists (use --force to recreate)"
+		return 0
+	fi
+
+	local app_name="Cursor${name}"
+	local bundle_id="com.cursor.${name,,}"
+	local user_data_dir badge_color
+	user_data_dir=$(_profile_user_data_dir "${name}")
+	badge_color=$(_profile_badge_color "${name}")
+
+	log "Creating ${app_path}..."
+	mkdir -p "${app_path}/Contents/MacOS"
+	mkdir -p "${app_path}/Contents/Resources"
+
+	# Icon with colored badge
+	local icon_path="${app_path}/Contents/Resources/AppIcon.icns"
+	_generate_icon "${name}" "${icon_path}" "${badge_color}" || {
+		local src
+		src=$(_find_cursor_icns) && cp "${src}" "${icon_path}" 2>/dev/null || true
+	}
+
+	# Info.plist
+	cat >"${app_path}/Contents/Info.plist" <<PLIST
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleExecutable</key>
+    <string>${app_name}</string>
+    <key>CFBundleIdentifier</key>
+    <string>${bundle_id}</string>
+    <key>CFBundleName</key>
+    <string>${app_name}</string>
+    <key>CFBundleDisplayName</key>
+    <string>Cursor (${name})</string>
+    <key>CFBundleVersion</key>
+    <string>1.0</string>
+    <key>CFBundleIconFile</key>
+    <string>AppIcon</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>LSMinimumSystemVersion</key>
+    <string>10.15</string>
+</dict>
+</plist>
+PLIST
+
+	# Launcher script
+	cat >"${app_path}/Contents/MacOS/${app_name}" <<LAUNCHER
+#!/usr/bin/env bash
+exec "${CURSOR_APP}/Contents/MacOS/Cursor" --user-data-dir "${user_data_dir}" "\$@"
+LAUNCHER
+	chmod +x "${app_path}/Contents/MacOS/${app_name}"
+
+	ok "Created ${app_path}"
+}
+
+# ── Symlink helpers ────────────────────────────────────────────────────────────
+_symlink() {
+	local source="$1" target="$2" force="${3:-false}"
+
+	if [[ ! -e ${source} ]]; then
+		warn "Source not found: ${source} — skipping"
+		return 0
+	fi
+
+	if [[ -L ${target} ]]; then
+		rm "${target}"
+	elif [[ -e ${target} ]]; then
+		if [[ ${force} == "true" ]]; then
+			rm -rf "${target}"
+		else
+			warn "${target} exists and is not a symlink (use --force to overwrite)"
+			return 0
+		fi
+	fi
+
+	mkdir -p "$(dirname "${target}")"
+	ln -s "${source}" "${target}"
+	ok "Linked $(basename "${target}") → ${source}"
+}
+
+# Sets up all symlinks for a profile's user-data-dir/User/ using the effective
+# links resolved from config (global defaults merged with profile overrides).
+#
+# Auto-import: if the dotfiles source file doesn't exist yet but a real
+# (non-symlink) file is present at the target location, it is imported into
+# dotfiles automatically before the symlink is created.
+_setup_symlinks() {
+	local name="$1"
+	local force="${2:-false}"
+	local user_dir
+	user_dir="$(_profile_user_data_dir "${name}")/User"
+
+	mkdir -p "${user_dir}"
+
+	while IFS=$'\t' read -r target source; do
+		[[ -z ${target} ]] && continue
+		local abs_source="${CURSOR_TOOL_DIR}/${source}"
+		local abs_target="${user_dir}/${target}"
+
+		# Auto-import: source missing in dotfiles, real file exists in user-data-dir
+		if [[ ! -e ${abs_source} ]] && [[ -f ${abs_target} ]] && [[ ! -L ${abs_target} ]]; then
+			log "Auto-importing ${target} from user data into dotfiles..."
+			mkdir -p "$(dirname "${abs_source}")"
+			cp "${abs_target}" "${abs_source}"
+			ok "Imported: ${abs_source}"
+		fi
+
+		_symlink "${abs_source}" "${abs_target}" "${force}"
+	done < <(_get_effective_links "${name}")
+}
+
+# ── Launcher script ────────────────────────────────────────────────────────────
+# Generates ~/.local/bin/cursor-<slug> as a thin wrapper around cursor-profile open.
+# Slug is the lowercase version of the profile name (Work → cursor-work).
+_generate_launcher() {
+	local name="$1"
+	local slug
+	slug=$(_profile_slug "${name}")
+	local launcher="${HOME}/.local/bin/cursor-${slug}"
+
+	mkdir -p "${HOME}/.local/bin"
+	cat >"${launcher}" <<SCRIPT
+#!/usr/bin/env bash
+# cursor-${slug} — Open Cursor with the '${name}' profile
+exec cursor-profile open ${name} "\$@"
+SCRIPT
+	chmod +x "${launcher}"
+	ok "Launcher: ${launcher}"
+}
+
+# ── Bootstrap settings ─────────────────────────────────────────────────────────
+# Merges shared/settings.json (base) with profiles/<name>/settings.json (wins)
+# and writes the result back to profiles/<name>/settings.json.
+#
+# First run:         shared + {}           → full settings seeded from shared
+# Re-run (--force):  shared + current file → adds new shared keys, keeps everything else
+_bootstrap_settings() {
+	local name="$1"
+	local force="${2:-false}"
+	_require_jq
+
+	local profile_dir="${PROFILES_DIR}/${name}"
+	local target="${profile_dir}/settings.json"
+	local shared="${SHARED_DIR}/settings.json"
+
+	mkdir -p "${profile_dir}"
+
+	if [[ -f ${target} ]] && [[ ${force} != "true" ]]; then
+		warn "settings.json already exists for '${name}' — skipping (use --force to re-bootstrap)"
+		return 0
+	fi
+
+	if [[ ! -f ${shared} ]]; then
+		warn "shared/settings.json not found — creating empty settings for '${name}'"
+		echo "{}" >"${target}"
+		ok "Created empty settings: ${target}"
+		return 0
+	fi
+
+	if [[ -f ${target} ]]; then
+		log "Re-bootstrapping '${name}': shared (base) + current settings (wins)..."
+		jq -s '.[0] * .[1]' "${shared}" "${target}" >"${target}.tmp" && mv "${target}.tmp" "${target}"
+	else
+		log "Bootstrapping '${name}': shared (base) + empty profile..."
+		jq -s '.[0] * .[1]' "${shared}" <(echo "{}") >"${target}"
+	fi
+
+	ok "Settings bootstrapped: ${target}"
+}
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Subcommands
+# ══════════════════════════════════════════════════════════════════════════════
+
+cmd_list() {
+	_require_yq
+
+	# shellcheck disable=SC2059
+	printf "${BOLD}%-16s %-9s %-12s %s${RESET}\n" "NAME" "DEFAULT" "COLOR" "USER DATA DIR"
+	printf '%0.s─' {1..75}
+	echo
+
+	while IFS= read -r name; do
+		local is_default_label color user_data_dir suffix
+		if _profile_is_default "${name}"; then
+			is_default_label="yes"
+		else
+			is_default_label="no"
+		fi
+		color=$(_profile_badge_color "${name}")
+		user_data_dir=$(_profile_user_data_dir "${name}")
+		suffix=""
+		[[ -d ${user_data_dir} ]] || suffix=" (missing)"
+		printf "%-16s %-9s %-12s %s\n" \
+			"${name}" "${is_default_label}" "${color}" "${user_data_dir}${suffix}"
+	done < <(_profile_names)
+}
+
+cmd_setup() {
+	_require_cursor_app
+	_require_yq
+
+	local force=false
+	local targets=()
+
+	while [[ $# -gt 0 ]]; do
+		case "$1" in
+		--force) force=true ;;
+		--all) mapfile -t targets < <(_profile_names) ;;
+		-*) die "Unknown option: $1" ;;
+		*) targets+=("$1") ;;
+		esac
+		shift
+	done
+
+	[[ ${#targets[@]} -eq 0 ]] && mapfile -t targets < <(_profile_names)
+
+	for name in "${targets[@]}"; do
+		_profile_exists "${name}" || die "Profile '${name}' not found in config.yaml"
+		step "Setup: ${name}"
+		_create_app_bundle "${name}" "${force}"
+		_setup_symlinks "${name}" "${force}"
+		_generate_launcher "${name}"
+		echo
+	done
+
+	ok "Done."
+}
+
+cmd_bootstrap() {
+	_require_yq
+
+	local force=false
+	local targets=()
+
+	while [[ $# -gt 0 ]]; do
+		case "$1" in
+		--force) force=true ;;
+		--all) mapfile -t targets < <(_profile_names) ;;
+		-*) die "Unknown option: $1" ;;
+		*) targets+=("$1") ;;
+		esac
+		shift
+	done
+
+	[[ ${#targets[@]} -eq 0 ]] && die "Usage: cursor-profile bootstrap <name>|--all [--force]"
+
+	for name in "${targets[@]}"; do
+		_profile_exists "${name}" || die "Profile '${name}' not found in config.yaml"
+		step "Bootstrap: ${name}"
+
+		_bootstrap_settings "${name}" "${force}"
+
+		# Recreate the settings symlink pointing to the (re)generated file
+		local user_dir
+		user_dir="$(_profile_user_data_dir "${name}")/User"
+		mkdir -p "${user_dir}"
+		_symlink "${PROFILES_DIR}/${name}/settings.json" "${user_dir}/settings.json" "true"
+		echo
+	done
+}
+
+cmd_add() {
+	_require_yq
+	_require_jq
+
+	local name=""
+	local is_default=false
+	local badge_color=""
+
+	while [[ $# -gt 0 ]]; do
+		case "$1" in
+		--default) is_default=true ;;
+		--color=*) badge_color="${1#--color=}" ;;
+		-*) die "Unknown option: $1" ;;
+		*)
+			if [[ -z ${name} ]]; then
+				name="$1"
+			else
+				die "Unexpected argument: $1"
+			fi
+			;;
+		esac
+		shift
+	done
+
+	[[ -z ${name} ]] && die "Usage: cursor-profile add <name> [--default] [--color=#hex]"
+	_profile_exists "${name}" && die "Profile '${name}' already exists in config.yaml"
+
+	# If marking as default, unset the current default first
+	if [[ ${is_default} == "true" ]]; then
+		local current_default
+		current_default=$(yq '.variables.cursor.profiles[] | select(.default == true) | .name' "${CONFIG_FILE}" 2>/dev/null || true)
+		if [[ -n ${current_default} ]] && [[ ${current_default} != "null" ]]; then
+			warn "Removing default flag from '${current_default}'"
+			yq -i "del(.variables.cursor.profiles[] | select(.name == \"${current_default}\") | .default)" "${CONFIG_FILE}"
+		fi
+	fi
+
+	# Build entry with jq, add to config.yaml with yq
+	local entry="{}"
+	entry=$(echo "${entry}" | jq --arg n "${name}" '. + {name: $n}')
+	[[ ${is_default} == "true" ]] && entry=$(echo "${entry}" | jq '. + {default: true}')
+	[[ -n ${badge_color} ]] && entry=$(echo "${entry}" | jq --arg c "${badge_color}" '. + {badge_color: $c}')
+
+	yq -i ".variables.cursor.profiles += [${entry}]" "${CONFIG_FILE}"
+
+	mkdir -p "${PROFILES_DIR}/${name}"
+
+	ok "Profile '${name}' added to config.yaml"
+	echo
+	log "Next steps:"
+	log "  1. Add any profile-specific settings to ${PROFILES_DIR}/${name}/settings.json"
+	log "  2. Run: cursor-profile setup ${name}"
+}
+
+cmd_rm() {
+	_require_yq
+
+	local name=""
+	local keep_data=false
+
+	while [[ $# -gt 0 ]]; do
+		case "$1" in
+		--keep-data) keep_data=true ;;
+		-*) die "Unknown option: $1" ;;
+		*)
+			if [[ -z ${name} ]]; then
+				name="$1"
+			else
+				die "Unexpected argument: $1"
+			fi
+			;;
+		esac
+		shift
+	done
+
+	[[ -z ${name} ]] && die "Usage: cursor-profile rm <name> [--keep-data]"
+	_profile_exists "${name}" || die "Profile '${name}' not found in config.yaml"
+
+	local app_path launcher user_data_dir profile_dir slug
+	app_path=$(_profile_app_path "${name}")
+	slug=$(_profile_slug "${name}")
+	launcher="${HOME}/.local/bin/cursor-${slug}"
+	user_data_dir=$(_profile_user_data_dir "${name}")
+	profile_dir="${PROFILES_DIR}/${name}"
+
+	warn "This will remove:"
+	! _profile_is_default "${name}" && [[ -d ${app_path} ]] && echo "  - App bundle:  ${app_path}"
+	[[ -f ${launcher} ]] && echo "  - Launcher:    ${launcher}"
+	[[ -d ${profile_dir} ]] && echo "  - Profile dir: ${profile_dir}"
+	[[ ${keep_data} == "false" ]] && [[ -d ${user_data_dir} ]] && echo "  - User data:   ${user_data_dir}"
+	echo "  - config.yaml entry for '${name}'"
+	echo
+
+	read -r -p "Continue? [y/N] " confirm
+	[[ ${confirm,,} == "y" ]] || {
+		log "Aborted."
+		return 0
+	}
+
+	# Remove .app bundle (skip for default — it's the native Cursor.app)
+	if ! _profile_is_default "${name}" && [[ -d ${app_path} ]]; then
+		rm -rf "${app_path}"
+		ok "Removed ${app_path}"
+	fi
+
+	[[ -f ${launcher} ]] && rm "${launcher}" && ok "Removed ${launcher}"
+	[[ -d ${profile_dir} ]] && rm -rf "${profile_dir}" && ok "Removed ${profile_dir}"
+
+	if [[ ${keep_data} == "false" ]] && [[ -d ${user_data_dir} ]]; then
+		echo
+		read -r -p "Also delete user data at ${user_data_dir}? This is irreversible. [y/N] " confirm_data
+		if [[ ${confirm_data,,} == "y" ]]; then
+			rm -rf "${user_data_dir}"
+			ok "Removed ${user_data_dir}"
+		else
+			log "User data kept at ${user_data_dir}"
+		fi
+	fi
+
+	yq -i "del(.variables.cursor.profiles[] | select(.name == \"${name}\"))" "${CONFIG_FILE}"
+	ok "Profile '${name}' removed from config.yaml"
+}
+
+cmd_open() {
+	_require_cursor_app
+
+	local name="${1-}"
+	[[ -z ${name} ]] && die "Usage: cursor-profile open <name> [cursor args...]"
+	shift || true
+
+	_require_yq
+	_profile_exists "${name}" || die "Profile '${name}' not found in config.yaml"
+
+	local user_data_dir cli electron
+	user_data_dir=$(_profile_user_data_dir "${name}")
+	cli="${CURSOR_APP}/Contents/Resources/app/out/cli.js"
+	electron="${CURSOR_APP}/Contents/MacOS/Cursor"
+
+	[[ -f ${cli} ]] || die "Cursor CLI not found at ${cli}"
+	[[ -f ${electron} ]] || die "Cursor binary not found at ${electron}"
+
+	ELECTRON_RUN_AS_NODE=1 "${electron}" "${cli}" --user-data-dir "${user_data_dir}" "$@"
+}
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Usage / Main
+# ══════════════════════════════════════════════════════════════════════════════
+
+usage() {
+	cat <<EOF
+${BOLD}Usage:${RESET} cursor-profile <subcommand> [args]
+
+${BOLD}Subcommands:${RESET}
+  list                                     List all configured profiles
+  setup   [<name>|--all] [--force]         Create .app bundles + symlinks (idempotent)
+  bootstrap [<name>|--all] [--force]       Merge shared+profile settings, then symlink
+  add     <name> [options]                 Add a new profile
+    --default                                Make this the default (uses native Cursor.app)
+    --color=<hex>                            Badge color (default: deterministic from name)
+  rm      <name> [--keep-data]             Remove profile (prompts before deleting user data)
+  open    <name> [cursor args...]          Open Cursor with profile
+
+${BOLD}Profile config${RESET} — config.yaml → variables.cursor.profiles
+${BOLD}Link defaults${RESET}  — config.yaml → variables.cursor.userSettingsLinks
+${BOLD}Profile files${RESET}  — tools/cursor/profiles/<name>/
+EOF
+	exit 1
+}
+
+[[ $# -eq 0 ]] && usage
+
+subcmd="$1"
+shift
+
+case "${subcmd}" in
+list) cmd_list "$@" ;;
+setup) cmd_setup "$@" ;;
+bootstrap) cmd_bootstrap "$@" ;;
+add) cmd_add "$@" ;;
+rm) cmd_rm "$@" ;;
+open) cmd_open "$@" ;;
+help | --help | -h) usage ;;
+*)
+	err "Unknown subcommand: '${subcmd}'"
+	echo
+	usage
+	;;
+esac

@@ -6,19 +6,28 @@ darwin:
         brew install --cask --quiet cursor
       fi
 
+      # yq is needed for YAML processing in cursor-profile
+      if ! command -v yq >/dev/null 2>&1; then
+        brew install --quiet yq
+      fi
+
       # Pillow is needed for icon badge generation
       python3 -m pip install --quiet Pillow 2>/dev/null || true
 
       CURSOR_DIR="{{ config.dotfiles }}/tools/cursor"
 
+      # Install cursor-sync extension
+      cursor --install-extension MarceloBarella.cursor-sync 2>/dev/null || true
+
       # Make scripts executable
       chmod +x "${CURSOR_DIR}/bin/cursor-setup"
-      chmod +x "${CURSOR_DIR}/bin/cursor-work"
-      chmod +x "${CURSOR_DIR}/bin/cursor-personal"
+      chmod +x "${CURSOR_DIR}/bin/cursor-profile"
 
-      # Run setup (creates .app bundles, user-data-dirs, symlinks shared config)
+      # Run setup (creates .app bundles, symlinks config, generates per-profile launchers)
       "${CURSOR_DIR}/bin/cursor-setup"
 
   links:
-    bin/cursor-work: ~/.local/bin/cursor-work
-    bin/cursor-personal: ~/.local/bin/cursor-personal
+    # Per-profile launchers (e.g. cursor-work, cursor-personal) are generated
+    # dynamically by cursor-profile setup — not linked from dotfiles.
+    bin/cursor-setup: ~/.local/bin/cursor-setup
+    bin/cursor-profile: ~/.local/bin/cursor-profile

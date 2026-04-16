@@ -1,0 +1,4 @@
+# Cursor profile and shared settings are managed/symlinked files
+# that should not be reformatted by prettier.
+tools/cursor/shared/
+tools/cursor/profiles/

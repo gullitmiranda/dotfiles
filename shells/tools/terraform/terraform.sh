@@ -1,6 +1,6 @@
-# Terraform/OpenTofu aliases with optional logging
-# Usage: tfu plan --log    -> logs to ./logs/tofu-plan-YYYY-MM-DD-HHMMSS.log
-#        tf apply --log    -> logs to ./logs/terraform-apply-YYYY-MM-DD-HHMMSS.log
+# OpenTofu aliases with optional logging
+# tf* aliases point to OpenTofu; use `terraform` directly for the official binary
+# Usage: tf plan --log    -> logs to ./logs/tofu-plan-YYYY-MM-DD-HHMMSS.log
 
 # Helper function to run command with optional logging
 _tf_run() {
@@ -32,16 +32,16 @@ _tf_run() {
 	fi
 }
 
+# tf* aliases -> OpenTofu
+tf() { tofu "$@"; }
+tfplan() { _tf_run tofu plan "$@"; }
+tfapply() { _tf_run tofu apply "$@"; }
+tfinit() { _tf_run tofu init "$@"; }
+tfdestroy() { _tf_run tofu destroy "$@"; }
+
 # OpenTofu aliases
 tfu() { tofu "$@"; }
 tfuplan() { _tf_run tofu plan "$@"; }
 tfuapply() { _tf_run tofu apply "$@"; }
 tfuinit() { _tf_run tofu init "$@"; }
 tfudestroy() { _tf_run tofu destroy "$@"; }
-
-# Terraform aliases
-tf() { terraform "$@"; }
-tfplan() { _tf_run terraform plan "$@"; }
-tfapply() { _tf_run terraform apply "$@"; }
-tfinit() { _tf_run terraform init "$@"; }
-tfdestroy() { _tf_run terraform destroy "$@"; }

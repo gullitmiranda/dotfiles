@@ -9,6 +9,7 @@ opentofu = "latest"
 oras = "latest"
 python = "3.12"
 terraform = "latest"
+uv = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = ["python", "go"]

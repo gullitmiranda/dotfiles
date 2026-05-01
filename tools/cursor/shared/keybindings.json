@@ -44,5 +44,22 @@
   {
     "key": "ctrl+alt+e",
     "command": "workbench.files.action.showActiveFileInExplorer"
+  },
+  {
+    "key": "ctrl+shift+o",
+    "command": "workbench.action.openRecent"
+  },
+  {
+    "key": "shift+cmd+l",
+    "command": "-aichat.newchataction"
+  },
+  {
+    "key": "ctrl+shift+l",
+    "command": "aichat.newchataction"
+  },
+  {
+    "key": "shift+cmd+l",
+    "command": "editor.action.selectHighlights",
+    "when": "editorFocus"
   }
 ]

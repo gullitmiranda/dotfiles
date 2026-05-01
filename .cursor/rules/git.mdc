@@ -6,7 +6,7 @@ alwaysApply: true
 
 # Git Rules
 
-- Never commit to the main/master branch unless explicitly requested
+- This is a personal repo — direct commits to `main` are allowed for small, punctual changes; create a branch only for larger multi-step work
 - Always use [Conventional Commits](https://www.conventionalcommits.org/) style
 - When moving files, prefer `git mv` over `mv` whenever possible
 - Only use `git push --force-with-lease` instead of `--force`

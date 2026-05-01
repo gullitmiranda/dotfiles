@@ -69,7 +69,8 @@
     "**/templates/**/*.tpl": "helm",
     ".prettierignore": "ignore",
     ".eslintignore": "ignore",
-    ".npmignore": "ignore"
+    ".npmignore": "ignore",
+    "*.hcl": "terragrunt"
   },
   "[helm]": {
     "editor.formatOnSave": false
@@ -94,5 +95,11 @@
   "vs-kubernetes": {
     "vs-kubernetes.crd-code-completion": "disabled"
   },
-  "terraform.languageServer.enable": true
+  "terraform.languageServer.enable": true,
+  "window.openFoldersInNewWindow": "on",
+  "projectManager.git.baseFolders": [
+    "~/code/"
+  ],
+  "terminal.external.osxExec": "iTerm.app",
+  "githubPullRequests.pullBranch": "never"
 }

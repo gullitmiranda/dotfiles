@@ -14,3 +14,8 @@ alias cup cursor-personal
 function zedn --wraps=zed --description 'zed -n: open in a new workspace'
     command zed -n $argv
 end
+
+# Short alias for `zedn`. Also wraps `zed` so completions keep working.
+function zn --wraps=zed --description 'zed -n: open in a new workspace (short)'
+    command zed -n $argv
+end

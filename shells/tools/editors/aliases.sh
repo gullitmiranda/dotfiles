@@ -14,3 +14,4 @@ alias cup="cursor-personal"
 # are expanded before completion lookup (so `zedn <TAB>` completes paths
 # the same way `zed <TAB>` does).
 alias zedn="zed -n"
+alias zn="zed -n"

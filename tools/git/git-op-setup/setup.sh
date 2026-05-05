@@ -77,6 +77,23 @@ git_config() {
 	git config --file "$config_file" "$key" "$value"
 }
 
+git_config_add() {
+	local config_file
+	config_file="$(expand_tilde "$1")"
+	local key="$2"
+	local value="$3"
+	log debug "     > git config --file ${config_file} --add '${key}' '${value}'"
+	git config --file "${config_file}" --add "${key}" "${value}"
+}
+
+git_config_unset_all() {
+	local config_file
+	config_file="$(expand_tilde "$1")"
+	local key="$2"
+	log debug "     > git config --file ${config_file} --unset-all '${key}'"
+	git config --file "${config_file}" --unset-all "${key}" 2>/dev/null || true
+}
+
 git_config_from_json() {
 	local config_file="$1"
 	local config_data="$2"
@@ -92,7 +109,7 @@ git_config_from_json() {
 
 setup_git_local_main_configs() {
 	local config_data
-	config_data="$(echo "$1" | jq -c '.config')"
+	config_data="$(echo "${1}" | jq -c '.config')"
 	git_config_from_json "$local_git_file" "$config_data"
 	mkdir -p "$dotfiles_local_dir"
 	create_link "$local_git_file" "$dotfiles_local_dir/.gitconfig.local"
@@ -139,6 +156,7 @@ configure_git_account() {
 	mkdir -p "$(dirname "$real_account_git_file")"
 
 	git_config_from_json "$real_account_git_file" "$account_config_data"
+	configure_account_credential_helper "${real_account_git_file}" "${account}"
 
 	# Add one includeIf per gitdir
 	local gitdir_count
@@ -181,6 +199,32 @@ configure_git_account() {
 			download_1password_keys "$account"
 		fi
 	fi
+}
+
+configure_account_credential_helper() {
+	local config_file="$1"
+	local account="$2"
+	local account_name gh_user gh_host helper_path helper_value
+	account_name="$(echo "${account}" | jq -r '.name')"
+	gh_user="$(echo "${account}" | jq -r '.gh_user // empty')"
+	gh_host="$(echo "${account}" | jq -r '.gh_host // "github.com"')"
+
+	if [[ -z ${gh_user} ]]; then
+		log warn "Account '${account_name}' has no gh_user — skipping GitHub credential helper setup"
+		return 0
+	fi
+
+	helper_path="${HOME}/.local/bin/git-credential-gh-user"
+	helper_value="!${helper_path} ${gh_user} ${gh_host}"
+
+	log info "Setting GitHub credential helper for ${account_name} (gh_user=${gh_user}, host=${gh_host})"
+
+	# Reset any inherited helper for GitHub, then add the explicit account helper.
+	# This keeps HTTPS Git auth independent from inherited GH_TOKEN/GITHUB_TOKEN
+	# values and from the globally active gh account.
+	git_config_unset_all "${config_file}" "credential.https://${gh_host}.helper"
+	git_config_add "${config_file}" "credential.https://${gh_host}.helper" ""
+	git_config_add "${config_file}" "credential.https://${gh_host}.helper" "${helper_value}"
 }
 
 download_1password_keys() {

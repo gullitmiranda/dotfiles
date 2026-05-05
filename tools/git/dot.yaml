@@ -2,6 +2,7 @@ global:
   links:
     .gitconfig: ~/.gitconfig
     .gitignore_global: ~/.gitignore_global
+    bin/git-credential-gh-user: ~/.local/bin/git-credential-gh-user
 
 darwin:
   installs:

@@ -163,9 +163,11 @@ Hi gullit-work! You've successfully authenticated, but GitHub does not provide s
 
 ### Configure Git
 
-#### HTTPS with `gh` credential helper (recommended)
+#### HTTPS with explicit per-directory `gh` credentials (recommended)
 
-Uses HTTPS for all GitHub operations, authenticated via `gh` CLI tokens stored in the system keyring. This avoids dependency on the 1Password SSH agent, which can lock on a timer (e.g. every 5 minutes with corporate policies) and block AI agents and automation.
+Uses HTTPS for GitHub operations, authenticated via `gh` CLI tokens stored in the system keyring. This avoids dependency on the 1Password SSH agent, which can lock on a timer (e.g. every 5 minutes with corporate policies) and block AI agents and automation.
+
+The global `~/.gitconfig` still defines `gh auth git-credential` as the fallback helper. Account-specific gitconfigs generated from `variables.git.accounts` override that fallback with `git-credential-gh-user`, using each account's `gh_user` value.
 
 1. Authenticate with `gh` for each account:
 
@@ -174,17 +176,42 @@ gh auth login --hostname github.com --git-protocol https --web
 # repeat and login with the other account when prompted
 ```
 
-2. Force HTTPS for GitHub in `~/.gitconfig.local`:
+2. Make sure each account in `config.yaml` has `gh_user` set:
 
-```gitconfig
-; Force HTTPS for GitHub to avoid dependency on 1Password SSH agent,
-; which locks every 5 min (corporate policy) and blocks AI agents.
-; Auth is handled by `gh auth git-credential` configured in ~/.gitconfig.
-[url "https://github.com/"]
-	insteadOf = git@github.com:
+```yaml
+variables:
+  git:
+    accounts:
+      - name: personal
+        gh_user: gullitmiranda
+        gitdirs:
+          - ~/code/gullit/
+        file: ~/code/gullit/.gitconfig
+      - name: work
+        gh_user: gullit-cw
+        gitdirs:
+          - ~/code/cw/
+        file: ~/code/cw/.gitconfig
 ```
 
-3. Route the correct `gh` account per directory using [mise](https://mise.jdx.dev/) `[env]`:
+3. Run the git setup:
+
+```bash
+rotz link tools/git
+rotz install tools/git
+```
+
+This links `git-credential-gh-user` to `~/.local/bin/git-credential-gh-user` and writes an explicit credential helper into each account gitconfig:
+
+```gitconfig
+[credential "https://github.com"]
+	helper =
+	helper = !/Users/guma/.local/bin/git-credential-gh-user gullitmiranda github.com
+```
+
+The helper intentionally unsets inherited `GH_TOKEN` and `GITHUB_TOKEN` before calling `gh auth token --user <gh_user>`. This makes Git authentication deterministic for GUI clients such as Fork, even when they are launched from a terminal with a token for a different account.
+
+4. Route the correct `gh` account per directory for non-Git `gh` commands using [mise](https://mise.jdx.dev/) `[env]`:
 
 ```toml
 # ~/.config/mise/config.toml (global default — personal account)
@@ -198,7 +225,7 @@ GH_TOKEN = "{{ exec(command='gh auth token --user <personal-user>') }}"
 GH_TOKEN = "{{ exec(command='gh auth token --user <work-user>') }}"
 ```
 
-mise resolves config hierarchically, so any subdirectory inherits the closest parent's `GH_TOKEN`. The global config covers `/tmp`, `~`, `~/.dotfiles`, etc. The work override only applies inside the work directory. This affects all `gh` commands (`gh pr create`, `gh issue list`, etc.), not just git push/pull.
+mise resolves config hierarchically, so any subdirectory inherits the closest parent's `GH_TOKEN`. This affects commands such as `gh pr create`, `gh issue list`, and other tools that call GitHub APIs directly. Git push/pull over HTTPS is handled by the per-directory credential helper above.
 
 #### Commit signing with local SSH keys
 

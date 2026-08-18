@@ -1,207 +1,96 @@
 # Git Authentication for Multiple Accounts
 
-This guide covers git authentication with multiple GitHub accounts. The recommended approach uses **HTTPS with `gh` CLI tokens**, routed automatically by the [`gh` wrapper](./bin/gh) (per-invocation, by repo owner or directory) and per-directory git credential helpers, both independent of 1Password lock state. The legacy SSH-based approach using 1Password agent is documented as a fallback.
+Git authentication with multiple GitHub accounts over **HTTPS with `gh` CLI tokens**:
+
+- The [`gh` wrapper](./bin/gh) routes every `gh` command to the correct account per invocation (by repo owner or directory), injecting a fresh keyring token.
+- Per-directory git credential helpers (`git-credential-gh-user`) do the same for `git push`/`pull`/`fetch`.
+- Commit signing uses local SSH keys exported once from 1Password.
+
+Everything works without the 1Password SSH agent, which can lock on a timer and block AI agents and automation. The legacy SSH approach is documented at the end as a fallback.
 
 ## Prerequisites
 
-- [1Password CLI](https://developer.1password.com/docs/cli/get-started)
-- [1Password Desktop SSH Agent Enabled](https://developer.1password.com/docs/ssh/agent/advanced)
+- `git`, `gh`, `jq`, `yq` (installed by `rotz install tools/git`)
+- [1Password CLI](https://developer.1password.com/docs/cli/get-started) — only for exporting signing keys (one-time)
 
 ## Setup
 
-### Enable the 1Password SSH Agent
+1. Authenticate each GitHub account with `gh`:
 
-1. Open 1Password and go to `Preferences > Developer`.
-2. Enable the `SSH Agent` option.
-3. Add your SSH keys to 1Password, ensuring they are marked as `SSH keys`.
+   ```bash
+   gh auth login --hostname github.com --git-protocol https --web
+   # repeat for the other account when prompted
+   ```
 
-### Run the setup script
+2. Declare accounts in `config.yaml`:
 
-```shell
-rotz link tools/git
-rotz install tools/git
-```
+   ```yaml
+   variables:
+     git:
+       accounts:
+         - name: personal
+           gh_user: your-github-username
+           owners: # GitHub orgs/users routed to this account by the gh wrapper
+             - your-github-username
+           gitdirs:
+             - ~/code/personal/
+           file: ~/code/personal/.gitconfig
+           config:
+             user.name: "Your Name"
+             user.email: "your@personal.email"
+             user.signingkey: ~/.ssh/signing_personal
+             commit.gpgsign: "true"
+             gpg.format: ssh
+         - name: work
+           gh_user: your-work-github-username
+           owners:
+             - your-work-org
+             - your-work-github-username
+           gitdirs:
+             - ~/code/cw/
+           file: ~/code/cw/.gitconfig
+           config:
+             user.name: "Your Name"
+             user.email: "your@work.email"
+             user.signingkey: ~/.ssh/signing_work
+             commit.gpgsign: "true"
+             gpg.format: ssh
+   ```
 
-The `rotz install` command will:
+3. Run the setup:
 
-- Create the `~/.dotfiles/local/gitconfig.json` file with the git config variables from `config.yaml`
-- Run the `tools/git/config.fish` script to configure git and the 1Password SSH agent
+   ```bash
+   rotz link tools/git
+   rotz install tools/git
+   ```
 
-> [!WARNING]
-> Only SSH Keys from the `Personal`, `Private`, or `Employee` vaults are available in the SSH Agent by default.
-> If you need to use a different vault, see [Configure 1Password Agent](#configure-1password-agent) section.
+   This links `.gitconfig`, `.gitignore_global`, `bin/gh` and `bin/git-credential-gh-user` into `$HOME`, then runs [`setup.sh`](./setup.sh), which reads `config.yaml` via `yq` and:
 
-### Optional Steps
+   - Writes `~/.gitconfig.local` (global config + one `includeIf.gitdir` per account gitdir)
+   - Writes each account gitconfig (`user.*`, signing, credential helper)
+   - Generates `~/.ssh/allowed_signers` from the accounts' public keys
+   - Optionally downloads SSH keys from 1Password (accounts with an `op:` block)
 
-Most of the steps below are already done by the `rotz install` command, but you can follow them to understand the process and make any changes you need.
+## How routing works
 
-#### Configure 1Password Agent
+### `gh` commands — the wrapper
 
-If you want to use the 1Password agent for other purposes like SSH and need to configure the agent to use the SSH keys (other than the default ones: [Personal](https://support.1password.com/1password-glossary/#personal-vault), [Private](https://support.1password.com/1password-glossary/#private-vault), or [Employee](https://support.1password.com/1password-glossary/#employee-vault)), you can create or edit the `~/.config/1Password/ssh/agent.toml` file to configure the 1Password agent:
+`~/.local/bin/gh` (which precedes homebrew in PATH) wraps the real `gh`. Per invocation, first match wins:
 
-```toml
-[[ssh-keys]]
-vault = "Personal"
-account = "my.1password.com"
+1. `GH_TOKEN`/`GITHUB_TOKEN` already set → pass through (CI, manual override)
+2. `gh auth ...` subcommands → pass through (keeps `gh auth status` truthful)
+3. Non-github.com host (`--hostname`) → pass through
+4. Owner in args (`-R owner/repo`, `--repo=`, GitHub URLs, positional `owner/repo`) → matched against `owners` in `config.yaml`
+5. cwd inside an account `gitdir` (longest prefix) → that account
+6. No match → active keyring account (default `gh` behavior)
 
-[[ssh-keys]]
-vault = "Another Vault"
-account = "my.1password.com"
+On a match, the wrapper injects a fresh token from `gh auth token --user <gh_user>` into that process only. Stateless — no `gh auth switch`, safe for parallel agents. Without `yq` or `config.yaml` it passes through silently.
 
-[[ssh-keys]]
-vault = "Employee"
-account = "work.1password.com"
-```
+Overrides: `GH_ROUTER_CONFIG` (alternate config.yaml), `GH_REAL_BIN` (alternate real gh).
 
-> See [1Password SSH Agent Configuration](https://developer.1password.com/docs/ssh/agent/config) for more information.
+### git push/pull/fetch — credential helpers
 
-#### Configure Your SSH Client
-
-Edit your `~/.ssh/config` file to use the 1Password SSH agent and specify custom commands for different keys:
-
-```ssh-config
-Host *
-	IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
-
-# Include 1Password SSH Bookmarks ssh config
-# - https://developer.1password.com/docs/ssh/bookmarks
-Include ~/.ssh/1Password/config
-
-# Personal GitHub
-Host github.com
-	HostName github.com
-	User git
-	IdentityFile ~/.ssh/op_personal_github.pub
-	IdentitiesOnly yes
-
-# Work GitHub
-Host github.work.example.com
-	HostName github.com
-	User git
-	IdentityFile ~/.ssh/op_work_github.pub
-	IdentitiesOnly yes
-```
-
-- `IdentityAgent` points to the 1Password SSH agent socket.
-- `IdentityFile` specifies the key to use for each host.
-
-#### Link 1Password files
-
-For standard purposes, link the 1Password SSH agent and config files to `~/.1password`:
-
-```bash
-mkdir -p ~/.1password
-ln -s ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock ~/.1password/agent.sock
-ln -s ~/.config/1Password/ssh/agent.toml ~/.1password/agent.toml
-```
-
-#### Git config location (originals, not symlinks)
-
-- `includeIf` in `local/.gitconfig.local` points to the original config files: `~/code/personal/.gitconfig` (personal) and `~/code/cw/.gitconfig` (work).
-- Repos outside `~/code/` (e.g. `~/.dotfiles`) use the personal config from `~/code/personal/.gitconfig` as fallback.
-- The symlinks under `local/` (e.g. `local/.gitconfig.personal` → `~/code/personal/.gitconfig`) are optional, only to open those files from the repo in the IDE.
-
-## Manual Setup
-
-> [!NOTE]
-> You do not need to perform these steps if you have already run the installation script.
-> They are more for documentation and troubleshooting purposes.
-
-### Install Dependencies
-
-```bash
-brew install --quiet git gh
-brew install --quiet --cask 1password-cli
-```
-
-### Download the Public Key from 1Password
-
-To set specific keys for different hosts to SSH, download the public key from 1Password. You can do this by:
-
-- In your 1Password app, select the `Download` button on the `Public key` field of the SSH item.
-- Use the `op` (1Password CLI) to download the public key:
-
-  ```bash
-  # for personal account
-  op item list --categories "SSH Key" --account "my.1password.com"
-  op read --account "my.1password.com" "op://Personal/GitHub SSH Key Personal/public key" --out-file ~/.ssh/op_personal_github.pub
-
-  # for work account
-  op item list --categories "SSH Key" --account "work.1password.com"
-  op read --account "work.1password.com" "op://Employee/GitHub SSH Key Work/public key" --out-file ~/.ssh/op_work_github.pub
-
-  # fix the permissions
-  chmod 600 ~/.ssh/op_*.pub
-  ```
-
-### Test Your SSH Configuration
-
-Ensure that the SSH keys are working:
-
-Test the personal key:
-
-```bash
-$ ssh -T git@github.com -i ~/.ssh/op_personal_github.pub
-Hi your-username! You've successfully authenticated, but GitHub does not provide shell access.
-```
-
-Test the work key with the default `github.com` host:
-
-```bash
-$ ssh -T git@github.com -i ~/.ssh/op_work_github.pub
-Hi your-work-username! You've successfully authenticated, but GitHub does not provide shell access.
-```
-
-Or using the custom host:
-
-```bash
-$ ssh -T git@github.work.example.com -i ~/.ssh/op_work_github.pub
-Hi your-work-username! You've successfully authenticated, but GitHub does not provide shell access.
-```
-
-> **Reference:** [1Password SSH Agent Advanced Usage](https://developer.1password.com/docs/ssh/agent/advanced/#use-multiple-github-accounts)
-
-### Configure Git
-
-#### HTTPS with explicit per-directory `gh` credentials (recommended)
-
-Uses HTTPS for GitHub operations, authenticated via `gh` CLI tokens stored in the system keyring. This avoids dependency on the 1Password SSH agent, which can lock on a timer (e.g. every 5 minutes with corporate policies) and block AI agents and automation.
-
-The global `~/.gitconfig` still defines `gh auth git-credential` as the fallback helper. Account-specific gitconfigs generated from `variables.git.accounts` override that fallback with `git-credential-gh-user`, using each account's `gh_user` value.
-
-1. Authenticate with `gh` for each account:
-
-```bash
-gh auth login --hostname github.com --git-protocol https --web
-# repeat and login with the other account when prompted
-```
-
-2. Make sure each account in `config.yaml` has `gh_user` set:
-
-```yaml
-variables:
-  git:
-    accounts:
-      - name: personal
-        gh_user: your-github-username
-        gitdirs:
-          - ~/code/personal/
-        file: ~/code/personal/.gitconfig
-      - name: work
-        gh_user: your-work-github-username
-        gitdirs:
-          - ~/code/cw/
-        file: ~/code/cw/.gitconfig
-```
-
-3. Run the git setup:
-
-```bash
-rotz link tools/git
-rotz install tools/git
-```
-
-This links `git-credential-gh-user` to `~/.local/bin/git-credential-gh-user` and writes an explicit credential helper into each account gitconfig:
+The global `~/.gitconfig` defines `gh auth git-credential` as the fallback helper. Each account gitconfig overrides it for `https://github.com` with:
 
 ```gitconfig
 [credential "https://github.com"]
@@ -209,93 +98,109 @@ This links `git-credential-gh-user` to `~/.local/bin/git-credential-gh-user` and
 	helper = !~/.local/bin/git-credential-gh-user your-github-username github.com
 ```
 
-The helper intentionally unsets inherited `GH_TOKEN` and `GITHUB_TOKEN` before calling `gh auth token --user <gh_user>`. This makes Git authentication deterministic for GUI clients such as Fork, even when they are launched from a terminal with a token for a different account.
+The helper unsets inherited `GH_TOKEN`/`GITHUB_TOKEN` before calling `gh auth token --user <gh_user>`, making Git authentication deterministic for GUI clients (e.g. Fork) launched from a terminal with a token for a different account.
 
-4. The [`gh` wrapper](./bin/gh) (linked to `~/.local/bin/gh`, which precedes homebrew in PATH) routes every `gh` command to the correct account automatically. It reads `config.yaml` (`owners`/`gitdirs` per account) via `yq` and injects a fresh keyring token into each invocation, resolved by: explicit `GH_TOKEN` (passthrough) > owner in args (`-R`, URLs) > cwd gitdir > keyring default. No `gh auth switch`, no per-directory env setup. This covers `gh pr create`, `gh issue list`, and any tool that calls `gh`. Git push/pull over HTTPS is handled by the per-directory credential helper above.
+### Commit signing
 
-#### Commit signing with local SSH keys
-
-Uses the same SSH key pair from 1Password, exported once to disk, so `ssh-keygen` can sign commits without requiring 1Password unlock.
-
-1. Export private keys from 1Password (one-time):
+Signing uses local SSH keys exported once from 1Password, so `ssh-keygen` signs without requiring 1Password unlock:
 
 ```bash
-op read "op://<vault>/<item-name>/private key" \
-  --account "<account>.1password.com" --out-file ~/.ssh/signing_work
-op read "op://<vault>/<item-name>/private key" \
-  --account "<account>.1password.com" --out-file ~/.ssh/signing_personal
-chmod 600 ~/.ssh/signing_work ~/.ssh/signing_personal
+op read "op://<vault>/<item>/private key" --account "<account>.1password.com" \
+  --out-file ~/.ssh/signing_personal
+chmod 600 ~/.ssh/signing_personal
 ```
 
 > [!NOTE]
 > 1Password exports ed25519 keys in PKCS#8 format. If `ssh-keygen -y -f` fails with "invalid format", convert to OpenSSH format using `python3` with the `cryptography` library.
 
-2. Point `user.signingkey` to the local key file in each gitconfig:
+Each account gitconfig points `user.signingkey` at its key file (see the `config.yaml` example above). No `gpg.ssh.program` is needed — git defaults to `ssh-keygen`. The public keys registered on GitHub stay the same, so commit verification keeps working.
 
-```gitconfig
-# ~/code/cw/.gitconfig (work)
-[user]
-	signingkey = ~/.ssh/signing_work
-[commit]
-	gpgsign = true
-[gpg]
-	format = ssh
-```
+## Git config layout
 
-```gitconfig
-# ~/code/personal/.gitconfig (personal)
-[user]
-	signingkey = ~/.ssh/signing_personal
-[commit]
-	gpgsign = true
-[gpg]
-	format = ssh
-```
+- `~/.gitconfig` → symlink to [`.gitconfig`](./.gitconfig) (global defaults, fallback credential helper, includes `~/.gitconfig.local` last)
+- `~/.gitconfig.local` → global `user.*` + `includeIf.gitdir` entries (written by `setup.sh`)
+- `~/code/<dir>/.gitconfig` → per-account config (written by `setup.sh`)
+- `local/.gitconfig.<name>` → optional symlinks to the account files, for opening them from the repo in the IDE
 
-No `gpg.ssh.program` is needed — git defaults to `ssh-keygen`, which reads the key file directly. The public keys registered on GitHub remain the same, so commit verification continues to work.
-
-#### SSH with 1Password (legacy)
-
-<details>
-<summary>Previous approach using 1Password SSH agent for git authentication</summary>
-
-1. Configure Git to rewrite the repository URLs to use the SSH protocol:
-
-```bash
-git config --file ~/.gitconfig.local url."git@github.com:".insteadOf "https://github.com/"
-# if you want to use a custom host for the work account
-git config --file ~/.gitconfig.local url."git@github.work.example.com:your-work-org".insteadOf "https://github.com/your-work-org"
-```
-
-> Using the `~/.gitconfig.local` file because we don't want to override the global config file that is a link to this [.gitconfig](./.gitconfig).
-
-2. Specify a custom SSH command for each git config file:
-
-```bash
-git config --file ~/code/personal/.gitconfig \
-  core.sshCommand "ssh -i ~/.ssh/op_personal_github.pub"
-
-git config --file ~/code/cw/.gitconfig \
-  core.sshCommand "ssh -i ~/.ssh/op_work_github.pub"
-```
-
-> [!NOTE]
-> You will need the `includeIf` directive in your `.gitconfig` already configured to use split config files for different projects.
-
-</details>
+Repos outside any account gitdir use the global config as fallback.
 
 ## Troubleshooting
 
-### Check Your SSH Keys
+**Which account will a `gh` call use?**
 
-After configuring your SSH setup, verify the SSH keys registered with the 1Password SSH agent by running:
+```bash
+gh auth status                     # keyring accounts (never injected by the wrapper)
+cd <dir> && gh api user --jq .login  # resolved account for that directory
+```
+
+**A private repo returns 404 through the wrapper.** Check that its owner is listed under the right account's `owners` in `config.yaml`.
+
+**Git operations use the wrong account.** Check the effective credential helper for the repo:
+
+```bash
+git config --show-origin --get-regexp 'credential\..*\.helper'
+```
+
+**Bypass the wrapper once:** call the real binary directly (`/opt/homebrew/bin/gh ...`) or set `GH_TOKEN` explicitly.
+
+## Legacy: SSH with 1Password agent
+
+Previous approach using the 1Password SSH agent for git authentication:
+
+Requires the [1Password SSH agent](https://developer.1password.com/docs/ssh/agent/advanced) enabled and SSH keys stored in 1Password.
+
+1. Configure Git to rewrite repository URLs to SSH:
+
+   ```bash
+   git config --file ~/.gitconfig.local url."git@github.com:".insteadOf "https://github.com/"
+   # with a custom host for the work account
+   git config --file ~/.gitconfig.local url."git@github.work.example.com:your-work-org".insteadOf "https://github.com/your-work-org"
+   ```
+
+2. Point each account gitconfig at its key:
+
+   ```bash
+   git config --file ~/code/personal/.gitconfig \
+     core.sshCommand "ssh -i ~/.ssh/op_personal_github.pub"
+
+   git config --file ~/code/cw/.gitconfig \
+     core.sshCommand "ssh -i ~/.ssh/op_work_github.pub"
+   ```
+
+3. Configure `~/.ssh/config` with the 1Password agent and per-host keys:
+
+   ```ssh-config
+
+   ```
+
+Host *
+IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+
+Host github.com
+HostName github.com
+User git
+IdentityFile ~/.ssh/op_personal_github.pub
+IdentitiesOnly yes
+
+Host github.work.example.com
+HostName github.com
+User git
+IdentityFile ~/.ssh/op_work_github.pub
+IdentitiesOnly yes
+
+````
+
+4. Test:
+
+   ```bash
+   ssh -T git@github.com -i ~/.ssh/op_personal_github.pub
+   # Hi your-username! You've successfully authenticated, but GitHub does not provide shell access.
+````
+
+To list keys registered with the agent:
 
 ```bash
 env SSH_AUTH_SOCK=~/.1password/agent.sock ssh-add -l
 ```
 
-This command lists the keys that the SSH agent is currently managing.
-
-> If your keys are not listed, ensure that the `SSH_AUTH_SOCK` environment variable is set correctly. This environment variable is crucial because it allows command-line tools like `ssh-add` to locate the SSH agent socket.
-> While the `IdentityAgent` directive in your SSH configuration file is used for SSH connections, `SSH_AUTH_SOCK` ensures that all tools and applications that use SSH can find the agent socket consistently.
-> This project already sets it in your shell configuration files, see [../shells/tools/op](../shells/tools/op) folder.
+> Only keys from the `Personal`, `Private`, or `Employee` vaults are exposed by default; see [1Password SSH Agent Configuration](https://developer.1password.com/docs/ssh/agent/config) to expose other vaults.

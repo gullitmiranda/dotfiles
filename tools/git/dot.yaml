@@ -2,21 +2,20 @@ global:
   links:
     .gitconfig: ~/.gitconfig
     .gitignore_global: ~/.gitignore_global
-    bin/git-credential-gh-user: ~/.local/bin/git-credential-gh-user
     bin/gh: ~/.local/bin/gh
+    bin/git-credential-gh-user: ~/.local/bin/git-credential-gh-user
 
 darwin:
   installs:
-    depends:
-      - git/git-op-setup
-      - git/git-mise-setup
     cmd: |
-      brew install --quiet git gh jq
+      brew install --quiet git gh jq yq
+      export DOTFILES_DIR="{{ config.dotfiles }}"
+      bash "{{ config.dotfiles }}/{{ name }}/setup.sh"
 
 linux:
   installs:
-    depends:
-      - git/git-op-setup
-      - git/git-mise-setup
     cmd: |
       sudo apt-get update && sudo apt-get install -y git gh jq
+      command -v yq >/dev/null || sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 && sudo chmod +x /usr/local/bin/yq
+      export DOTFILES_DIR="{{ config.dotfiles }}"
+      bash "{{ config.dotfiles }}/{{ name }}/setup.sh"

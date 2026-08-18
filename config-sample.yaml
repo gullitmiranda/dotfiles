@@ -19,6 +19,9 @@ variables:
     accounts:
       - name: personal
         gh_user: your-github-username
+        # GitHub owners (orgs/users) that route to this account in the gh wrapper
+        owners:
+          - your-github-username
         # All gitdirs that map to this account (creates one includeIf per entry)
         gitdirs:
           - ~/code/personal/
@@ -37,6 +40,9 @@ variables:
 
       - name: work
         gh_user: your-work-github-username
+        owners:
+          - your-work-org
+          - your-work-github-username
         gitdirs:
           - ~/code/cw/
         file: ~/code/cw/.gitconfig

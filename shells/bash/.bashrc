@@ -64,8 +64,10 @@ if [[ $- == *i* ]]; then
   bind '"\e[3~": delete-char' # Delete key - delete character under cursor
 
   # Word navigation with Option+arrows
-  bind '"\e\e[C": forward-word'  # Option+Right - move cursor forward one word
-  bind '"\e\e[D": backward-word' # Option+Left - move cursor backward one word
+  bind '"\e\e[C": forward-word'    # Option+Right - move cursor forward one word
+  bind '"\e\e[D": backward-word'   # Option+Left - move cursor backward one word
+  bind '"\e[1;3C": forward-word'   # Alt/Option+Right in VS Code/Cursor integrated terminal
+  bind '"\e[1;3D": backward-word'  # Alt/Option+Left in VS Code/Cursor integrated terminal
 fi
 
 # Enable basic completion

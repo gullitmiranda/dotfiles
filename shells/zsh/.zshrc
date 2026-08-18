@@ -50,6 +50,8 @@ bindkey '^[[F' end-of-line                       # End key - move cursor to end 
 bindkey '^[[3~' delete-char                      # Delete key - delete character under cursor
 bindkey '^[^[[C' forward-word                    # Option+Right - move cursor forward one word
 bindkey '^[^[[D' backward-word                   # Option+Left - move cursor backward one word
+bindkey '^[[1;3C' forward-word                   # Alt/Option+Right in VS Code/Cursor integrated terminal
+bindkey '^[[1;3D' backward-word                  # Alt/Option+Left in VS Code/Cursor integrated terminal
 
 # -----------------------------------------------------------------------------
 # Initializers

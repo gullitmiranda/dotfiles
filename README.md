@@ -69,7 +69,7 @@ cd $DOTFILES_DIR
 rotz init
 
 # Or clone and initialize in one step (clones to ~/.dotfiles by default)
-rotz clone https://github.com/gullitmiranda/dotfiles.git
+rotz clone https://github.com/<your-username>/dotfiles.git
 ```
 
 ### Configuring Rotz

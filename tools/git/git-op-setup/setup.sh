@@ -347,7 +347,7 @@ generate_allowed_signers() {
 	done
 
 	if [[ ${#entries[@]} -eq 0 ]]; then
-		warn "No signing keys found, skipping allowed_signers generation"
+		log warn "No signing keys found, skipping allowed_signers generation"
 		return 0
 	fi
 

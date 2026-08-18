@@ -4,9 +4,105 @@ defaults:
   backend: legacy
   scope: global
   agents:
+    - agents
     - cursor
+    - claude
+    - factory
 skills:
-  - source: vercel-labs/agent-skills
+  - source: github.com/github/gh-stack
+    ref: main
+    skills:
+      - gh-stack
+  - source: github.com/mattpocock/skills
+    ref: main
+    skills:
+      - ask-matt
+      - code-review
+      - codebase-design
+      - design-an-interface
+      - diagnose
+      - diagnosing-bugs
+      - domain-modeling
+      - engineering-workflow
+      - git-guardrails-claude-code
+      - grill-me
+      - grill-with-docs
+      - grilling
+      - handoff
+      - implement
+      - improve-codebase-architecture
+      - loop-me
+      - migrate-to-shoehorn
+      - obsidian-vault
+      - prototype
+      - qa
+      - research
+      - request-refactor-plan
+      - resolving-merge-conflicts
+      - scaffold-exercises
+      - setup-matt-pocock-skills
+      - setup-pre-commit
+      - setup-ts-deep-modules
+      - teach
+      - tdd
+      - to-prd
+      - to-spec
+      - to-tickets
+      - triage
+      - ubiquitous-language
+      - wayfinder
+      - wizard
+      - writing-beats
+      - writing-fragments
+      - writing-great-skills
+      - writing-shape
+      - zoom-out
+  - source: github.com/vercel-labs/agent-skills
     ref: main
     skills:
       - web-design-guidelines
+  - source: local:/Users/guma/code/gullit/gullit-skills
+    skills:
+      - agent-selection
+      - build-plan
+      - context-capsule
+      - daily-notes
+      - data-boundary
+      - deslop
+      - engineering-workflow
+      - gh-profile
+      - git
+      - git-worktree
+      - gremlin-clean
+      - grill-with-docs
+      - incremental-delivery
+      - integration
+      - learn
+      - model-selection
+      - npm-supply-chain-safety
+      - persist-agent-constraints
+      - plan
+      - plan-archive
+      - pr
+      - pr-babysit
+      - pr-delivery
+      - project-path-migration
+      - publish-safe-links
+      - quality
+      - safety
+      - skill-writing
+      - tech-debt
+      - trunk-safety
+      - user-preferences
+      - work-context-cleanup
+      - workflow
+      - workflow-intake
+      - workspace-status
+      - workspace-topology
+      - zeropath
+  - source: local:/Users/guma/code/gullit/gullit-work-skills
+    skills:
+      - data-boundary-cw
+      - gh-profile-cw
+      - integration-cw
+      - linear

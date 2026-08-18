@@ -1,7 +1,0 @@
-linux|darwin:
-  installs:
-    depends:
-      - git-op-config
-    cmd: |
-      export DOTFILES_DIR="{{ config.dotfiles }}"
-      bash {{ config.dotfiles }}/{{ name }}/setup.sh

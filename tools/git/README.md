@@ -75,10 +75,10 @@ Host github.com
 	IdentitiesOnly yes
 
 # Work GitHub
-Host github.cloudwalk.network
+Host github.work.example.com
 	HostName github.com
 	User git
-	IdentityFile ~/.ssh/op_cloudwalk_github.pub
+	IdentityFile ~/.ssh/op_work_github.pub
 	IdentitiesOnly yes
 ```
 
@@ -97,9 +97,9 @@ ln -s ~/.config/1Password/ssh/agent.toml ~/.1password/agent.toml
 
 #### Git config location (originals, not symlinks)
 
-- `includeIf` in `local/.gitconfig.local` points to the original config files: `~/Code/.gitconfig` (personal) and `~/Code/CloudWalk/.gitconfig` (work).
-- Repos outside `~/Code/` (e.g. `~/.dotfiles`) use the personal config from `~/Code/.gitconfig` as fallback.
-- The symlinks under `local/` (e.g. `local/.gitconfig.personal` → `~/Code/.gitconfig`) are optional, only to open those files from the repo in the IDE.
+- `includeIf` in `local/.gitconfig.local` points to the original config files: `~/code/personal/.gitconfig` (personal) and `~/code/cw/.gitconfig` (work).
+- Repos outside `~/code/` (e.g. `~/.dotfiles`) use the personal config from `~/code/personal/.gitconfig` as fallback.
+- The symlinks under `local/` (e.g. `local/.gitconfig.personal` → `~/code/personal/.gitconfig`) are optional, only to open those files from the repo in the IDE.
 
 ## Manual Setup
 
@@ -127,8 +127,8 @@ To set specific keys for different hosts to SSH, download the public key from 1P
   op read --account "my.1password.com" "op://Personal/GitHub SSH Key Personal/public key" --out-file ~/.ssh/op_personal_github.pub
 
   # for work account
-  op item list --categories "SSH Key" --account "cloudwalk.1password.com"
-  op read --account "cloudwalk.1password.com" "op://Employee/GitHub SSH Key CloudWalk/public key" --out-file ~/.ssh/op_cloudwalk_github.pub
+  op item list --categories "SSH Key" --account "work.1password.com"
+  op read --account "work.1password.com" "op://Employee/GitHub SSH Key Work/public key" --out-file ~/.ssh/op_work_github.pub
 
   # fix the permissions
   chmod 600 ~/.ssh/op_*.pub
@@ -142,21 +142,21 @@ Test the personal key:
 
 ```bash
 $ ssh -T git@github.com -i ~/.ssh/op_personal_github.pub
-Hi gullitmiranda! You've successfully authenticated, but GitHub does not provide shell access.
+Hi your-username! You've successfully authenticated, but GitHub does not provide shell access.
 ```
 
 Test the work key with the default `github.com` host:
 
 ```bash
-$ ssh -T git@github.com -i ~/.ssh/op_cloudwalk_github.pub
-Hi gullit-work! You've successfully authenticated, but GitHub does not provide shell access.
+$ ssh -T git@github.com -i ~/.ssh/op_work_github.pub
+Hi your-work-username! You've successfully authenticated, but GitHub does not provide shell access.
 ```
 
 Or using the custom host:
 
 ```bash
-$ ssh -T git@github.cloudwalk.network -i ~/.ssh/op_cloudwalk_github.pub
-Hi gullit-work! You've successfully authenticated, but GitHub does not provide shell access.
+$ ssh -T git@github.work.example.com -i ~/.ssh/op_work_github.pub
+Hi your-work-username! You've successfully authenticated, but GitHub does not provide shell access.
 ```
 
 > **Reference:** [1Password SSH Agent Advanced Usage](https://developer.1password.com/docs/ssh/agent/advanced/#use-multiple-github-accounts)
@@ -183,12 +183,12 @@ variables:
   git:
     accounts:
       - name: personal
-        gh_user: gullitmiranda
+        gh_user: your-github-username
         gitdirs:
-          - ~/code/gullit/
-        file: ~/code/gullit/.gitconfig
+          - ~/code/personal/
+        file: ~/code/personal/.gitconfig
       - name: work
-        gh_user: gullit-cw
+        gh_user: your-work-github-username
         gitdirs:
           - ~/code/cw/
         file: ~/code/cw/.gitconfig
@@ -206,7 +206,7 @@ This links `git-credential-gh-user` to `~/.local/bin/git-credential-gh-user` and
 ```gitconfig
 [credential "https://github.com"]
 	helper =
-	helper = !/Users/guma/.local/bin/git-credential-gh-user gullitmiranda github.com
+	helper = !~/.local/bin/git-credential-gh-user your-github-username github.com
 ```
 
 The helper intentionally unsets inherited `GH_TOKEN` and `GITHUB_TOKEN` before calling `gh auth token --user <gh_user>`. This makes Git authentication deterministic for GUI clients such as Fork, even when they are launched from a terminal with a token for a different account.
@@ -220,7 +220,7 @@ GH_TOKEN = "{{ exec(command='gh auth token --user <personal-user>') }}"
 ```
 
 ```toml
-# ~/Code/Work/.mise.toml (work account override)
+# ~/code/cw/.mise.toml (work account override)
 [env]
 GH_TOKEN = "{{ exec(command='gh auth token --user <work-user>') }}"
 ```
@@ -247,7 +247,7 @@ chmod 600 ~/.ssh/signing_work ~/.ssh/signing_personal
 2. Point `user.signingkey` to the local key file in each gitconfig:
 
 ```gitconfig
-# ~/Code/Work/.gitconfig (work)
+# ~/code/cw/.gitconfig (work)
 [user]
 	signingkey = ~/.ssh/signing_work
 [commit]
@@ -257,7 +257,7 @@ chmod 600 ~/.ssh/signing_work ~/.ssh/signing_personal
 ```
 
 ```gitconfig
-# ~/Code/.gitconfig (personal)
+# ~/code/personal/.gitconfig (personal)
 [user]
 	signingkey = ~/.ssh/signing_personal
 [commit]
@@ -278,7 +278,7 @@ No `gpg.ssh.program` is needed — git defaults to `ssh-keygen`, which reads the
 ```bash
 git config --file ~/.gitconfig.local url."git@github.com:".insteadOf "https://github.com/"
 # if you want to use a custom host for the work account
-git config --file ~/.gitconfig.local url."git@github.cloudwalk.network:cloudwalk".insteadOf "https://github.com/cloudwalk"
+git config --file ~/.gitconfig.local url."git@github.work.example.com:your-work-org".insteadOf "https://github.com/your-work-org"
 ```
 
 > Using the `~/.gitconfig.local` file because we don't want to override the global config file that is a link to this [.gitconfig](./.gitconfig).
@@ -286,11 +286,11 @@ git config --file ~/.gitconfig.local url."git@github.cloudwalk.network:cloudwalk
 2. Specify a custom SSH command for each git config file:
 
 ```bash
-git config --file ~/Code/.gitconfig \
+git config --file ~/code/personal/.gitconfig \
   core.sshCommand "ssh -i ~/.ssh/op_personal_github.pub"
 
-git config --file ~/Code/CloudWalk/.gitconfig \
-  core.sshCommand "ssh -i ~/.ssh/op_cloudwalk_github.pub"
+git config --file ~/code/cw/.gitconfig \
+  core.sshCommand "ssh -i ~/.ssh/op_work_github.pub"
 ```
 
 > [!NOTE]

@@ -21,10 +21,10 @@ variables:
         gh_user: your-github-username
         # All gitdirs that map to this account (creates one includeIf per entry)
         gitdirs:
-          - ~/Code/Gullit/
+          - ~/code/personal/
           - ~/code/oss/
         # The gitconfig file for this account (created/updated by setup)
-        file: ~/Code/Gullit/.gitconfig
+        file: ~/code/personal/.gitconfig
         config:
           user.name: "Your Name"
           user.email: "your@personal.email"
@@ -38,8 +38,8 @@ variables:
       - name: work
         gh_user: your-work-github-username
         gitdirs:
-          - ~/Code/cw/
-        file: ~/Code/cw/.gitconfig
+          - ~/code/cw/
+        file: ~/code/cw/.gitconfig
         config:
           user.name: "Your Name"
           user.email: "your@work.email"

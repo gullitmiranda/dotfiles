@@ -61,5 +61,10 @@
     "key": "shift+cmd+l",
     "command": "editor.action.selectHighlights",
     "when": "editorFocus"
+  },
+  {
+    "key": "cmd+e",
+    "command": "-cursor.toggleAgentWindowIDEUnification",
+    "when": "!isGlass && workbenchState != 'empty'"
   }
 ]

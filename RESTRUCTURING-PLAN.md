@@ -380,7 +380,7 @@ The repository now includes comprehensive documentation:
   - [ ] Add common completions
 - [ ] Move custom local files to .local directory:
   - [ ] Create ~/.dotfiles/local structure
-  - [ ] Move .env.sh to ~/.dotfiles/local/env.sh
+  - [ ] Move .env.sh to ~/.dotfiles/local/.env.sh
   - [ ] Update shell configurations to source from new location
   - [ ] Add documentation for local configuration
 

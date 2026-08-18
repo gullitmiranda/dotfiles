@@ -356,6 +356,33 @@ generate_allowed_signers() {
 	log info "Generated $allowed_signers_file with ${#entries[@]} entries"
 }
 
+### gh-router config
+
+generate_gh_router_config() {
+	local data="$1"
+	local router_dir="${HOME}/.config/gh-router"
+	local router_file="${router_dir}/config.json"
+
+	mkdir -p "${router_dir}"
+
+	# Build owners map: { owner: gh_user } and paths map: { expanded_gitdir: gh_user }
+	local owners_json paths_json
+	owners_json="$(echo "${data}" | jq -c '
+		[ .accounts[] | select(.gh_user != null) |
+		  (.owners // []) as $owners | $owners[] as $o |
+		  { key: $o, value: .gh_user } ] | from_entries
+	')"
+	paths_json="$(echo "${data}" | jq -c --arg home "${HOME}" '
+		[ .accounts[] | select(.gh_user != null) |
+		  .gitdirs[] as $d |
+		  { key: ($d | sub("^~"; $home) | sub("/$"; "")), value: .gh_user } ] | from_entries
+	')"
+
+	jq -n --argjson owners "${owners_json}" --argjson paths "${paths_json}" '{ owners: $owners, paths: $paths }' >"${router_file}"
+	chmod 644 "${router_file}"
+	log info "Generated ${router_file} ($(echo "${owners_json}" | jq 'length') owners, $(echo "${paths_json}" | jq 'length') paths)"
+}
+
 ### Prerequisites
 
 check_cmd jq "jq is not installed. You can install it using 'brew install jq'"
@@ -379,6 +406,9 @@ configure_accounts "$gitconfig_data"
 
 log info "Generating allowed_signers file..."
 generate_allowed_signers "$gitconfig_data"
+
+log info "Generating gh-router config..."
+generate_gh_router_config "${gitconfig_data}"
 
 # Optional: 1Password SSH agent linking
 # Disabled by default — Git auth uses HTTPS via `gh`, signing uses local pub keys.

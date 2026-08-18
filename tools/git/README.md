@@ -1,6 +1,6 @@
 # Git Authentication for Multiple Accounts
 
-This guide covers git authentication with multiple GitHub accounts. The recommended approach uses **HTTPS with `gh` CLI tokens** routed per directory via `mise`, which works independently of 1Password lock state. The legacy SSH-based approach using 1Password agent is documented as a fallback.
+This guide covers git authentication with multiple GitHub accounts. The recommended approach uses **HTTPS with `gh` CLI tokens**, routed automatically by the [`gh` wrapper](./bin/gh) (per-invocation, by repo owner or directory) and per-directory git credential helpers, both independent of 1Password lock state. The legacy SSH-based approach using 1Password agent is documented as a fallback.
 
 ## Prerequisites
 
@@ -211,21 +211,7 @@ This links `git-credential-gh-user` to `~/.local/bin/git-credential-gh-user` and
 
 The helper intentionally unsets inherited `GH_TOKEN` and `GITHUB_TOKEN` before calling `gh auth token --user <gh_user>`. This makes Git authentication deterministic for GUI clients such as Fork, even when they are launched from a terminal with a token for a different account.
 
-4. Route the correct `gh` account per directory for non-Git `gh` commands using [mise](https://mise.jdx.dev/) `[env]`:
-
-```toml
-# ~/.config/mise/config.toml (global default — personal account)
-[env]
-GH_TOKEN = "{{ exec(command='gh auth token --user <personal-user>') }}"
-```
-
-```toml
-# ~/code/cw/.mise.toml (work account override)
-[env]
-GH_TOKEN = "{{ exec(command='gh auth token --user <work-user>') }}"
-```
-
-mise resolves config hierarchically, so any subdirectory inherits the closest parent's `GH_TOKEN`. This affects commands such as `gh pr create`, `gh issue list`, and other tools that call GitHub APIs directly. Git push/pull over HTTPS is handled by the per-directory credential helper above.
+4. The [`gh` wrapper](./bin/gh) (linked to `~/.local/bin/gh`, which precedes homebrew in PATH) routes every `gh` command to the correct account automatically. It reads `config.yaml` (`owners`/`gitdirs` per account) via `yq` and injects a fresh keyring token into each invocation, resolved by: explicit `GH_TOKEN` (passthrough) > owner in args (`-R`, URLs) > cwd gitdir > keyring default. No `gh auth switch`, no per-directory env setup. This covers `gh pr create`, `gh issue list`, and any tool that calls `gh`. Git push/pull over HTTPS is handled by the per-directory credential helper above.
 
 #### Commit signing with local SSH keys
 

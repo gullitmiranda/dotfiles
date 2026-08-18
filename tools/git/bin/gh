@@ -15,20 +15,26 @@
 # (variables.git.accounts[].gh_user / owners / gitdirs) via yq on every call —
 # no generated files, changes take effect immediately.
 #
-# Overrides:
-#   GH_ROUTER_CONFIG — path to an alternative config.yaml
-#   GH_REAL_BIN      — path to the real gh binary
+# Config resolution: GH_ROUTER_CONFIG > DOTFILES_DIR/config.yaml >
+# self-located repo root > conventional fallbacks.
+# GH_REAL_BIN overrides the real gh binary path.
 
 set -euo pipefail
 
 ### Locate config.yaml
 
 resolve_config() {
+	# 1. Explicit override
 	if [[ -n ${GH_ROUTER_CONFIG:-} ]]; then
 		[[ -f ${GH_ROUTER_CONFIG} ]] && echo "${GH_ROUTER_CONFIG}"
 		return 0
 	fi
-	# Self-locate: this script lives at <dotfiles>/tools/git/bin/gh (possibly
+	# 2. DOTFILES_DIR (set by all dotfiles shells)
+	if [[ -n ${DOTFILES_DIR:-} && -f ${DOTFILES_DIR}/config.yaml ]]; then
+		echo "${DOTFILES_DIR}/config.yaml"
+		return 0
+	fi
+	# 3. Self-locate: this script lives at <dotfiles>/tools/git/bin/gh (possibly
 	# via a symlink from ~/.local/bin/gh). Worktrees don't have config.yaml
 	# (git-ignored), so fall back to the conventional dotfiles locations.
 	local src="$0" dir candidate

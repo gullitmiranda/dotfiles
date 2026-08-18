@@ -90,7 +90,7 @@ export SHELL=$(which bash)
 export SHELL_TYPE=bash
 
 # Load sensitive environment variables
-[ -f "$DOTFILES_DIR/local/env.sh" ] && source "$DOTFILES_DIR/local/env.sh"
+[ -f "$DOTFILES_DIR/local/.env.sh" ] && source "$DOTFILES_DIR/local/.env.sh"
 
 # Source configuration files, including completions files
 for config_file in "$DOTFILES_DIR"/shells/tools/**/*.{sh,bash} \

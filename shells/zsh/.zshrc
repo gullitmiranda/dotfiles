@@ -63,7 +63,7 @@ export SHELL=$(which zsh)
 export SHELL_TYPE=zsh
 
 # Load sensitive environment variables (if file exists and not already loaded)
-[ -f "$DOTFILES_DIR/local/env.sh" ] && source "$DOTFILES_DIR/local/env.sh"
+[ -f "$DOTFILES_DIR/local/.env.sh" ] && source "$DOTFILES_DIR/local/.env.sh"
 
 # Check for Zinit plugin manager
 ZINIT_HOME="$(brew --prefix zinit)"

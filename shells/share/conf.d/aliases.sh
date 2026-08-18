@@ -42,3 +42,4 @@ alias g=gcloud
 
 # Fork Git client
 alias f=fork
+alias gf=gitfox

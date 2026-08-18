@@ -39,8 +39,8 @@ set -gx SHELL (which fish)
 set -gx SHELL_TYPE fish
 
 # Load sensitive environment variables (if file exists and not already loaded)
-if test -f $DOTFILES_DIR/local/env.sh
-    source $DOTFILES_DIR/local/env.sh
+if test -f $DOTFILES_DIR/local/.env.sh
+    source $DOTFILES_DIR/local/.env.sh
 end
 
 # append functions to fish autoload path

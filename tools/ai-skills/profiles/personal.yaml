@@ -1,0 +1,12 @@
+version: 1
+profile: personal
+defaults:
+  backend: legacy
+  scope: global
+  agents:
+    - cursor
+skills:
+  - source: vercel-labs/agent-skills
+    ref: main
+    skills:
+      - web-design-guidelines

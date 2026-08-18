@@ -30,6 +30,8 @@
   "terminal.integrated.fontSize": 13,
   "workbench.startupEditor": "none",
   "workbench.editor.enablePreview": false,
+  "workbench.editor.pinnedTabsOnSeparateRow": true,
+  "window.autoDetectColorScheme": true,
   "explorer.confirmDelete": false,
   "explorer.confirmDragAndDrop": false,
   "git.autofetch": true,
@@ -74,6 +76,12 @@
   },
   "[helm]": {
     "editor.formatOnSave": false
+  },
+  "[go]": {
+    "editor.defaultFormatter": "golang.go"
+  },
+  "[toml]": {
+    "editor.defaultFormatter": "trunk.io"
   },
   "editor.formatOnSaveMode": "modificationsIfAvailable",
   "extensions.autoUpdate": "onlyEnabledExtensions",

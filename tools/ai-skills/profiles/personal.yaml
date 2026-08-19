@@ -64,6 +64,7 @@ skills:
   - source: local:~/code/gullit/gullit-skills
     skills:
       - agent-selection
+      - agents-standard
       - build-plan
       - context-capsule
       - daily-notes

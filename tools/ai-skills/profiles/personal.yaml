@@ -61,7 +61,7 @@ skills:
     ref: main
     skills:
       - web-design-guidelines
-  - source: local:~/code/personal/my-skills
+  - source: local:~/code/gullit/gullit-skills
     skills:
       - agent-selection
       - build-plan
@@ -100,7 +100,7 @@ skills:
       - workspace-status
       - workspace-topology
       - zeropath
-  - source: local:~/code/work/work-skills
+  - source: local:~/code/gullit/gullit-work-skills
     skills:
       - data-boundary-cw
       - gh-profile-cw

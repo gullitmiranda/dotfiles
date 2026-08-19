@@ -47,8 +47,8 @@ Everything works without the 1Password SSH agent, which can lock on a timer and 
              - your-work-org
              - your-work-github-username
            gitdirs:
-             - ~/code/cw/
-           file: ~/code/cw/.gitconfig
+             - ~/code/work/
+           file: ~/code/work/.gitconfig
            config:
              user.name: "Your Name"
              user.email: "your@work.email"
@@ -163,39 +163,35 @@ Requires the [1Password SSH agent](https://developer.1password.com/docs/ssh/agen
    git config --file ~/code/personal/.gitconfig \
      core.sshCommand "ssh -i ~/.ssh/op_personal_github.pub"
 
-   git config --file ~/code/cw/.gitconfig \
+   git config --file ~/code/work/.gitconfig \
      core.sshCommand "ssh -i ~/.ssh/op_work_github.pub"
    ```
 
 3. Configure `~/.ssh/config` with the 1Password agent and per-host keys:
 
    ```ssh-config
+   Host *
+     IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
 
+   Host github.com
+     HostName github.com
+     User git
+     IdentityFile ~/.ssh/op_personal_github.pub
+     IdentitiesOnly yes
+
+   Host github.work.example.com
+     HostName github.com
+     User git
+     IdentityFile ~/.ssh/op_work_github.pub
+     IdentitiesOnly yes
    ```
-
-Host *
-IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
-
-Host github.com
-HostName github.com
-User git
-IdentityFile ~/.ssh/op_personal_github.pub
-IdentitiesOnly yes
-
-Host github.work.example.com
-HostName github.com
-User git
-IdentityFile ~/.ssh/op_work_github.pub
-IdentitiesOnly yes
-
-````
 
 4. Test:
 
    ```bash
    ssh -T git@github.com -i ~/.ssh/op_personal_github.pub
    # Hi your-username! You've successfully authenticated, but GitHub does not provide shell access.
-````
+   ```
 
 To list keys registered with the agent:
 

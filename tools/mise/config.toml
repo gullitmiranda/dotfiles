@@ -5,13 +5,22 @@ helm = "latest"
 istioctl = "1.18.7"
 kubectl = "latest"
 kustomize = "latest"
-node = "22"
 opentofu = "latest"
 oras = "latest"
 python = "3.12"
 terraform = "latest"
 uv = "latest"
 
+node = "24.19.0"
+pnpm = "latest"
+"npm:sfw" = "latest"
+"npm:linearis" = "latest"
+"npm:@earendil-works/pi-coding-agent" = "latest"
+# dsh-acp: outside mise — aube breaks on the recursive peer deps of @deepseek-ai/dsh-*
+# (upstream bug). Manual install: sfw npm install -g @openma/deepseek-harness-acp
+# "npm:@openma/deepseek-harness-acp" = "latest"
+
 [settings]
 idiomatic_version_file_enable_tools = ["python", "go"]
 experimental = true
+minimum_release_age = "24h"

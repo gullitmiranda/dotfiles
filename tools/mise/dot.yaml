@@ -1,3 +1,6 @@
 linux|darwin:
   links:
     config.toml: ~/.config/mise/config.toml
+    bin/npm: ~/.local/bin/npm
+    bin/pnpm: ~/.local/bin/pnpm
+    bin/sfw: ~/.local/bin/sfw

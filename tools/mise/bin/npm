@@ -1,0 +1,10 @@
+#!/bin/sh
+# Wrapper: npm -> sfw npm
+# Ensures every npm install goes through Socket Firewall
+# Prevents double-wrapping when called from inside sfw
+if [ -n "${SFW_ACTIVE}" ]; then
+	exec mise x npm:sfw -- npm "$@"
+fi
+SFW_ACTIVE=1
+export SFW_ACTIVE
+exec sfw npm "$@"

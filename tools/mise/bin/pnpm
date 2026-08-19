@@ -1,0 +1,10 @@
+#!/bin/sh
+# Wrapper: pnpm -> sfw pnpm
+# Ensures every pnpm install goes through Socket Firewall
+# Prevents double-wrapping when called from inside sfw
+if [ -n "${SFW_ACTIVE}" ]; then
+	exec mise x npm:sfw -- pnpm "$@"
+fi
+SFW_ACTIVE=1
+export SFW_ACTIVE
+exec sfw pnpm "$@"

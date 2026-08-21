@@ -1,0 +1,8 @@
+#!/bin/sh
+# Wrapper: pnpx -> sfw pnpx
+# Ensures every pnpx invocation goes through Socket Firewall
+# Prevents double-wrapping when called from inside sfw
+if [ -n "${SFW_ACTIVE}" ]; then
+	exec mise x npm:sfw -- pnpx "$@"
+fi
+exec sfw pnpx "$@"

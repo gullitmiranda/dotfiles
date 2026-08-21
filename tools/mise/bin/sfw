@@ -1,6 +1,6 @@
 #!/bin/sh
-# Wrapper: sfw -> real sfw (via mise), marking the environment so the
-# npm/pnpm wrappers do not re-wrap when called from inside the firewall.
+# Wrapper: sfw -> real sfw (via mise), marking the environment so package-manager
+# wrappers do not re-wrap when called from inside the firewall.
 if [ -n "${SFW_ACTIVE}" ]; then
 	# Already inside an sfw session: run the command directly, no extra proxy layer
 	exec "$@"

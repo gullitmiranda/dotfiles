@@ -1,0 +1,8 @@
+#!/bin/sh
+# Wrapper: npx -> sfw npx
+# Ensures every npx invocation goes through Socket Firewall
+# Prevents double-wrapping when called from inside sfw
+if [ -n "${SFW_ACTIVE}" ]; then
+	exec mise x npm:sfw -- npx "$@"
+fi
+exec sfw npx "$@"

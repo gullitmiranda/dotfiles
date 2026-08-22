@@ -1,0 +1,8 @@
+#!/bin/sh
+# Wrapper: uvx -> sfw uvx
+# Ensures every uvx invocation goes through Socket Firewall
+# Prevents double-wrapping when called from inside sfw
+if [ -n "${SFW_ACTIVE}" ]; then
+	exec mise x uv -- uvx "$@"
+fi
+exec sfw uvx "$@"

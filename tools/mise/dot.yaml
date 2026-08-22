@@ -7,3 +7,5 @@ linux|darwin:
     bin/pnpm: ~/.local/bin/pnpm
     bin/pnpx: ~/.local/bin/pnpx
     bin/sfw: ~/.local/bin/sfw
+    bin/uv: ~/.local/bin/uv
+    bin/uvx: ~/.local/bin/uvx

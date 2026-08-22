@@ -1,0 +1,8 @@
+#!/bin/sh
+# Wrapper: corepack -> sfw corepack
+# Ensures every corepack command goes through Socket Firewall
+# Prevents double-wrapping when called from inside sfw
+if [ -n "${SFW_ACTIVE}" ]; then
+	exec mise x npm:sfw -- corepack "$@"
+fi
+exec sfw corepack "$@"

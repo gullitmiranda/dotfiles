@@ -1,6 +1,7 @@
 linux|darwin:
   links:
     config.toml: ~/.config/mise/config.toml
+    bin/corepack: ~/.local/bin/corepack
     bin/npm: ~/.local/bin/npm
     bin/npx: ~/.local/bin/npx
     bin/pnpm: ~/.local/bin/pnpm
